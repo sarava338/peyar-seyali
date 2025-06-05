@@ -1,15 +1,27 @@
-// src/components/Dashboard.tsx
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
-import { useAuth } from "../contexts/AuthProvider";
+// src/pages/AdminDashboard.tsx
+import { useState } from "react";
 
-export default function AdminDashboard() {
-  const { user } = useAuth();
+import Sidebar from "../components/SideBar";
+import NameManager from "./admin_pages/NameManager";
+
+const AdminDashboard = () => {
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const renderContent = () => {
+    switch (selected) {
+      case "name":
+        return <NameManager />;
+      default:
+        return <NameManager />;
+    }
+  };
 
   return (
-    <div>
-      <h2>Welcome, {user?.email}</h2>
-      <button onClick={() => signOut(auth)}>Logout</button>
+    <div style={{ display: "flex" }}>
+      <Sidebar onSelect={setSelected} />
+      <div style={{ flex: 1 }}>{renderContent()}</div>
     </div>
   );
-}
+};
+
+export default AdminDashboard;

@@ -1,15 +1,15 @@
 // src/components/Login.tsx
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 import {
   signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
+  sendPasswordResetEmail,
 } from "firebase/auth";
-import { auth } from "../firebase";
-import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../contexts/AuthProvider";
 
 import "../styles/Login.css";
-import { useAuth } from "../contexts/AuthProvider";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,15 +19,14 @@ export default function Login() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const provider = new GoogleAuthProvider();
-
   useEffect(() => {
     if (loginStarted && user) {
       navigate("/admin");
     }
   }, [loginStarted, user, navigate]);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       setLoginStarted(true);
       await signInWithEmailAndPassword(auth, email, password);
@@ -35,33 +34,39 @@ export default function Login() {
     } catch (err) {
       const error = err as Error;
       setLoginStarted(false);
-      alert("Login error: " + error.message);
+      console.error(error);
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleForgotPassword = async () => {
+    if (!email) return alert("Please enter your email first.");
+
     try {
-      setLoginStarted(true);
-      await signInWithPopup(auth, provider);
-      navigate("/admin");
+      await sendPasswordResetEmail(auth, email);
+      alert("📧 Password reset email sent!");
     } catch (err) {
       const error = err as Error;
-      setLoginStarted(false);
-      alert("Google login error: " + error.message);
+      console.error(error);
     }
   };
 
   return (
     <div className="login-container">
       <h2>Log In</h2>
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Login</button>
-      <button onClick={handleGoogleLogin}>Login with Google</button>
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button onClick={handleLogin}>Login</button>
+        <button onClick={handleForgotPassword}>Forgot Password?</button>
+      </form>
     </div>
   );
 }
