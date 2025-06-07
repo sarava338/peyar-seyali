@@ -1,12 +1,12 @@
-import NamesList from "../components/NameList";
+import NameTable from "../components/NameTable";
 
 export default function HomePage() {
   return (
     <>
-      <h1>Home Page</h1>
+      <h1>பெயர் செயலி</h1>
       <p>Welcome to the home page!</p>
 
-      <NamesList />
+      <NameTable />
     </>
   );
 }

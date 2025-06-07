@@ -1,15 +1,11 @@
-import AuthProvider from "./contexts/AuthProvider";
+import Header from "./components/Header";
 import AppRouter from "./routes/AppRouter";
 
-function App() {
+export default function App() {
   return (
     <>
-      <h1>பெயர் செயலி</h1>
-      <AuthProvider>
-        <AppRouter />
-      </AuthProvider>
+      <Header />
+      <AppRouter />
     </>
   );
 }
-
-export default App;

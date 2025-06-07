@@ -1,43 +1,33 @@
 // src/AppRouter.tsx
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import ProtectedRoute from "./ProtectedRoute";
-import PublicRoute from "./PublicRoute";
 
 import LoginPage from "../pages/LoginPage";
-import AdminDashboard from "../pages/AdminDashBoard";
 import HomePage from "../pages/HomePage";
+import AllNamesPage from "../pages/AllNamesPage";
+import NameDetailPage from "../pages/NameDetailPage";
+
+import AdminDashboard from "../pages/admin/AdminDashBoard";
 
 const AppRouter = () => {
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <PublicRoute>
-              <HomePage />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <LoginPage />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+
+      <Route path="/names" element={<AllNamesPage />} />
+      <Route path="/names/:id" element={<NameDetailPage />} />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 };
 

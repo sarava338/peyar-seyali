@@ -1,16 +1,16 @@
-export type NameCardProps = {
-  name: {
-    id: string;
-    name: string;
-    nameInEnglish: string;
-  };
+import { Link } from "react-router-dom";
+import type { IName } from "../types";
+
+type NameCardProps = {
+  nameDetail: IName;
 };
 
-export default function NameCard({ name }: NameCardProps) {
+export default function NameCard({ nameDetail }: NameCardProps) {
   return (
-    <div className="name-card">
-      <h3>{name.name}</h3>
-      <p>{name.nameInEnglish}</p>
-    </div>
+    <article>
+      <h3>{nameDetail.name}</h3>
+      <p>{nameDetail.description}</p>
+      <Link to={`/names/${nameDetail.id}`}>view</Link>
+    </article>
   );
 }

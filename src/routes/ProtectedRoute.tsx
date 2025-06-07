@@ -1,14 +1,18 @@
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthProvider";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useAppSelector } from "../store/hooks";
 
 export default function ProtectedRoute({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = useAuth();
+  const user = useAppSelector((state) => state.user.currentUser);
+  const navigate = useNavigate();
 
-  console.log("ProtectedRoute user:", user);
+  useEffect(() => {
+    if (!user) navigate("/login");
+  }, [user, navigate]);
 
-  return !user ? <Navigate to="/login" /> : <>{children}</>;
+  return <>{children}</>;
 }
