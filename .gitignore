@@ -26,6 +26,8 @@ dist-ssr
 .env
 .env.*
 
+.firebase
+
 peyar-seyali-firebase-adminsdk-fbsvc*.json
 serviceAccountKey.json
 serviceAccountKey*.json
