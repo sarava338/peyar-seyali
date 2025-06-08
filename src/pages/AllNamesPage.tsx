@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { fetchNames } from "../store/namesSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+
 import NameCard from "../components/NameCard";
 
 export default function AllNamesPage() {
