@@ -9,6 +9,8 @@ import AllNamesPage from "../pages/AllNamesPage";
 import NameDetailPage from "../pages/NameDetailPage";
 
 import AdminDashboard from "../pages/admin/AdminDashBoard";
+import NameManager from "../pages/admin/NameManager";
+import NameAddPage from "../pages/admin/NameAddPage";
 
 const AppRouter = () => {
   return (
@@ -24,6 +26,24 @@ const AppRouter = () => {
         element={
           <ProtectedRoute>
             <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/names"
+        element={
+          <ProtectedRoute>
+            <NameManager />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/names/add"
+        element={
+          <ProtectedRoute>
+            <NameAddPage />
           </ProtectedRoute>
         }
       />

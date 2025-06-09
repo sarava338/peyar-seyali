@@ -26,6 +26,7 @@ export default function NameDetailPage() {
   return (
     <main>
       <h2>Name - {nameDetail.name}</h2>
+      <p>Created At : {nameDetail.createdAt}</p>
     </main>
   );
 }

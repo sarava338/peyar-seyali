@@ -1,15 +1,19 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import { useAuthActions } from "../store/hooks";
 
 export default function LoginPage() {
   const { login } = useAuthActions();
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || "/admin"; // fallback to /admin
 
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       await login(e.currentTarget.email.value, e.currentTarget.password.value);
-      navigate("/admin");
+      navigate(from, { replace: true });
     } catch (error) {
       console.error("Login failed:", error);
       alert("Login failed. Please check your credentials.");
