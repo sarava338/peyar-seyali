@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchNames } from "../store/namesSlice";
 
-import NameList from "../components/NameList";
+import NameList from "../components/names/NameList";
 
 export default function HomePage() {
   const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ export default function HomePage() {
         <p>Loading Names...</p>
       ) : (
         <section>
-          <p>Total Names : {names.length}</p>
+          <h2>Total Names : {names.length}</h2>
 
           <NameList names={names} />
         </section>

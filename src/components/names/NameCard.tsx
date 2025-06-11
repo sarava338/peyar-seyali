@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 
-import type { IName } from "../types";
+import type { NameDetail } from "../../types";
 
 type NameCardProps = {
-  nameDetail: IName;
+  nameDetail: NameDetail;
   styles?: object;
 };
 
@@ -12,7 +12,7 @@ export default function NameCard({ nameDetail, styles }: NameCardProps) {
     <article style={styles}>
       <h3>{nameDetail.name}</h3>
       <p>{nameDetail.description}</p>
-      <Link to={`/names/${nameDetail.id}`}>view more</Link>
+      <Link to={`/names/${nameDetail.slug}`}>view more</Link>
     </article>
   );
 }

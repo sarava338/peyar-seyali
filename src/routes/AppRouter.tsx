@@ -9,8 +9,7 @@ import AllNamesPage from "../pages/AllNamesPage";
 import NameDetailPage from "../pages/NameDetailPage";
 
 import AdminDashboard from "../pages/admin/AdminDashBoard";
-import NameManager from "../pages/admin/NameManager";
-import NameAddPage from "../pages/admin/NameAddPage";
+import type { FieldKey } from "../types";
 
 const AppRouter = () => {
   return (
@@ -25,28 +24,24 @@ const AppRouter = () => {
         path="/admin"
         element={
           <ProtectedRoute>
-            <AdminDashboard />
+            <AdminDashboard selectedField="names" />
           </ProtectedRoute>
         }
       />
 
-      <Route
-        path="/admin/names"
-        element={
-          <ProtectedRoute>
-            <NameManager />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/admin/names/add"
-        element={
-          <ProtectedRoute>
-            <NameAddPage />
-          </ProtectedRoute>
-        }
-      />
+      {(["names", "tags", "categories", "comments"] as FieldKey[]).map(
+        (field) => (
+          <Route
+            key={`field-${field}-route`}
+            path={`/admin/${field}`}
+            element={
+              <ProtectedRoute>
+                <AdminDashboard selectedField={field} />
+              </ProtectedRoute>
+            }
+          />
+        )
+      )}
     </Routes>
   );
 };

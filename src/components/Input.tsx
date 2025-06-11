@@ -1,5 +1,5 @@
 type InputProps = {
-  inputType?: React.HTMLInputTypeAttribute;
+  inputType: React.HTMLInputTypeAttribute | null;
   inputValue: string | boolean;
   onChange: (
     e:
@@ -41,6 +41,7 @@ export default function Input({
       ) : (
         <textarea
           id={`input-${inputName}`}
+          name={inputName}
           placeholder={placeHolder}
           onChange={onChange}
           value={inputValue as string}

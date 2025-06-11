@@ -27,6 +27,9 @@ export default function NameDetailPage() {
     <main>
       <h2>Name - {nameDetail.name}</h2>
       <p>Created At : {nameDetail.createdAt}</p>
+      <p>Updated At : {nameDetail.updatedAt}</p>
+
+      <p>Authored by - {nameDetail.author}</p>
     </main>
   );
 }

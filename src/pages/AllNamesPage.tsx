@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { fetchNames } from "../store/namesSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
-import NameCard from "../components/NameCard";
+import NameCard from "../components/names/NameCard";
 
 export default function AllNamesPage() {
   const dispatch = useAppDispatch();
@@ -23,7 +23,7 @@ export default function AllNamesPage() {
       <p>இந்தப் பக்கம் அனைத்து பெயர்களையும் காட்டும்.</p>
       <section>
         {names.map((nameDetail) => (
-          <NameCard key={nameDetail.id} nameDetail={nameDetail} />
+          <NameCard key={nameDetail.slug} nameDetail={nameDetail} />
         ))}
       </section>
     </>

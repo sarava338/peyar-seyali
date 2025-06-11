@@ -1,26 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { doc, getDoc } from "firebase/firestore";
 
-import { db } from "../firebase/firebase";
+import { getNameById } from "../firebase/services/nameService";
 
-import type { IName } from "../types";
+import type { NameDetail } from "../types";
 
-const fetchNameById = createAsyncThunk(
-  "names/fetchNameById",
-  async (id: string) => {
-    const docRef = doc(db, "names", id);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      return { id: docSnap.id, ...docSnap.data() };
-    } else {
-      throw new Error("Name not found");
-    }
-  }
-);
+const fetchNameById = createAsyncThunk("names/fetchNameById", getNameById);
 
 interface NameDetailState {
-  data: IName | null;
+  data: NameDetail | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -31,10 +18,16 @@ const initialState: NameDetailState = {
   error: null,
 };
 
-const nameSlice = createSlice({
+const nameDetailSlice = createSlice({
   name: "nameDetail",
   initialState,
-  reducers: {},
+  reducers: {
+    clearNameDetail: (state) => {
+      state.data = null;
+      state.status = "idle";
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchNameById.pending, (state) => {
@@ -42,7 +35,7 @@ const nameSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchNameById.fulfilled, (state, action) => {
-        state.data = action.payload as IName;
+        state.data = action.payload as NameDetail;
         state.status = "succeeded";
       })
       .addCase(fetchNameById.rejected, (state, action) => {
@@ -52,5 +45,6 @@ const nameSlice = createSlice({
   },
 });
 
-export default nameSlice.reducer;
+export default nameDetailSlice.reducer;
+export const { clearNameDetail } = nameDetailSlice.actions;
 export { fetchNameById };

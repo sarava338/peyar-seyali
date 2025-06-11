@@ -1,0 +1,16 @@
+export const NAME_INPUT_DATA = [
+  { inputName: "name", inputType: "text" },
+  { inputName: "nameInEnglish", inputType: "text" },
+  { inputName: "descrption", inputType: "text" },
+  { inputName: "gender", inputType: "text" },
+  { inputName: "origin", inputType: "text" },
+  { inputName: "slug", inputType: "text" },
+  { inputName: "literatureEvidence", inputType: null },
+  { inputName: "epigraphEvidence", inputType: null },
+  { inputName: "otherNames", inputType: null },
+  { inputName: "relatedNames", inputType: null },
+  { inputName: "categories", inputType: null },
+  { inputName: "tags", inputType: null },
+  { inputName: "reference", inputType: null },
+  { inputName: "active", inputType: "checkbox" },
+];

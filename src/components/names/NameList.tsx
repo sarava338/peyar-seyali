@@ -1,9 +1,9 @@
 import NameCard from "./NameCard";
 
-import type { IName } from "../types";
+import type { NameDetail } from "../../types";
 
 type NameListProps = {
-  names: IName[];
+  names: NameDetail[];
 };
 
 export default function NameList({ names }: NameListProps) {
@@ -11,7 +11,7 @@ export default function NameList({ names }: NameListProps) {
     <section>
       <p>Name List</p>
       {names.map((nameDetail) => (
-        <NameCard key={nameDetail.id} nameDetail={nameDetail} />
+        <NameCard key={nameDetail.slug} nameDetail={nameDetail} />
       ))}
     </section>
   );

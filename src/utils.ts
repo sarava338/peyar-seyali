@@ -1,10 +1,10 @@
 export function toSlug(str: string) {
   return str
+    .trim()
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/[^\w-]+/g, "");
 }
-
 
 export function toArray(str: string, delimeter: string) {
   return str

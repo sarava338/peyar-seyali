@@ -1,12 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { collection, getDocs } from "firebase/firestore";
 
-import { db } from "../firebase/firebase";
+import { getAllNames } from "../firebase/services/nameService";
 
-import type { IName } from "../types";
+import type { NameDetail } from "../types";
 
 interface NamesState {
-  data: IName[];
+  data: NameDetail[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -17,10 +16,7 @@ const initialState: NamesState = {
   error: null,
 };
 
-const fetchNames = createAsyncThunk("names/fetchNames", async () => {
-  const snapshot = await getDocs(collection(db, "names"));
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as IName));
-});
+const fetchNames = createAsyncThunk("names/fetchNames", getAllNames);
 
 const namesSlice = createSlice({
   name: "names",
