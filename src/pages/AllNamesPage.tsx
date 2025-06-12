@@ -19,8 +19,7 @@ export default function AllNamesPage() {
 
   return (
     <>
-      <h1>பெயர்கள் பட்டியல்</h1>
-      <p>இந்தப் பக்கம் அனைத்து பெயர்களையும் காட்டும்.</p>
+      <h2>பெயர்கள் பட்டியல்</h2>
       <section>
         {names.map((nameDetail) => (
           <NameCard key={nameDetail.slug} nameDetail={nameDetail} />
