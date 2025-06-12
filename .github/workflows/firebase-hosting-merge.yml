@@ -8,6 +8,7 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    environment: production # ✅ This line tells GitHub to use env secrets
 
     steps:
       - name: 🔄 Checkout Repo

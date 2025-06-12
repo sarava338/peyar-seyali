@@ -14,6 +14,8 @@ jobs:
   build_and_preview:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
+    environment: production # ✅ This line tells GitHub to use env secrets
+
 
     steps:
       - name: 🔄 Checkout Repository
