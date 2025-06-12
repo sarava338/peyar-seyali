@@ -9,8 +9,6 @@ import { BrowserRouter } from "react-router-dom";
 
 export default function App() {
 
-  console.log(import.meta.env.VITE_APP_ENV);
-
   return (
     <>
       <Provider store={store}>
