@@ -69,3 +69,5 @@ export type IUser = {
   imageUrl: string;
   isAdmin: boolean;
 };
+
+export type Path = { path: string; name: string };
