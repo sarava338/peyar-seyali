@@ -6,9 +6,9 @@ import AppRouter from "./routes/AppRouter";
 
 import { store, persistor } from "./store";
 import { BrowserRouter } from "react-router-dom";
+import Footer from "./components/Footer";
 
 export default function App() {
-
   return (
     <>
       <Provider store={store}>
@@ -16,6 +16,7 @@ export default function App() {
           <BrowserRouter>
             <Header />
             <AppRouter />
+            <Footer />
           </BrowserRouter>
         </PersistGate>
       </Provider>
