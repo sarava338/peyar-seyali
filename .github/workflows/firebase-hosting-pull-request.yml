@@ -23,8 +23,10 @@ jobs:
 
       - name: 📦 Install Dependencies
         run: |
-          echo "🔧 Installing dependencies..."
-          npm ci
+          echo "deleting node_modules directory and package-lock.json file"
+          rm -rf node_modules package-lock.json
+          echo "🔧 Installing dependencies using npm install"
+          npm install
           echo "✅ Dependencies installed."
 
       - name: 🛠 Build Project
