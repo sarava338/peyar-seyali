@@ -26,6 +26,7 @@ export function useAuthActions() {
           email: res.user.email as string,
           name: res.user.displayName as string,
           imageUrl: res.user.photoURL as string,
+          isAdmin: (await res.user.getIdTokenResult()).claims.admin === true,
         })
       );
     } catch (err) {

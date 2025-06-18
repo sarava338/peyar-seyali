@@ -67,4 +67,5 @@ export type IUser = {
   email: string;
   uid: string;
   imageUrl: string;
+  isAdmin: boolean;
 };
