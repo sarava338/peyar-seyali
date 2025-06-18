@@ -1,7 +1,7 @@
 export const NAME_INPUT_DATA = [
   { inputName: "name", inputType: "text" },
   { inputName: "nameInEnglish", inputType: "text" },
-  { inputName: "descrption", inputType: "text" },
+  { inputName: "description", inputType: "text" },
   { inputName: "gender", inputType: "text" },
   { inputName: "origin", inputType: "text" },
   { inputName: "slug", inputType: "text" },
