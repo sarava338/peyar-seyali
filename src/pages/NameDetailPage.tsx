@@ -24,12 +24,12 @@ export default function NameDetailPage() {
   if (!nameDetail) return <p>No name details found.</p>;
 
   return (
-    <main>
+    <article>
       <h2>Name - {nameDetail.name}</h2>
       <p>Created At : {nameDetail.createdAt}</p>
       <p>Updated At : {nameDetail.updatedAt}</p>
 
       <p>Authored by - {nameDetail.author}</p>
-    </main>
+    </article>
   );
 }
