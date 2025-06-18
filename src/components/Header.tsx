@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import DropDown from "./DropDown";
+import UserProfileDropDown from "./UserProfileDropDown";
 
 export default function Header() {
   return (
@@ -14,7 +14,7 @@ export default function Header() {
       <nav className="header-nav">
         <Link to="/">முகப்பு</Link>
         <Link to="/names">பெயர்கள்</Link>
-        {<DropDown />}
+        {<UserProfileDropDown />}
       </nav>
     </header>
   );
