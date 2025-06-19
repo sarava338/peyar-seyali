@@ -13,7 +13,7 @@ import { useAppSelector, useAuthActions } from "../../store/hooks";
 
 import { USER_PATHS } from "../../data";
 
-import defaultProfilePicture from "../assets/default_profilr_picture.jpg";
+import defaultProfilePicture from "../../assets/default_profilr_picture.jpg";
 
 interface UserMenuProps {
   userAnchor: HTMLElement | null;
