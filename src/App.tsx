@@ -1,13 +1,13 @@
 import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 
-// import Header from "./components/Header";
 import AppRouter from "./routes/AppRouter";
 
 import { store, persistor } from "./store";
-import { BrowserRouter } from "react-router-dom";
+
+import Header from "./components/header";
 import Footer from "./components/Footer";
-import HeaderCopy from "./components/Header";
 
 export default function App() {
   return (
@@ -15,8 +15,7 @@ export default function App() {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
-            {/* <Header /> */}
-            <HeaderCopy />
+            <Header />
             <AppRouter />
             <Footer />
           </BrowserRouter>

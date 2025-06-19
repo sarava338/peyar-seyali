@@ -7,7 +7,7 @@ export default function LoginPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const from = location.state?.from?.pathname || "/admin"; // fallback to /admin
+  const from = location.state?.from?.pathname || "/"; // fallback to Home page
 
   async function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
