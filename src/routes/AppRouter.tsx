@@ -1,49 +1,35 @@
-// src/AppRouter.tsx
 import { Routes, Route } from "react-router-dom";
 
-import ProtectedRoute from "./ProtectedRoute";
+import PublicLayout from "./PublicLayout";
+import AdminLayout from "./AdminLayout";
 
-import LoginPage from "../pages/LoginPage";
-import HomePage from "../pages/HomePage";
-import AllNamesPage from "../pages/AllNamesPage";
-import NameDetailPage from "../pages/NameDetailPage";
+import Home from "../pages/Home";
+import PublicNames from "../pages/Names";
+import Name from "../pages/Name";
 
-import AdminDashboard from "../pages/admin/AdminDashBoard";
-import type { FieldKey } from "../types";
+import AdminNames from "../pages/admin/Names";
+import AddName from "../pages/admin/AddName";
+import EditName from "../pages/admin/EditName";
 
-const AppRouter = () => {
+export default function AppRouter() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
+      {/* Public Routes */}
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/names" element={<PublicNames />} />
+        <Route path="/names/:id" element={<Name />} />
+      </Route>
 
-      <Route path="/names" element={<AllNamesPage />} />
-      <Route path="/names/:id" element={<NameDetailPage />} />
-
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <AdminDashboard selectedField="names" />
-          </ProtectedRoute>
-        }
-      />
-
-      {(["names", "tags", "categories", "comments"] as FieldKey[]).map(
-        (field) => (
-          <Route
-            key={`field-${field}-route`}
-            path={`/admin/${field}`}
-            element={
-              <ProtectedRoute>
-                <AdminDashboard selectedField={field} />
-              </ProtectedRoute>
-            }
-          />
-        )
-      )}
+      {/* Admin Routes */}
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route path="names" element={<AdminNames />} />
+        <Route path="names/add" element={<AddName />} />
+        <Route
+          path="names/:id/edit"
+          element={<EditName nameSlug="saravanan" />}
+        />
+      </Route>
     </Routes>
   );
-};
-
-export default AppRouter;
+}

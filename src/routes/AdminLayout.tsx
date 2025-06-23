@@ -1,16 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 import { useAppSelector } from "../store/hooks";
 
-export default function ProtectedRoute({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import AdminDashBoard from "../pages/admin/AdminDashboard";
+
+export default function AdminLayout() {
   const user = useAppSelector((state) => state.user.currentUser);
 
   return user?.isAdmin ? (
-    children
+    <AdminDashBoard>
+      <Outlet />
+    </AdminDashBoard>
   ) : (
     <div>
       <p>

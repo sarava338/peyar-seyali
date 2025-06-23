@@ -1,34 +1,44 @@
-import { type JSX } from "react";
+import { useState, type ReactNode } from "react";
 
-import NameManager from "./NameManager";
-import TagManager from "./TagManager";
-import CategoryManager from "./CategoryManager";
-import CommentManager from "./CommentManager";
+import { Box, CssBaseline } from "@mui/material";
 
-import type { FieldKey } from "../../types";
-import SideBar from "../../components/SideBar";
+import Header from "../../components/admin/Header";
+import SideNavBar from "../../components/admin/SideNavBar";
+import { DrawerHeader } from "../../components/admin/Drawer";
 
-interface AdminDashBoardProps {
-  selectedField: FieldKey;
-}
+export default function AdminDashBoard({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
 
-export default function AdminDashBoard({ selectedField }: AdminDashBoardProps) {
-  const fields: Record<FieldKey, JSX.Element> = {
-    names: <NameManager />,
-    tags: <TagManager />,
-    categories: <CategoryManager />,
-    comments: <CommentManager />,
+  const handleDrawerOpen = () => {
+    setOpen(true);
   };
 
-  const selectedManager = fields[selectedField];
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const DRAWER_WIDTH = 240;
 
   return (
-    <>
-      <main>
-        <h2>Admin DashBoard</h2>
-        <SideBar fields={fields} />
-        <section>{selectedManager}</section>
-      </main>
-    </>
+    <Box sx={{ display: "flex" }} component="section">
+      <CssBaseline />
+
+      <Header
+        open={open}
+        handleDrawerOpen={handleDrawerOpen}
+        drawerWidth={DRAWER_WIDTH}
+      />
+      <SideNavBar
+        open={open}
+        handleDrawerClose={handleDrawerClose}
+        drawerWidth={DRAWER_WIDTH}
+      />
+
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <DrawerHeader />
+        <h1>Welcome to Admin Dashboard</h1>
+        {children}
+      </Box>
+    </Box>
   );
 }
