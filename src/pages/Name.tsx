@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { useEffect } from "react";
 import { fetchNameById } from "../store/nameDetailSlice";
 
-export default function NameDetailPage() {
+export default function Name() {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const {

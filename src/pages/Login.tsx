@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAuthActions } from "../store/hooks";
 
-export default function LoginPage() {
+export default function Login() {
   const { login } = useAuthActions();
   const location = useLocation();
   const navigate = useNavigate();

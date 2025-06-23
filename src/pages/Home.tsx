@@ -5,7 +5,7 @@ import { fetchNames } from "../store/namesSlice";
 
 import NameList from "../components/names/NameList";
 
-export default function HomePage() {
+export default function Home() {
   const dispatch = useAppDispatch();
   const { data: names, status } = useAppSelector((state) => state.names);
 

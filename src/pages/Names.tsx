@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 import NameList from "../components/names/NameList";
 
-export default function AllNamesPage() {
+export default function Names() {
   const dispatch = useAppDispatch();
   const { data: names, status, error } = useAppSelector((state) => state.names);
 
