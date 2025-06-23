@@ -1,22 +1,20 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import { useAppSelector } from "../store/hooks";
 
-import AdminDashBoard from "../pages/admin/AdminDashboard";
+import AdminDashBoard from "../pages/admin/AdminDashBoard";
 
 export default function AdminLayout() {
   const user = useAppSelector((state) => state.user.currentUser);
+  const navigate = useNavigate();
 
-  return user?.isAdmin ? (
+  if (!user || !user.isAdmin) {
+    navigate("/");
+  }
+
+  return (
     <AdminDashBoard>
       <Outlet />
     </AdminDashBoard>
-  ) : (
-    <div>
-      <p>
-        You are not ADMIN. You can't access /admin route. Go to
-        <Link to="/"> Home page</Link> or <Link to="/login">Login Page</Link>
-      </p>
-    </div>
   );
 }
