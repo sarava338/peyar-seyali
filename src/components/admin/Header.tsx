@@ -49,15 +49,16 @@ export default function Header({
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h5" noWrap component="h1">
-            பெயர் செயலி - நிர்வாகி தளம்
-          </Typography>
 
           <UserMenu
             userAnchor={userAnchor}
             onUserMenuOpen={handleUserMenuOpen}
             onUserMenuClose={handleUserMenuClose}
           />
+
+          <Typography variant="h5" noWrap component="p" sx={{ marginLeft: 5 }}>
+            பெயர் செயலி - நிர்வாகி தளம்
+          </Typography>
         </Toolbar>
       </AppBar>
     </>
