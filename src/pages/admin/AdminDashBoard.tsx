@@ -36,7 +36,7 @@ export default function AdminDashBoard({ children }: { children: ReactNode }) {
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <h1>Welcome to Admin Dashboard</h1>
+        <p>Welcome to Admin Dashboard</p>
         {children}
       </Box>
     </Box>

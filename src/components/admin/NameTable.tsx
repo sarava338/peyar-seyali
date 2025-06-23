@@ -2,14 +2,16 @@ import type { NameDetail } from "../../types";
 
 interface NameTableProps {
   names: NameDetail[];
-  handleEditClick: (nameSlug: string) => void;
-  handleDeleteClick: (nameSlug: string) => void;
+  handleView: (nameSlug: string) => void;
+  handleEdit: (nameSlug: string) => void;
+  handleDelete: (nameSlug: string) => void;
 }
 
 export default function NameTable({
   names,
-  handleEditClick,
-  handleDeleteClick,
+  handleView,
+  handleEdit,
+  handleDelete,
 }: NameTableProps) {
   return (
     <table>
@@ -23,7 +25,7 @@ export default function NameTable({
         </tr>
       </thead>
       <tbody>
-        {names.map((name: NameDetail) => (
+        {names.map((name) => (
           <tr key={name.slug}>
             <td>{name.name}</td>
             <td>{name.nameInEnglish}</td>
@@ -33,7 +35,15 @@ export default function NameTable({
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  handleEditClick(name.slug!);
+                  handleView(name.slug!);
+                }}
+              >
+                view
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleEdit(name.slug!);
                 }}
               >
                 edit
@@ -41,7 +51,7 @@ export default function NameTable({
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  handleDeleteClick(name.slug!);
+                  handleDelete(name.slug!);
                 }}
               >
                 delete
