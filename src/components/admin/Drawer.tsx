@@ -7,23 +7,23 @@ interface DrawerProps {
   drawerwidth: number;
 }
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open" && prop !== "drawerwidth",
-})<DrawerProps>(({ theme, open, drawerwidth }) => ({
-  width: drawerwidth,
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
-  ...(open
-    ? {
-        ...openedMixin(theme, drawerwidth),
-        "& .MuiDrawer-paper": openedMixin(theme, drawerwidth),
-      }
-    : {
-        ...closedMixin(theme),
-        "& .MuiDrawer-paper": closedMixin(theme),
-      }),
-}));
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" && prop !== "drawerwidth" })<DrawerProps>(
+  ({ theme, open, drawerwidth }) => ({
+    width: drawerwidth,
+    flexShrink: 0,
+    whiteSpace: "nowrap",
+    boxSizing: "border-box",
+    ...(open
+      ? {
+          ...openedMixin(theme, drawerwidth),
+          "& .MuiDrawer-paper": openedMixin(theme, drawerwidth),
+        }
+      : {
+          ...closedMixin(theme),
+          "& .MuiDrawer-paper": closedMixin(theme),
+        }),
+  })
+);
 
 const openedMixin = (theme: Theme, drawerWidth: number): CSSObject => ({
   width: drawerWidth,

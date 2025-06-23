@@ -15,11 +15,7 @@ interface HeaderProps {
   handleDrawerOpen: () => void;
 }
 
-export default function Header({
-  open,
-  handleDrawerOpen,
-  drawerWidth,
-}: HeaderProps) {
+export default function Header({ open, handleDrawerOpen, drawerWidth }: HeaderProps) {
   const [userAnchor, setUserAnchor] = useState<null | HTMLElement>(null);
 
   const handleUserMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
@@ -30,12 +26,7 @@ export default function Header({
 
   return (
     <>
-      <AppBar
-        position="fixed"
-        component="header"
-        open={open}
-        drawerWidth={drawerWidth}
-      >
+      <AppBar position="fixed" component="header" open={open} drawerWidth={drawerWidth}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -50,11 +41,7 @@ export default function Header({
             <MenuIcon />
           </IconButton>
 
-          <UserMenu
-            userAnchor={userAnchor}
-            onUserMenuOpen={handleUserMenuOpen}
-            onUserMenuClose={handleUserMenuClose}
-          />
+          <UserMenu userAnchor={userAnchor} onUserMenuOpen={handleUserMenuOpen} onUserMenuClose={handleUserMenuClose} />
 
           <Typography variant="h5" noWrap component="p" sx={{ marginLeft: 5 }}>
             பெயர் செயலி - நிர்வாகி தளம்

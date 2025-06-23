@@ -11,6 +11,7 @@ import AdminNames from "../pages/admin/Names";
 import AddName from "../pages/admin/AddName";
 import EditName from "../pages/admin/EditName";
 import AdminName from "../pages/admin/Name";
+import Login from "../pages/Login";
 
 export default function AppRouter() {
   return (
@@ -18,6 +19,7 @@ export default function AppRouter() {
       {/* Public Routes */}
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/names" element={<PublicNames />} />
         <Route path="/names/:id" element={<PublicName />} />
       </Route>
@@ -25,14 +27,8 @@ export default function AppRouter() {
       {/* Admin Routes */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="names" element={<AdminNames />} />
-        <Route
-          path="names/:nameSlug"
-          element={<AdminName />}
-        />
-        <Route
-          path="names/:nameSlug/edit"
-          element={<EditName />}
-        />
+        <Route path="names/:nameSlug" element={<AdminName />} />
+        <Route path="names/:nameSlug/edit" element={<EditName />} />
         <Route path="names/add" element={<AddName />} />
       </Route>
     </Routes>

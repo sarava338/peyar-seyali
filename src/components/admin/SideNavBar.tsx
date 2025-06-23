@@ -11,19 +11,10 @@ interface SideNavBarProps {
   handleDrawerClose: () => void;
 }
 
-export default function SideNavBar({
-  open,
-  drawerWidth,
-  handleDrawerClose,
-}: SideNavBarProps) {
+export default function SideNavBar({ open, drawerWidth, handleDrawerClose }: SideNavBarProps) {
   return (
     <>
-      <Drawer
-        variant="permanent"
-        open={open}
-        component="nav"
-        drawerwidth={drawerWidth}
-      >
+      <Drawer variant="permanent" open={open} component="nav" drawerwidth={drawerWidth}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
@@ -34,11 +25,12 @@ export default function SideNavBar({
 
         <List>
           <DashBoardListItem open={open} pageName="Names" path="/admin/names" />
-          <DashBoardListItem
-            open={open}
-            pageName="Add Name"
-            path="/admin/names/add"
-          />
+          <DashBoardListItem open={open} pageName="Add Name" path="/admin/names/add" />
+
+          <Divider />
+
+          <DashBoardListItem open={open} pageName="Tags" path="/admin/tags" />
+          <DashBoardListItem open={open} pageName="Add Tag" path="/admin/tags/add" />
 
           <Divider />
         </List>

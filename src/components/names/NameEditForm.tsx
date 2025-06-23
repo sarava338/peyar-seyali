@@ -36,9 +36,7 @@ export default function NameEditForm({
   return (
     <main>
       <h4>Name Edit - {nameDetail.name}</h4>
-      <p>
-        created by <b>{author}</b>
-      </p>
+      <p>created by {author}</p>
       <p>name created at : {createdAt}</p>
       <p>name last updated at : {updatedAt}</p>
 
@@ -53,10 +51,7 @@ export default function NameEditForm({
             key={`input-${field.inputName}`}
             inputType={field.inputType}
             inputName={field.inputName}
-            inputValue={
-              form[field.inputName as keyof typeof form] ??
-              (field.inputType === "checkbox" ? false : "")
-            }
+            inputValue={form[field.inputName as keyof typeof form] ?? (field.inputType === "checkbox" ? false : "")}
             onChange={handleChange}
             placeHolder={field.inputName}
           />

@@ -7,12 +7,7 @@ interface NameTableProps {
   handleDelete: (nameSlug: string) => void;
 }
 
-export default function NameTable({
-  names,
-  handleView,
-  handleEdit,
-  handleDelete,
-}: NameTableProps) {
+export default function NameTable({ names, handleView, handleEdit, handleDelete }: NameTableProps) {
   return (
     <table>
       <thead>

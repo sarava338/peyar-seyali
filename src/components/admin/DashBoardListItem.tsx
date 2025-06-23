@@ -15,20 +15,12 @@ interface DashBoardListItemProps {
   pageName: string;
 }
 
-export default function DashBoardListItem({
-  open,
-  path,
-  pageName,
-}: DashBoardListItemProps) {
+export default function DashBoardListItem({ open, path, pageName }: DashBoardListItemProps) {
   const navigate = useNavigate();
 
   return (
     <>
-      <ListItem
-        disablePadding
-        sx={{ display: "block" }}
-        onClick={() => navigate(path)}
-      >
+      <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate(path)}>
         <ListItemButton
           sx={{
             minHeight: 48,
