@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-import { IconButton, styled, Toolbar, Typography } from "@mui/material";
+import { Box, styled, Toolbar, Typography } from "@mui/material";
 
-import MenuIcon from "@mui/icons-material/Menu";
+import MuiAppBar, { type AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 
-import MuiAppBar, {
-  type AppBarProps as MuiAppBarProps,
-} from "@mui/material/AppBar";
+import Logo from "../Logo";
 import UserMenu from "../header/UserMenu";
+
+import AdminDrawerIcon from "../../assets/icons/AdminDrawerIcon";
 
 interface HeaderProps {
   open: boolean;
@@ -28,23 +28,16 @@ export default function Header({ open, handleDrawerOpen, drawerWidth }: HeaderPr
     <>
       <AppBar position="fixed" component="header" open={open} drawerWidth={drawerWidth}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              display: open ? "none" : "block",
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
+          <AdminDrawerIcon isDrawerOpen={open} onClick={handleDrawerOpen} />
 
           <UserMenu userAnchor={userAnchor} onUserMenuOpen={handleUserMenuOpen} onUserMenuClose={handleUserMenuClose} />
 
-          <Typography variant="h5" noWrap component="p" sx={{ marginLeft: 5 }}>
-            பெயர் செயலி - நிர்வாகி தளம்
+          <Box sx={{ mx: 4 }}>
+            <Logo />
+          </Box>
+
+          <Typography variant="h5" noWrap component="p">
+            நிர்வாகி தளம்
           </Typography>
         </Toolbar>
       </AppBar>
