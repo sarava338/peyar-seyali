@@ -13,7 +13,7 @@ export default function NameList({ names }: NameListProps) {
       sx={{
         display: "flex",
         flexWrap: "wrap",
-        gap: 3,
+        gap: 4,
         justifyContent: "center",
       }}
     >

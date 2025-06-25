@@ -1,11 +1,4 @@
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  Typography,
-} from "@mui/material";
+import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Typography } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 
@@ -23,12 +16,26 @@ export default function NameCard({ nameDetail }: NameCardProps) {
   };
 
   return (
-    <Card elevation={3} sx={{ maxWidth: 345 }}>
+    <Card elevation={3} sx={{ maxWidth: 345, minWidth: 300 }}>
       <CardActionArea onClick={handleCardClick}>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h5">
+        <CardContent sx={{ position: "relative" }}>
+          <Chip
+            variant="outlined"
+            size="small"
+            label={nameDetail.gender}
+            sx={{
+              position: "absolute",
+              bgcolor: nameDetail.gender === "male" ? "#1e90ff" : "#ffa9d0",
+              p: 1,
+              top: 22,
+              right: -10,
+            }}
+          />
+
+          <Typography gutterBottom variant="h5" component="h3">
             {nameDetail.name}
           </Typography>
+
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             {nameDetail.description}
           </Typography>
