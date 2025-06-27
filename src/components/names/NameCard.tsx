@@ -16,14 +16,15 @@ export default function NameCard({ nameDetail }: NameCardProps) {
   };
 
   const handleShareClick = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Prevent the card click event
+    event.stopPropagation();
+
     const shareData = {
       title: nameDetail.name,
-      text: nameDetail.description,
-      url: window.location.href, // Current page URL
+      text: `${nameDetail.name} - ${nameDetail.description}`,
+      url: `${window.location.origin}/names/${nameDetail.slug}`,
     };
 
-    if (navigator.share) {
+    if (navigator.share && navigator.canShare?.(shareData)) {
       navigator
         .share(shareData)
         .then(() => console.log("Share successful"))
