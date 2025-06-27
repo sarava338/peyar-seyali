@@ -15,6 +15,24 @@ export default function NameCard({ nameDetail }: NameCardProps) {
     navigate(`/names/${nameDetail.slug}`);
   };
 
+  const handleShareClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent the card click event
+    const shareData = {
+      title: nameDetail.name,
+      text: nameDetail.description,
+      url: window.location.href, // Current page URL
+    };
+
+    if (navigator.share) {
+      navigator
+        .share(shareData)
+        .then(() => console.log("Share successful"))
+        .catch((error) => console.error("Error sharing:", error));
+    } else {
+      alert("Sharing not supported in this browser.");
+    }
+  };
+
   return (
     <Card elevation={3} sx={{ maxWidth: 345, minWidth: 300 }}>
       <CardActionArea onClick={handleCardClick}>
@@ -42,7 +60,7 @@ export default function NameCard({ nameDetail }: NameCardProps) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={handleShareClick}>
           Share
         </Button>
       </CardActions>
