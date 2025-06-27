@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "peyar-seyali"
-  }
+  },
+  "targets": {
+    "peyar-seyali": {
+      "hosting": {
+        "peyarkal": [
+          "peyarkal"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
