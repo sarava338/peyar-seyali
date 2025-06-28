@@ -1,11 +1,9 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Typography } from "@mui/material";
-
 import { useNavigate } from "react-router-dom";
 
+import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Typography } from "@mui/material";
+import ShareIcon from "@mui/icons-material/Share";
+
 import type { IName } from "../../types";
-
-import peyarkal_logo_tamil_and_english from "../../assets/logos/peyarkal_logo_tamil_and_english.png";
-
 interface NameCardProps {
   nameDetail: IName;
 }
@@ -23,10 +21,9 @@ export default function NameCard({ nameDetail }: NameCardProps) {
     event.stopPropagation();
 
     const shareData = {
-      title: nameDetail.name,
-      text: `${nameDetail.name} - ${nameDetail.description}`,
-      url: `${window.location.origin}/names/${nameDetail.slug}`,
-      file: peyarkal_logo_tamil_and_english,
+      title: nameDetail.name + "\n",
+      text: `${nameDetail.name} - ${nameDetail.description}\n`,
+      url: `${window.location.origin}/names/${nameDetail.slug}\n`,
     };
 
     try {
@@ -68,7 +65,7 @@ export default function NameCard({ nameDetail }: NameCardProps) {
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary" onClick={handleShareClick}>
-          Share
+          Share <ShareIcon />
         </Button>
       </CardActions>
     </Card>
