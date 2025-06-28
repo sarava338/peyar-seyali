@@ -32,13 +32,13 @@ export type NameDetail = {
   slug?: string;
   literatureEvidence?: string;
   epigraphEvidence?: string;
-  otherNames?: string;
-  relatedNames?: string;
-  categories?: string;
-  reference?: string;
+  otherNames?: string[];
+  relatedNames?: string[];
+  categories?: string[];
   comments?: string[];
-  tags?: string;
+  tags?: string[];
   author: string;
+  reference?: string;
   active: boolean;
   createdAt?: string;
   updatedAt?: string;

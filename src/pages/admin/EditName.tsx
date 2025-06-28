@@ -7,5 +7,5 @@ export default function EditName() {
     
     if (!nameSlug) return <p>Error: Name slug is missing.</p>;
     
-    return <div>EditName - {nameSlug}</div>;
+    return <h1>EditName - {nameSlug}</h1>;
 }
