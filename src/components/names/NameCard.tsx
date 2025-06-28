@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import type { NameDetail } from "../../types";
 
+import peyarkal_logo_tamil_and_english from "../../assets/logos/peyarkal_logo_tamil_and_english.png";
+
 interface NameCardProps {
   nameDetail: NameDetail;
 }
@@ -15,22 +17,23 @@ export default function NameCard({ nameDetail }: NameCardProps) {
     navigate(`/names/${nameDetail.slug}`);
   };
 
-  const handleShareClick = (event: React.MouseEvent) => {
+  const handleShareClick = async (event: React.MouseEvent) => {
     event.stopPropagation();
 
     const shareData = {
       title: nameDetail.name,
       text: `${nameDetail.name} - ${nameDetail.description}`,
       url: `${window.location.origin}/names/${nameDetail.slug}`,
+      file: peyarkal_logo_tamil_and_english,
     };
 
-    if (navigator.share && navigator.canShare?.(shareData)) {
-      navigator
-        .share(shareData)
-        .then(() => console.log("Share successful"))
-        .catch((error) => console.error("Error sharing:", error));
-    } else {
-      alert("Sharing not supported in this browser.");
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+        console.log("Share successful");
+      } else alert("Sharing not supported in this browser.");
+    } catch (error) {
+      console.error("Error preparing share data:", error);
     }
   };
 
