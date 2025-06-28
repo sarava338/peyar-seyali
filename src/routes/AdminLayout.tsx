@@ -1,4 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 import { useAppSelector } from "../store/hooks";
 
@@ -14,8 +15,14 @@ export default function AdminLayout() {
   }, [user, navigate]);
 
   return (
-    <AdminDashBoard>
-      <Outlet />
-    </AdminDashBoard>
+    <>
+      <Helmet>
+        <title>பெயர்கள் - நிர்வாகி தளம்</title>
+      </Helmet>
+
+      <AdminDashBoard>
+        <Outlet />
+      </AdminDashBoard>
+    </>
   );
 }

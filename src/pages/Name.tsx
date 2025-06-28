@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { useEffect } from "react";
 import { fetchNameById } from "../store/nameDetailSlice";
 
 export default function Name() {
@@ -20,12 +21,19 @@ export default function Name() {
   if (!nameDetail) return <p>No name details found.</p>;
 
   return (
-    <article>
-      <h2>Name - {nameDetail.name}</h2>
-      <p>Created At : {nameDetail.createdAt}</p>
-      <p>Updated At : {nameDetail.updatedAt}</p>
+    <>
+      <Helmet>
+        <title>{nameDetail.name} - பெயர்கள்</title>
+        <meta name="description" content={nameDetail.name} />
+      </Helmet>
 
-      <p>Authored by - {nameDetail.author}</p>
-    </article>
+      <article>
+        <h2>Name - {nameDetail.name}</h2>
+        <p>Created At : {nameDetail.createdAt}</p>
+        <p>Updated At : {nameDetail.updatedAt}</p>
+
+        <p>Authored by - {nameDetail.author}</p>
+      </article>
+    </>
   );
 }
