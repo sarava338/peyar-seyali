@@ -7,11 +7,7 @@ import { fetchNameById } from "../store/nameDetailSlice";
 export default function Name() {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
-  const {
-    data: nameDetail,
-    status,
-    error,
-  } = useAppSelector((state) => state.nameDetail);
+  const { data: nameDetail, status, error } = useAppSelector((state) => state.nameDetail);
 
   useEffect(() => {
     if (id) {
