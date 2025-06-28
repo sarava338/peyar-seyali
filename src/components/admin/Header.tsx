@@ -26,7 +26,7 @@ export default function Header({ open, handleDrawerOpen, drawerWidth }: HeaderPr
 
   return (
     <>
-      <AppBar position="fixed" component="header" open={open} drawerWidth={drawerWidth}>
+      <AppBar position="fixed" component="header" open={open} drawerWidth={drawerWidth} sx={{ backgroundColor: "white", color: "black" }}>
         <Toolbar>
           <AdminDrawerIcon isDrawerOpen={open} onClick={handleDrawerOpen} />
 
