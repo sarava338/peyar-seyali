@@ -3,7 +3,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import namesReducer from "./namesSlice";
-import nameDetailReducer from "./nameDetailSlice";
+import nameReducer from "./nameSlice";
 import userReducer from "./userSlice";
 
 const persistConfig = {
@@ -16,12 +16,11 @@ const persistedUserReducer = persistReducer(persistConfig, userReducer);
 export const store = configureStore({
   reducer: {
     names: namesReducer,
-    nameDetail: nameDetailReducer,
+    name: nameReducer,
     user: persistedUserReducer,
   },
 
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export const persistor = persistStore(store);

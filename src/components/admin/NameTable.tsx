@@ -1,7 +1,7 @@
-import type { NameDetail } from "../../types";
+import type { IName } from "../../types";
 
 interface NameTableProps {
-  names: NameDetail[];
+  names: IName[];
   handleView: (nameSlug: string) => void;
   handleEdit: (nameSlug: string) => void;
   handleDelete: (nameSlug: string) => void;

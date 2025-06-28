@@ -2,12 +2,12 @@ import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Typograph
 
 import { useNavigate } from "react-router-dom";
 
-import type { NameDetail } from "../../types";
+import type { IName } from "../../types";
 
 import peyarkal_logo_tamil_and_english from "../../assets/logos/peyarkal_logo_tamil_and_english.png";
 
 interface NameCardProps {
-  nameDetail: NameDetail;
+  nameDetail: IName;
 }
 
 export default function NameCard({ nameDetail }: NameCardProps) {

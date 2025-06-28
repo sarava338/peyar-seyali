@@ -7,7 +7,7 @@ import NameList from "../components/names/NameList";
 
 export default function Names() {
   const dispatch = useAppDispatch();
-  const { data: names, status, error } = useAppSelector((state) => state.names);
+  const { publicNames: names, status, error } = useAppSelector((state) => state.names);
 
   useEffect(() => {
     dispatch(fetchNames());

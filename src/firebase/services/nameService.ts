@@ -1,13 +1,13 @@
-import { updateDoc, setDoc, deleteDoc, doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { updateDoc, setDoc, deleteDoc, doc, getDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 import { db } from "../firebase";
 
 import { toSlug } from "../../utils";
-import type { IName, NameDetail } from "../../types";
+import type { IName } from "../../types";
 
-export async function getAllNames(): Promise<NameDetail[]> {
-  const namesCol = collection(db, "names");
-  const snapshot = await getDocs(namesCol);
+export async function getAllNamesForAdmin(): Promise<IName[]> {
+  const selectedNames = collection(db, "names");
+  const snapshot = await getDocs(selectedNames);
 
   const names = snapshot.docs.map((doc) => {
     const nameData = doc.data() as IName;
@@ -21,7 +21,36 @@ export async function getAllNames(): Promise<NameDetail[]> {
   return names;
 }
 
-export async function getNameById(id: string): Promise<NameDetail | null> {
+export async function getAllNames(): Promise<IName[]> {
+  const selectedNames = query(collection(db, "names"), where("active", "==", true));
+  const snapshot = await getDocs(selectedNames);
+
+  const names: IName[] = snapshot.docs.map((doc) => {
+    const nameData = doc.data() as IName;
+
+    return {
+      id: doc.id,
+      ...nameData,
+    };
+  });
+
+  return names;
+}
+
+export async function getNameById(id: string): Promise<IName | null> {
+  const selectedName = query(collection(db, "names"), where("slug", "==", id), where("active", "==", true));
+
+  const snapshot = await getDocs(selectedName);
+
+  if (snapshot.empty) return null;
+
+  const doc = snapshot.docs[0];
+  const docData = doc.data() as IName;
+
+  return docData;
+}
+
+export async function getNameByIdForAdmin(id: string): Promise<IName | null> {
   const docRef = doc(db, "names", id);
   const docSnap = await getDoc(docRef);
 
@@ -40,9 +69,9 @@ export async function getNameById(id: string): Promise<NameDetail | null> {
 /**
  * Add a new name with unique slug as document ID
  * @export
- * @param {NameDetail} nameDetail
+ * @param {IName} nameDetail
  */
-export async function addName(nameDetail: NameDetail) {
+export async function addName(nameDetail: IName) {
   const slug = nameDetail.slug || toSlug(nameDetail.nameInEnglish);
   const docRef = doc(db, "names", slug);
 
@@ -64,7 +93,7 @@ export async function addName(nameDetail: NameDetail) {
  * @param docId firebase's document id
  * @param nameDetail name data from form
  */
-export async function updateName(docId: string, nameDetail: NameDetail) {
+export async function updateName(docId: string, nameDetail: IName) {
   const docRef = doc(db, "names", docId);
 
   await updateDoc(docRef, {

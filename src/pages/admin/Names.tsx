@@ -2,57 +2,52 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchNames } from "../../store/namesSlice";
+import { fetchNames, fetchNamesForAdmin } from "../../store/namesSlice";
 
 import NameTable from "../../components/admin/NameTable";
 import { deleteName } from "../../firebase/services/nameService";
 
 export default function Names() {
-    const {data : names, error, status} = useAppSelector((state) => state.names);
-    const navigate = useNavigate()
-    const dispatch = useAppDispatch();
+  const { adminNames: names, error, status } = useAppSelector((state) => state.names);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-    useEffect(() => {
+  useEffect(() => {
+    dispatch(fetchNamesForAdmin());
+  }, [dispatch]);
+
+  const handleViewClick = (nameSlug: string): void => {
+    navigate(`/admin/names/${nameSlug}`);
+  };
+
+  const handleEditClick = (nameSlug: string): void => {
+    navigate(`/admin/names/${nameSlug}/edit`);
+  };
+
+  const handleDeleteClick = async (nameSlug: string) => {
+    const canDelete = confirm(`Are you sure you want to delete the name: ${nameSlug}?`);
+    try {
+      if (canDelete) {
+        await deleteName(nameSlug);
         dispatch(fetchNames());
-      }, [dispatch]);
-
-    const handleViewClick = (nameSlug: string): void => {
-        navigate(`/admin/names/${nameSlug}`);
+        console.log(`Name: ${nameSlug} deleted successfully.`);
+      }
+    } catch (error) {
+      console.error("Error deleting name:", error);
     }
+  };
 
-    const handleEditClick = (nameSlug: string): void => {
-        navigate(`/admin/names/${nameSlug}/edit`);
-    }
+  if (status === "loading") return <p>Loading Names for you...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!names || names.length === 0) return <p>பெயர்கள் இல்லை.</p>;
 
-    const handleDeleteClick = async (nameSlug: string) => {
-        const canDelete = confirm(`Are you sure you want to delete the name: ${nameSlug}?`);
-        try {
-            
-            if (canDelete) {
-                await deleteName(nameSlug);
-                dispatch(fetchNames());
-                console.log(`Name: ${nameSlug} deleted successfully.`);
-            }
-
-        } catch (error) {
-            console.error("Error deleting name:", error);
-        }
-    }
-
-    if(status === 'loading') return <p>Loading Names for you...</p>;
-    if(error) return <p>Error: {error}</p>;
-    if (!names || names.length === 0) return <p>பெயர்கள் இல்லை.</p>;
-
-    return (
+  return (
     <>
       <main>
-        <h1>அனைத்து பெயர்கள் - <strong>{names.length}</strong></h1>
-        <NameTable 
-            names={names} 
-            handleView={handleViewClick} 
-            handleEdit={handleEditClick} 
-            handleDelete={handleDeleteClick} 
-        />
+        <h1>
+          அனைத்து பெயர்கள் - <strong>{names.length}</strong>
+        </h1>
+        <NameTable names={names} handleView={handleViewClick} handleEdit={handleEditClick} handleDelete={handleDeleteClick} />
       </main>
     </>
   );

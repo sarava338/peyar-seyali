@@ -1,22 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { getAllNames } from "../firebase/services/nameService";
+import { getAllNames, getAllNamesForAdmin } from "../firebase/services/nameService";
 
-import type { NameDetail } from "../types";
+import type { IName } from "../types";
 
 interface NamesState {
-  data: NameDetail[];
+  publicNames: IName[];
+  adminNames: IName[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: NamesState = {
-  data: [],
+  publicNames: [],
+  adminNames: [],
   status: "idle",
   error: null,
 };
 
 const fetchNames = createAsyncThunk("names/fetchNames", getAllNames);
+const fetchNamesForAdmin = createAsyncThunk("names/fetchNamesForAdmin", getAllNamesForAdmin);
 
 const namesSlice = createSlice({
   name: "names",
@@ -24,15 +27,30 @@ const namesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // public fetch
       .addCase(fetchNames.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
       .addCase(fetchNames.fulfilled, (state, action) => {
-        state.data = action.payload;
+        state.publicNames = action.payload;
         state.status = "succeeded";
       })
       .addCase(fetchNames.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Failed to fetch names";
+      })
+
+      // admin fetch
+      .addCase(fetchNamesForAdmin.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchNamesForAdmin.fulfilled, (state, action) => {
+        state.adminNames = action.payload;
+        state.status = "succeeded";
+      })
+      .addCase(fetchNamesForAdmin.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Failed to fetch names";
       });
@@ -40,4 +58,4 @@ const namesSlice = createSlice({
 });
 
 export default namesSlice.reducer;
-export { fetchNames };
+export { fetchNames, fetchNamesForAdmin };
