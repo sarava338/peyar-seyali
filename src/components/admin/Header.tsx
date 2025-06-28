@@ -4,7 +4,7 @@ import { Box, styled, Toolbar, Typography } from "@mui/material";
 
 import MuiAppBar, { type AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 
-import Logo from "../Logo";
+import { HeaderLogo } from "../Logo";
 import UserMenu from "../header/UserMenu";
 
 import AdminDrawerIcon from "../../assets/icons/AdminDrawerIcon";
@@ -33,7 +33,7 @@ export default function Header({ open, handleDrawerOpen, drawerWidth }: HeaderPr
           <UserMenu userAnchor={userAnchor} onUserMenuOpen={handleUserMenuOpen} onUserMenuClose={handleUserMenuClose} />
 
           <Box sx={{ mx: 4 }}>
-            <Logo />
+            <HeaderLogo />
           </Box>
 
           <Typography variant="h5" noWrap component="p">

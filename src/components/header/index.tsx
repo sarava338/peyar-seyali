@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Toolbar, Container, Box, AppBar } from "@mui/material";
 
-import Logo from "../Logo";
+import { HeaderLogo } from "../Logo";
 import NavMenu from "./NavMenu";
 import UserMenu from "./UserMenu";
 
@@ -28,15 +28,15 @@ export default function Header() {
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             {/** Logo - Desktop */}
-            <Box sx={{ display: { xs: "none", md: "flex" }, mr: 2 }}>
-              <Logo />
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <HeaderLogo />
             </Box>
 
             <NavMenu navAnchor={navAnchor} onNavOpen={handleNavMenuOpen} onNavClose={handleNavMenuClose} />
 
             {/* Logo - Mobile */}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <Logo />
+              <HeaderLogo />
             </Box>
 
             <UserMenu userAnchor={userAnchor} onUserMenuOpen={handleUserMenuOpen} onUserMenuClose={handleUserMenuClose} />
