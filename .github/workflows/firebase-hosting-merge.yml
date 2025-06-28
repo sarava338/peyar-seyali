@@ -37,10 +37,21 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
           VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.VITE_FIREBASE_MEASUREMENT_ID }}
 
-      - name: 🚀 Deploy to Firebase Hosting
+
+      - name: 🚀 Deploy to peyarkal site
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PEYAR_SEYALI }}
-          channelId: live
           projectId: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          channelId: live
+          target: peyarkal
+        
+      - name: 🚀Deploy to peyar-seyali site
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PEYAR_SEYALI }}
+          projectId: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          channelId: live
+          target: peyar-seyali
