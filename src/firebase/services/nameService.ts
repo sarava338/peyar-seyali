@@ -1,6 +1,6 @@
 import { updateDoc, setDoc, deleteDoc, doc, getDoc, collection, getDocs, query, where } from "firebase/firestore";
 
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 
 import { toSlug } from "../../utils";
 import type { IName } from "../../types";
@@ -75,13 +75,10 @@ export async function addName(nameDetail: IName) {
   const slug = nameDetail.slug || toSlug(nameDetail.nameInEnglish);
   const docRef = doc(db, "names", slug);
 
-  console.log("nameDetail", nameDetail);
-  console.log("slug", slug);
-  console.log("docRef", docRef);
-
   await setDoc(docRef, {
     ...nameDetail,
     slug: slug,
+    author: nameDetail.author.split("@")[0] || auth.currentUser?.email || "Anonymous",
     comments: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
