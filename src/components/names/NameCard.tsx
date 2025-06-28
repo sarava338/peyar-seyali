@@ -10,6 +10,8 @@ interface NameCardProps {
   nameDetail: IName;
 }
 
+const DESCRIPTION_MAX_WORDS = 12; // Maximum words to display in the description
+
 export default function NameCard({ nameDetail }: NameCardProps) {
   const navigate = useNavigate();
 
@@ -38,28 +40,29 @@ export default function NameCard({ nameDetail }: NameCardProps) {
   };
 
   return (
-    <Card elevation={3} sx={{ maxWidth: 345, minWidth: 300 }}>
+    <Card elevation={3} sx={{ width: 345 }}>
       <CardActionArea onClick={handleCardClick}>
-        <CardContent sx={{ position: "relative" }}>
+        <CardContent sx={{ position: "relative", height: 90 }}>
           <Chip
             variant="outlined"
             size="small"
             label={nameDetail.gender}
             sx={{
               position: "absolute",
-              bgcolor: nameDetail.gender === "male" ? "#1e90ff" : "#ffa9d0",
+              bgcolor: nameDetail.gender === "male" ? "#99ccff" : "#ffb4d5",
               p: 1,
               top: 22,
               right: -10,
             }}
           />
 
-          <Typography gutterBottom variant="h5" component="h3">
+          <Typography gutterBottom variant="h5" component="h2">
             {nameDetail.name}
           </Typography>
 
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {nameDetail.description}
+            {nameDetail.description.split(" ").slice(0, DESCRIPTION_MAX_WORDS).join(" ")}
+            {nameDetail.description.split(" ").length > DESCRIPTION_MAX_WORDS && "..."}
           </Typography>
         </CardContent>
       </CardActionArea>
