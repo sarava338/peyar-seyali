@@ -59,7 +59,7 @@ export default function AddName() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formDetail = { ...formData, author: user?.name || "" };
+    const formDetail = { ...formData, author: user?.email || "ADMIN" };
 
     try {
       await addName(formDetail);
