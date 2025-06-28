@@ -30,7 +30,10 @@ export default function SideNavBar({ open, drawerWidth, handleDrawerClose }: Sid
           <Divider />
 
           <DashBoardListItem open={open} pageName="Tags" path="/admin/tags" />
-          <DashBoardListItem open={open} pageName="Add Tag" path="/admin/tags/add" />
+
+          <Divider />
+
+          <DashBoardListItem open={open} pageName="Categories" path="/admin/categories" />
 
           <Divider />
         </List>
