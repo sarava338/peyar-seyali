@@ -8,11 +8,11 @@ export type IName = {
   slug?: string;
   literatureEvidence?: string;
   epigraphEvidence?: string;
-  otherNames?: string[];
-  relatedNames?: string[];
-  categories?: string[];
-  comments?: string[];
-  tags?: string[];
+  otherNames: string[];
+  relatedNames: string[];
+  categories: string[];
+  comments: string[];
+  tags: string[];
   author: string;
   reference?: string;
   active: boolean;
