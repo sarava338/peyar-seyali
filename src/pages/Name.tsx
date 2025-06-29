@@ -94,11 +94,11 @@ export default function Name() {
 
                 <Stack component="main" spacing={2}>
                   <Typography variant="subtitle1">
-                    <strong>மெய்ப்பொருள்:</strong> {name.meaning}
+                    <strong>பொருள்:</strong> {name.meaning}
                   </Typography>
 
                   <Typography variant="body1">
-                    <strong>விவரணம்:</strong> {name.description}
+                    <strong>விளக்கம்:</strong> {name.description}
                   </Typography>
 
                   <Typography variant="body1">
