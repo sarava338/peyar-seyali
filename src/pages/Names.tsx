@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 
+import { Box, Typography } from "@mui/material";
+
 import { fetchNames } from "../store/namesSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 import NameList from "../components/names/NameList";
-import { Box, Typography } from "@mui/material";
+import LoadingScreen from "../components/LoadingScreen";
 
 export default function Names() {
   const dispatch = useAppDispatch();
@@ -14,7 +16,7 @@ export default function Names() {
     dispatch(fetchNames());
   }, [dispatch]);
 
-  if (status === "loading") return <p>பெயர்கள் ஏற்றப்படுகிறது...</p>;
+  if (status === "loading") return <LoadingScreen />;
   if (error) return <p>பிழை: {error}</p>;
   if (!names || names.length === 0) return <p>பெயர்கள் இல்லை.</p>;
 

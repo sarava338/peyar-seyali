@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchNames } from "../store/namesSlice";
@@ -8,7 +9,7 @@ import NameList from "../components/names/NameList";
 
 export default function Home() {
   const dispatch = useAppDispatch();
-  const { publicNames: names } = useAppSelector((state) => state.names);
+  const { publicNames: names, status } = useAppSelector((state) => state.names);
 
   useEffect(() => {
     dispatch(fetchNames());
@@ -24,7 +25,7 @@ export default function Home() {
         <Typography component="h2" variant="h5" sx={{ textAlign: "center" }}>
           மொத்த பெயர்கள் :{" "}
           <Typography component="span" variant="h3" color="primary">
-            {names.length}
+            {status === "loading" ? <CircularProgress size={30} /> : names.length}
           </Typography>
         </Typography>
 

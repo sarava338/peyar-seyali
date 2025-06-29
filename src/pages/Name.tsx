@@ -8,6 +8,8 @@ import ShareIcon from "@mui/icons-material/Share";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchNameById } from "../store/nameSlice";
 
+import LoadingScreen from "../components/LoadingScreen";
+
 export default function Name() {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
@@ -19,7 +21,7 @@ export default function Name() {
     }
   }, [dispatch, id]);
 
-  if (status === "loading") return <p>Loading Name Details...</p>;
+  if (status === "loading") return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
   if (!name) return <p>No name details found.</p>;
 

@@ -7,6 +7,8 @@ import { fetchNames, fetchNamesForAdmin } from "../../store/namesSlice";
 import NameTable from "../../components/admin/NameTable";
 import { deleteName } from "../../firebase/services/nameService";
 
+import LoadingScreen from "../../components/LoadingScreen";
+
 export default function Names() {
   const { adminNames: names, error, status } = useAppSelector((state) => state.names);
   const navigate = useNavigate();
@@ -37,7 +39,7 @@ export default function Names() {
     }
   };
 
-  if (status === "loading") return <p>Loading Names for you...</p>;
+  if (status === "loading") return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
   if (!names || names.length === 0) return <p>பெயர்கள் இல்லை.</p>;
 

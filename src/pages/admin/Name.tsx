@@ -5,6 +5,8 @@ import { Helmet } from "react-helmet-async";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchNameByIdForAdmin } from "../../store/nameSlice";
 
+import LoadingScreen from "../../components/LoadingScreen";
+
 export default function Name() {
   const { nameSlug } = useParams<{ nameSlug: string }>();
   const dispatch = useAppDispatch();
@@ -16,7 +18,7 @@ export default function Name() {
     }
   }, [nameSlug, dispatch]);
 
-  if (status === "loading") return <p>Loading Name Details...</p>;
+  if (status === "loading") return <LoadingScreen />;
   if (error) return <p>Error: {error}</p>;
   if (!name) return <p>No name details found.</p>;
 
