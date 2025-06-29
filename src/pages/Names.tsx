@@ -4,6 +4,7 @@ import { fetchNames } from "../store/namesSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 import NameList from "../components/names/NameList";
+import { Box, Typography } from "@mui/material";
 
 export default function Names() {
   const dispatch = useAppDispatch();
@@ -19,8 +20,12 @@ export default function Names() {
 
   return (
     <>
-      <h2>பெயர்கள் பட்டியல்</h2>
-      <NameList names={names} />
+      <Box sx={{ mx: { md: 2, xs: 1 } }}>
+        <Typography component="h1" variant="h2" sx={{ textAlign: "center" }}>
+          பெயர்கள் பட்டியல்
+        </Typography>
+        <NameList names={names} />
+      </Box>
     </>
   );
 }
