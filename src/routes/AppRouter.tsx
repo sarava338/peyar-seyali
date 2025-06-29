@@ -8,13 +8,15 @@ import Login from "../pages/Login";
 
 import PublicNames from "../pages/Names";
 import PublicName from "../pages/Name";
+import PublicTags from "../pages/Tags";
+import PublicCategories from "../pages/Categories";
 
 import AdminNames from "../pages/admin/Names";
 import AddName from "../pages/admin/AddName";
 import EditName from "../pages/admin/EditName";
 import AdminName from "../pages/admin/Name";
-import Tags from "../pages/admin/Tags";
-import Categories from "../pages/admin/Categories";
+import AdminTags from "../pages/admin/Tags";
+import AdminCategories from "../pages/admin/Categories";
 
 export default function AppRouter() {
   return (
@@ -25,6 +27,9 @@ export default function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/names" element={<PublicNames />} />
         <Route path="/names/:id" element={<PublicName />} />
+
+        <Route path="/tags/:tagSlug" element={<PublicTags />} />
+        <Route path="/categories/:categorySlug" element={<PublicCategories />} />
       </Route>
 
       {/* Admin Routes */}
@@ -34,8 +39,8 @@ export default function AppRouter() {
         <Route path="names/:nameSlug/edit" element={<EditName />} />
         <Route path="names/add" element={<AddName />} />
 
-        <Route path="tags" element={<Tags />} />
-        <Route path="categories" element={<Categories />} />
+        <Route path="tags" element={<AdminTags />} />
+        <Route path="categories" element={<AdminCategories />} />
       </Route>
     </Routes>
   );
