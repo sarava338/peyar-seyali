@@ -55,7 +55,7 @@ export default function Name() {
           <Grid size={{ xs: 12, md: 8 }}>
             <Paper component="article" elevation={3}>
               <Box sx={{ p: 3 }}>
-                <Box component="header" position='relative'>
+                <Box component="header" position="relative">
                   <Chip
                     variant="outlined"
                     size="small"
@@ -129,9 +129,6 @@ export default function Name() {
                 <Divider sx={{ my: 3 }} />
 
                 <Stack component="footer" spacing={1}>
-                  <Typography variant="body2" color="text.secondary">
-                    ஆசிரியர்: {name.author}
-                  </Typography>
                   <Typography variant="body2" color="text.secondary">
                     உருவாக்கப்பட்டது: {new Date(name.createdAt ?? "").toLocaleDateString()}
                   </Typography>
