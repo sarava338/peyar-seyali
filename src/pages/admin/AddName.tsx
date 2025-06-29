@@ -4,8 +4,9 @@ import { Box, Button, FormControlLabel, MenuItem, Paper, Switch, TextField, Typo
 import { useAppSelector } from "../../store/hooks";
 
 import { addName } from "../../firebase/services/nameService";
+import type { IName } from "../../types";
 
-const initialFormData = {
+const initialFormData: IName = {
   name: "",
   nameInEnglish: "",
   meaning: "",
@@ -13,7 +14,7 @@ const initialFormData = {
   description: "",
   gender: "",
   literatureEvidence: "",
-  epigrapicalEvidence: "",
+  epigraphEvidence: "",
   otherNames: [] as string[],
   relatedNames: [] as string[],
   tags: [] as string[],
@@ -25,7 +26,7 @@ const initialFormData = {
 };
 
 export default function AddName() {
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState<IName>(initialFormData);
   const user = useAppSelector((state) => state.user.currentUser);
 
   const genderOptions = [
@@ -197,9 +198,9 @@ export default function AddName() {
               />
               <TextField
                 fullWidth
-                label="Epigraphical Evidence"
-                name="epigrapicalEvidence"
-                value={formData.epigrapicalEvidence}
+                label="Epigraph Evidence"
+                name="epigraphEvidence"
+                value={formData.epigraphEvidence}
                 onChange={handleChange}
                 margin="normal"
                 multiline
