@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <>
-      <AppBar position="fixed" component="header" sx={{ backgroundColor: "white", color: "black" }}>
+      <AppBar position="fixed" component="header" sx={{ backgroundColor: "white", color: "black", px: { md: 8, xs: 1 } }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             {/** Logo - Desktop */}
