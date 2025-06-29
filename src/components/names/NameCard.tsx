@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 
-import type { IName } from "../../types";
+import type { NameCard as NameType } from "../../types";
 interface NameCardProps {
-  nameDetail: IName;
+  nameDetail: NameType;
 }
 
 const DESCRIPTION_MAX_WORDS = 12; // Maximum words to display in the description

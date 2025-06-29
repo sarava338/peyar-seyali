@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
-import { Box, Button, Card, CardContent, Chip, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -44,6 +44,8 @@ export default function Name() {
     }
   };
 
+  console.log(name);
+
   return (
     <>
       <Helmet>
@@ -52,7 +54,7 @@ export default function Name() {
       </Helmet>
 
       <Box component="article" maxWidth="lg" mx="auto" mt={4} px={2}>
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
           {/* Main Info */}
           <Grid size={{ xs: 12, md: 8 }}>
             <Paper component="article" elevation={3}>
@@ -64,8 +66,8 @@ export default function Name() {
                     label={name.gender}
                     sx={{
                       position: "absolute",
-                      bgcolor: name.gender === "male" ? "#99ccff" : "#ffb4d5",
-                      p: 1,
+                      bgcolor: ["ஆண்", "male", "ஆன்", "Male"].some((gen) => gen === name.gender) ? "#99ccff" : "#ffb4d5",
+                      p: 2,
                       bottom: 0,
                       right: 0,
                     }}
@@ -79,8 +81,10 @@ export default function Name() {
                     </Typography>
                     {name.tags.length > 0 && (
                       <Stack direction="row" flexWrap="wrap" spacing={1}>
-                        {name.tags.map((tag, index) => (
-                          <Chip key={index} label={tag} variant="filled" />
+                        {name.tags.map((tag) => (
+                          <Link to={`/tags/${tag.slug}`} key={tag.slug}>
+                            <Chip label={tag.tag} variant="filled" />
+                          </Link>
                         ))}
                       </Stack>
                     )}
@@ -126,6 +130,17 @@ export default function Name() {
                       <strong>மேற்கோள்:</strong> {name.reference}
                     </Typography>
                   )}
+
+                  {name.categories.length > 0 && (
+                    <Stack direction="row" flexWrap="wrap" spacing={1}>
+                      <strong>வகைகள்:</strong>
+                      {name.categories.map((category) => (
+                        <Link to={`/categories/${category.slug}`} key={category.slug}>
+                          <Chip label={category.category} variant="filled" />
+                        </Link>
+                      ))}
+                    </Stack>
+                  )}
                 </Stack>
 
                 <Divider sx={{ my: 3 }} />
@@ -141,43 +156,53 @@ export default function Name() {
               </Box>
             </Paper>
           </Grid>
-        </Grid>
 
-        {/* Sidebar */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Stack component="aside" spacing={3}>
-            {/* Related Names */}
-            {name.relatedNames?.length > 0 && (
-              <Card variant="outlined">
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
+          {/* <Grid size={{ xs: 12, md: 6 }}>
+            {name.comments!.length === 0 ? (
+              <p>No Comments Yet</p>
+            ) : (
+              <div>
+                <p>All comments</p>
+              </div>
+            )}
+          </Grid> */}
+
+          {/* Sidebar */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Stack component="aside" spacing={3}>
+              {/* Related Names */}
+              {name.relatedNames?.length > 0 && (
+                <Paper component="section" elevation={3} sx={{ p: 3 }}>
+                  <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
                     தொடர்புடைய பெயர்கள்
                   </Typography>
-                  <Stack direction="row" spacing={1} flexWrap="wrap">
+                  <Stack direction="column" spacing={2}>
                     {name.relatedNames.map((related) => (
-                      <Chip key={related} label={related} color="primary" variant="outlined" />
+                      <Link to={`/names/${related.slug}`} style={{ width: "fit-content" }} key={related.slug}>
+                        <Chip key={related.slug} label={related.name} color="primary" variant="outlined" />
+                      </Link>
                     ))}
                   </Stack>
-                </CardContent>
-              </Card>
-            )}
+                </Paper>
+              )}
 
-            {/* Other Names */}
-            {name.otherNames?.length > 0 && (
-              <Card variant="outlined">
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
+              {/* Other Names */}
+              {name.otherNames?.length > 0 && (
+                <Paper component="section" elevation={3} sx={{ p: 3 }}>
+                  <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
                     மற்ற பெயர்கள்
                   </Typography>
-                  <Stack direction="row" spacing={1} flexWrap="wrap">
+                  <Stack direction="column" spacing={2}>
                     {name.otherNames.map((other) => (
-                      <Chip key={other} label={other} variant="filled" />
+                      <Link to={`/names/${other.slug}`} style={{ width: "fit-content" }} key={other.slug}>
+                        <Chip key={other.slug} label={other.name} variant="filled" />
+                      </Link>
                     ))}
                   </Stack>
-                </CardContent>
-              </Card>
-            )}
-          </Stack>
+                </Paper>
+              )}
+            </Stack>
+          </Grid>
         </Grid>
       </Box>
     </>

@@ -1,10 +1,10 @@
 import NameCard from "./NameCard";
 
-import type { IName } from "../../types";
+import type { NameCard as NameType } from "../../types";
 import { Box } from "@mui/material";
 
 type NameListProps = {
-  names: IName[];
+  names: NameType[];
 };
 
 export default function NameList({ names }: NameListProps) {

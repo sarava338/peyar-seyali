@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { Box, Button, FormControlLabel, MenuItem, Paper, Switch, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Autocomplete, Box, Button, FormControlLabel, Grid, MenuItem, Paper, Switch, TextField, Typography } from "@mui/material";
 
 import { useAppSelector } from "../../store/hooks";
 
-import { addName } from "../../firebase/services/nameService";
-import type { IName } from "../../types";
+import { addName, getNamesForInput } from "../../firebase/services/nameService";
+import { getTagsForInput } from "../../firebase/services/tagService";
+import { getCategoriesForInput } from "../../firebase/services/categoryService";
+
+import type { ICategory, IName, ITag } from "../../types";
 
 const initialFormData: IName = {
   name: "",
@@ -15,10 +18,10 @@ const initialFormData: IName = {
   gender: "",
   literatureEvidence: "",
   epigraphEvidence: "",
-  otherNames: [] as string[],
-  relatedNames: [] as string[],
-  tags: [] as string[],
-  categories: [] as string[],
+  otherNames: [],
+  relatedNames: [],
+  tags: [],
+  categories: [],
   slug: "",
   author: "",
   reference: "",
@@ -29,15 +32,21 @@ export default function AddName() {
   const [formData, setFormData] = useState<IName>(initialFormData);
   const user = useAppSelector((state) => state.user.currentUser);
 
-  const genderOptions = [
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
-    { value: "unisex", label: "Unisex" },
-  ];
+  const [tagOptions, setTagOptions] = useState<Pick<ITag, "tag" | "slug">[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<Pick<ICategory, "category" | "slug">[]>([]);
+  const [nameOptions, setNameOptions] = useState<Pick<IName, "name" | "slug">[]>([]);
 
-  const tagOptions = ["Spiritual", "Modern", "Classic", "Nature", "Mythology"];
-  const categoryOptions = ["Tamil", "Sanskrit", "Literature", "Poetic"];
-  const nameOptions = ["Arun", "Kavi", "Suriya", "Anbu", "Vetri", "Selvi", "Tharun", "Lakshmi", "Karthik", "Meera"];
+  useEffect(() => {
+    getTagsForInput().then(setTagOptions);
+    getCategoriesForInput().then(setCategoryOptions);
+    getNamesForInput().then(setNameOptions);
+  }, []);
+
+  const genderOptions = [
+    { value: "ஆண்", label: "ஆண்" },
+    { value: "பெண்", label: "பெண்" },
+    { value: "இருபாலர்", label: "இருபாலர்" },
+  ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -78,13 +87,13 @@ export default function AddName() {
 
   return (
     <Box>
-      <Paper elevation={3} sx={{ maxWidth: "80%", mx: "auto", p: 3 }}>
+      <Paper elevation={3} sx={{ maxWidth: "90%", mx: "auto", p: 3 }}>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <Typography variant="h3" component="h1" gutterBottom>
               Add a New Name
             </Typography>
-            <Box sx={{ display: "flex", justifyContent: "space-between", gap: 5 }}>
+            <Box sx={{ display: { xs: "none", md: "flex" }, justifyContent: "space-between", gap: 5 }}>
               <Button type="submit" variant="contained" color="primary">
                 Add Name
               </Button>
@@ -94,8 +103,8 @@ export default function AddName() {
               </Button>
             </Box>
           </Box>
-          <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 3 }}>
-            <Box>
+          <Grid container gap={3}>
+            <Grid size={{ md: 6, xs: 12 }}>
               <TextField fullWidth label="Name" name="name" value={formData.name} onChange={handleChange} margin="normal" required />
               <TextField
                 fullWidth
@@ -149,42 +158,28 @@ export default function AddName() {
               />
 
               <TextField fullWidth label="Slug (Optional)" name="slug" value={formData.slug} onChange={handleChange} margin="normal" />
-            </Box>
+            </Grid>
 
-            <Box>
-              <TextField
-                select
+            <Grid size={{ md: 5, xs: 12 }}>
+              <Autocomplete
+                sx={{ mt: 2, mb: 3 }}
                 fullWidth
-                slotProps={{ select: { multiple: true } }}
-                label="Other Names"
-                name="otherNames"
-                value={formData.otherNames}
-                onChange={handleChange}
-                margin="normal"
-              >
-                {nameOptions.map((name) => (
-                  <MenuItem key={name} value={name}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </TextField>
+                multiple
+                options={nameOptions}
+                getOptionLabel={(name) => name.name}
+                onChange={(_e, value) => setFormData({ ...formData, otherNames: value })}
+                renderInput={(params) => <TextField {...params} label="Other Names" variant="outlined" />}
+              />
 
-              <TextField
-                select
+              <Autocomplete
+                sx={{ mt: 2, mb: 3 }}
                 fullWidth
-                slotProps={{ select: { multiple: true } }}
-                label="Related Names"
-                name="relatedNames"
-                value={formData.relatedNames}
-                onChange={handleChange}
-                margin="normal"
-              >
-                {nameOptions.map((name) => (
-                  <MenuItem key={name} value={name}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </TextField>
+                multiple
+                options={nameOptions}
+                getOptionLabel={(name) => name.name}
+                onChange={(_e, value) => setFormData({ ...formData, relatedNames: value })}
+                renderInput={(params) => <TextField {...params} label="Related Names" variant="outlined" />}
+              />
 
               <TextField
                 fullWidth
@@ -207,41 +202,27 @@ export default function AddName() {
                 rows={3}
               />
 
-              <TextField
-                select
+              <Autocomplete
+                sx={{ mt: 2, mb: 3 }}
                 fullWidth
-                slotProps={{ select: { multiple: true } }}
-                label="Tags"
-                name="tags"
-                value={formData.tags}
-                onChange={handleChange}
-                margin="normal"
-              >
-                {tagOptions.map((tag) => (
-                  <MenuItem key={tag} value={tag}>
-                    {tag}
-                  </MenuItem>
-                ))}
-              </TextField>
+                multiple
+                options={tagOptions}
+                getOptionLabel={(tag) => tag.tag}
+                onChange={(_e, value) => setFormData({ ...formData, tags: value })}
+                renderInput={(params) => <TextField {...params} label="Tags" variant="outlined" />}
+              />
 
-              <TextField
-                select
+              <Autocomplete
+                sx={{ mt: 2, mb: 3 }}
                 fullWidth
-                slotProps={{ select: { multiple: true } }}
-                label="Categories"
-                name="categories"
-                value={formData.categories}
-                onChange={handleChange}
-                margin="normal"
-              >
-                {categoryOptions.map((category) => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-          </Box>
+                multiple
+                options={categoryOptions}
+                getOptionLabel={(cat) => cat.category}
+                onChange={(_e, value) => setFormData({ ...formData, categories: value })}
+                renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
+              />
+            </Grid>
+          </Grid>
           <TextField
             fullWidth
             label="Reference"

@@ -2,11 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { getAllNames, getAllNamesForAdmin } from "../firebase/services/nameService";
 
-import type { IName } from "../types";
+import type { NameCard } from "../types";
 
 interface NamesState {
-  publicNames: IName[];
-  adminNames: IName[];
+  publicNames: NameCard[];
+  adminNames: NameCard[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
