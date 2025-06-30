@@ -11,6 +11,8 @@ async function resolveName(docSnap: any): Promise<IName> {
   const data = docSnap.data();
 
   return {
+    ...data,
+
     comments: await resolveRefs<IComment>(data.comments || []),
     tags: await resolveRefs<ITag, TagSlugType>(data.tags || [], (data) => ({ tag: data.tag, slug: data.slug })),
     relatedNames: await resolveRefs<IName, NameSlugType>(data.relatedNames || [], (data) => ({ name: data.name, slug: data.slug })),
@@ -20,8 +22,6 @@ async function resolveName(docSnap: any): Promise<IName> {
       category: data.category,
       slug: data.slug,
     })),
-
-    ...data,
   };
 }
 
