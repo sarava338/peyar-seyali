@@ -10,42 +10,18 @@ import type { CategorySlugType, ICategory, IComment, IName, ITag, NameCardType, 
 async function resolveName(docSnap: any): Promise<IName> {
   const data = docSnap.data();
 
-  const [tags, categories, relatedNames, otherNames, comments] = await Promise.all([
-    resolveRefs<IComment>(data.comments || []),
+  return {
+    comments: await resolveRefs<IComment>(data.comments || []),
+    tags: await resolveRefs<ITag, TagSlugType>(data.tags || [], (data) => ({ tag: data.tag, slug: data.slug })),
+    relatedNames: await resolveRefs<IName, NameSlugType>(data.relatedNames || [], (data) => ({ name: data.name, slug: data.slug })),
+    otherNames: await resolveRefs<IName, NameSlugType>(data.otherNames || [], (data) => ({ name: data.name, slug: data.slug })),
 
-    resolveRefs<ITag, TagSlugType>(data.tags || [], (data, id) => ({
-      id,
-      tag: data.tag,
-      slug: data.slug,
-    })),
-
-    resolveRefs<IName, NameSlugType>(data.relatedNames || [], (data, id) => ({
-      id,
-      name: data.name,
-      slug: data.slug,
-    })),
-
-    resolveRefs<IName, NameSlugType>(data.otherNames || [], (data, id) => ({
-      id,
-      name: data.name,
-      slug: data.slug,
-    })),
-
-    resolveRefs<ICategory, CategorySlugType>(data.categories || [], (data, id) => ({
-      id,
+    categories: await resolveRefs<ICategory, CategorySlugType>(data.categories || [], (data) => ({
       category: data.category,
       slug: data.slug,
     })),
-  ]);
 
-  return {
-    id: docSnap.id,
     ...data,
-    tags,
-    categories,
-    relatedNames,
-    otherNames,
-    comments,
   };
 }
 

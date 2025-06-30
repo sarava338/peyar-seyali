@@ -4,14 +4,14 @@ import { db } from "./firebase";
 
 import type { CollectionName } from "../types/types";
 
-export async function resolveRefs<T, R = T>(refs: DocumentReference[], projector?: (data: T, id: string) => R): Promise<R[]> {
+export async function resolveRefs<T, R = T>(refs: DocumentReference[], projector?: (data: T) => R): Promise<R[]> {
   const docs = await Promise.all(refs.map((ref) => getDoc(ref)));
 
   return docs
     .filter((d) => d.exists())
     .map((d) => {
       const data = d.data() as T;
-      return projector ? projector(data, d.id) : ({ id: d.id, ...data } as R);
+      return projector ? projector(data) : ({ id: d.id, ...data } as R);
     });
 }
 
