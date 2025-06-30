@@ -1,5 +1,5 @@
+export type Path = { path: string; name: string };
 export type CollectionName = "names" | "tags" | "categories" | "comments";
-export type NameCard = Pick<IName, "name" | "nameInEnglish" | "slug" | "description" | "gender">;
 
 export type IName = {
   name: string;
@@ -10,10 +10,10 @@ export type IName = {
   origin: string;
   literatureEvidence: string;
   epigraphEvidence: string;
-  otherNames: Pick<IName, "name" | "slug">[];
-  relatedNames: Pick<IName, "name" | "slug">[];
-  categories: Pick<ICategory, "category" | "slug">[];
-  tags: Pick<ITag, "tag" | "slug">[];
+  otherNames: NameSlugType[];
+  relatedNames: NameSlugType[];
+  categories: CategorySlugType[];
+  tags: TagSlugType[];
   author: string;
   active: boolean;
   slug: string;
@@ -23,19 +23,28 @@ export type IName = {
   updatedAt?: string;
 };
 
+export type NameCardType = Pick<IName, "name" | "nameInEnglish" | "slug" | "description" | "gender">;
+export type NameSlugType = Pick<IName, "name" | "slug">;
+
 export type ITag = {
   tag: string;
   tagInEnglish: string;
   slug: string;
-  names: { name: string; nameInEnglish: string; nameSlug: string }[];
+  names: NameSlugType[];
 };
+
+export type TagType = Pick<ITag, "tag" | "slug" | "tagInEnglish">;
+export type TagSlugType = Pick<ITag, "tag" | "slug">;
 
 export type ICategory = {
   category: string;
   categoryInEnglish: string;
   slug: string;
-  names: { name: string; nameInEnglish: string; nameSlug: string }[];
+  names: NameSlugType[];
 };
+
+export type CategoryType = Pick<ICategory, "category" | "slug" | "categoryInEnglish">;
+export type CategorySlugType = Pick<ICategory, "category" | "slug">;
 
 export type IComment = {
   text: string;
@@ -53,5 +62,3 @@ export type IUser = {
   imageUrl: string;
   isAdmin: boolean;
 };
-
-export type Path = { path: string; name: string };

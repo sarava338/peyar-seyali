@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 
-import type { NameCard as NameType } from "../../types";
+import type { NameCardType } from "../../types/types";
 interface NameCardProps {
-  nameDetail: NameType;
+  nameDetail: NameCardType;
 }
 
 const DESCRIPTION_MAX_WORDS = 12; // Maximum words to display in the description
 
-export default function NameCard({ nameDetail }: NameCardProps) {
+export default function NameCardType({ nameDetail }: NameCardProps) {
   const navigate = useNavigate();
 
   const handleCardClick = () => {

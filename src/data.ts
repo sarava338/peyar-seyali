@@ -1,4 +1,4 @@
-import type { Path } from "./types";
+import type { Path } from "./types/types";
 
 export const NAME_INPUT_DATA = [
   { inputName: "name", inputType: "text" },

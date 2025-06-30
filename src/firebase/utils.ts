@@ -2,11 +2,17 @@ import { collection, doc, getDoc, getDocs, query, where, type DocumentReference 
 
 import { db } from "./firebase";
 
-import type { CollectionName } from "../types";
+import type { CollectionName } from "../types/types";
 
-export async function resolveRefs<T>(refs: DocumentReference[]): Promise<T[]> {
+export async function resolveRefs<T, R = T>(refs: DocumentReference[], projector?: (data: T, id: string) => R): Promise<R[]> {
   const docs = await Promise.all(refs.map((ref) => getDoc(ref)));
-  return docs.filter((d) => d.exists()).map((d) => ({ id: d.id, ...d.data() } as T));
+
+  return docs
+    .filter((d) => d.exists())
+    .map((d) => {
+      const data = d.data() as T;
+      return projector ? projector(data, d.id) : ({ id: d.id, ...data } as R);
+    });
 }
 
 /**

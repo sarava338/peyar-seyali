@@ -7,7 +7,7 @@ import { addName, getNamesForInput } from "../../firebase/services/nameService";
 import { getTagsForInput } from "../../firebase/services/tagService";
 import { getCategoriesForInput } from "../../firebase/services/categoryService";
 
-import type { ICategory, IName, ITag } from "../../types";
+import type { CategorySlugType, IName, NameSlugType, TagSlugType } from "../../types/types";
 
 const initialFormData: IName = {
   name: "",
@@ -32,9 +32,9 @@ export default function AddName() {
   const [formData, setFormData] = useState<IName>(initialFormData);
   const user = useAppSelector((state) => state.user.currentUser);
 
-  const [tagOptions, setTagOptions] = useState<Pick<ITag, "tag" | "slug">[]>([]);
-  const [categoryOptions, setCategoryOptions] = useState<Pick<ICategory, "category" | "slug">[]>([]);
-  const [nameOptions, setNameOptions] = useState<Pick<IName, "name" | "slug">[]>([]);
+  const [tagOptions, setTagOptions] = useState<TagSlugType[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<CategorySlugType[]>([]);
+  const [nameOptions, setNameOptions] = useState<NameSlugType[]>([]);
 
   useEffect(() => {
     getTagsForInput().then(setTagOptions);

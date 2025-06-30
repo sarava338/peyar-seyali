@@ -1,13 +1,15 @@
 import NameCard from "./NameCard";
 
-import type { NameCard as NameType } from "../../types";
+import type { NameCardType } from "../../types/types";
 import { Box } from "@mui/material";
 
 type NameListProps = {
-  names: NameType[];
+  names: NameCardType[];
 };
 
 export default function NameList({ names }: NameListProps) {
+  console.log("names", names);
+
   return (
     <Box component="section" sx={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center", mt: 3 }}>
       {names.map((nameDetail) => (

@@ -44,7 +44,7 @@ export default function Name() {
     }
   };
 
-  console.log(name);
+  console.log("name", name);
 
   return (
     <>

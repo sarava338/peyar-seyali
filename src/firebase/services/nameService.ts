@@ -3,18 +3,39 @@ import { updateDoc, setDoc, deleteDoc, doc, getDoc, collection, getDocs, query, 
 import { auth, db } from "../firebase";
 
 import { toSlug } from "../../utils";
-import type { ICategory, IComment, IName, ITag, NameCard } from "../../types";
 import { getRefs, resolveRefs } from "../utils";
+
+import type { CategorySlugType, ICategory, IComment, IName, ITag, NameCardType, NameSlugType, TagSlugType } from "../../types/types";
 
 async function resolveName(docSnap: any): Promise<IName> {
   const data = docSnap.data();
 
   const [tags, categories, relatedNames, otherNames, comments] = await Promise.all([
-    resolveRefs<Pick<ITag, "tag" | "slug">>(data.tags || []),
-    resolveRefs<Pick<ICategory, "category" | "slug">>(data.categories || []),
-    resolveRefs<Pick<IName, "name" | "slug">>(data.relatedNames || []),
-    resolveRefs<Pick<IName, "name" | "slug">>(data.otherNames || []),
     resolveRefs<IComment>(data.comments || []),
+
+    resolveRefs<ITag, TagSlugType>(data.tags || [], (data, id) => ({
+      id,
+      tag: data.tag,
+      slug: data.slug,
+    })),
+
+    resolveRefs<IName, NameSlugType>(data.relatedNames || [], (data, id) => ({
+      id,
+      name: data.name,
+      slug: data.slug,
+    })),
+
+    resolveRefs<IName, NameSlugType>(data.otherNames || [], (data, id) => ({
+      id,
+      name: data.name,
+      slug: data.slug,
+    })),
+
+    resolveRefs<ICategory, CategorySlugType>(data.categories || [], (data, id) => ({
+      id,
+      category: data.category,
+      slug: data.slug,
+    })),
   ]);
 
   return {
@@ -28,11 +49,22 @@ async function resolveName(docSnap: any): Promise<IName> {
   };
 }
 
-export async function getAllNamesForAdmin(): Promise<NameCard[]> {
+export async function getAllNamesForAdmin(): Promise<NameCardType[]> {
   try {
     const selectedNames = query(collection(db, "names"));
     const snapshot = await getDocs(selectedNames);
-    return await Promise.all(snapshot.docs.map(async (docSnap) => await resolveName(docSnap)));
+
+    return snapshot.docs.map((docSnap) => {
+      const data = docSnap.data() as IName;
+
+      return {
+        name: data.name,
+        nameInEnglish: data.nameInEnglish,
+        slug: data.slug,
+        description: data.description,
+        gender: data.gender,
+      };
+    });
   } catch (err) {
     const error = err as Error;
     console.error(error);
@@ -40,7 +72,7 @@ export async function getAllNamesForAdmin(): Promise<NameCard[]> {
   }
 }
 
-export async function getAllNames(): Promise<NameCard[]> {
+export async function getAllNames(): Promise<NameCardType[]> {
   try {
     const selectedNames = query(collection(db, "names"), where("active", "==", true));
     const snapshot = await getDocs(selectedNames);
@@ -63,11 +95,11 @@ export async function getAllNames(): Promise<NameCard[]> {
   }
 }
 
-export async function getNamesForInput(): Promise<Pick<IName, "name" | "slug">[]> {
+export async function getNamesForInput(): Promise<NameSlugType[]> {
   const selectedNames = collection(db, "names");
   const snapshot = await getDocs(selectedNames);
 
-  const names: Pick<IName, "name" | "slug">[] = snapshot.docs.map((doc) => {
+  const names = snapshot.docs.map((doc) => {
     const nameData = doc.data() as IName;
 
     return {
@@ -79,19 +111,19 @@ export async function getNamesForInput(): Promise<Pick<IName, "name" | "slug">[]
   return names;
 }
 
-export async function getNameById(id: string): Promise<IName | null> {
+export async function getNameById(id: string): Promise<IName> {
   const selectedName = query(collection(db, "names"), where("slug", "==", id), where("active", "==", true));
 
   const snapshot = await getDocs(selectedName);
 
-  if (snapshot.empty) return null;
+  if (snapshot.empty) throw new Error("Name Not Found");
 
   const doc = snapshot.docs[0];
 
   return resolveName(doc);
 }
 
-export async function getNameByIdForAdmin(id: string): Promise<IName | null> {
+export async function getNameByIdForAdmin(id: string): Promise<IName> {
   const docRef = doc(db, "names", id);
   const docSnap = await getDoc(docRef);
 
@@ -112,17 +144,17 @@ export async function addName(nameDetail: IName) {
 
     const otherNameSlugs = nameDetail.otherNames.map((name) => name.slug);
     const relatedNameSlugs = nameDetail.relatedNames.map((name) => name.slug);
-    const tagRefs = nameDetail.tags.map((tag) => tag.slug);
-    const categoryRefs = nameDetail.categories.map((category) => category.slug);
+    const tagSlugs = nameDetail.tags.map((tag) => tag.slug);
+    const categorySlugs = nameDetail.categories.map((category) => category.slug);
 
     await setDoc(docRef, {
       ...nameDetail,
       otherNames: await getRefs("names", otherNameSlugs),
       relatedNames: await getRefs("names", relatedNameSlugs),
-      categories: await getRefs("categories", categoryRefs),
-      tags: await getRefs("tags", tagRefs),
+      categories: await getRefs("categories", categorySlugs),
+      tags: await getRefs("tags", tagSlugs),
       slug: slug,
-      author: nameDetail.author.split("@")[0] || auth.currentUser?.email || "Anonymous",
+      author: nameDetail.author.split("@")[0] || auth.currentUser?.email?.split("@")[0] || "Anonymous",
       comments: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

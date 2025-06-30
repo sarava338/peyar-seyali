@@ -1,7 +1,7 @@
-import type { NameCard } from "../../types";
+import type { NameCardType } from "../../types/types";
 
 interface NameTableProps {
-  names: NameCard[];
+  names: NameCardType[];
   handleView: (nameSlug: string) => void;
   handleEdit: (nameSlug: string) => void;
   handleDelete: (nameSlug: string) => void;
