@@ -44,6 +44,8 @@ export default function Name() {
     }
   };
 
+  console.log(name);
+
   return (
     <>
       <Helmet>
@@ -174,7 +176,7 @@ export default function Name() {
               {name.relatedNames?.length > 0 && (
                 <Paper component="section" elevation={3} sx={{ p: 3 }}>
                   <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
-                    தொடர்புடைய பெயர்கள்
+                    <strong>தொடர்புடைய பெயர்கள் :</strong>
                   </Typography>
                   <Stack direction="column" spacing={2}>
                     {name.relatedNames.map((related) => (
@@ -190,7 +192,7 @@ export default function Name() {
               {name.otherNames?.length > 0 && (
                 <Paper component="section" elevation={3} sx={{ p: 3 }}>
                   <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
-                    மற்ற பெயர்கள்
+                    <strong>மற்ற பெயர்கள் :</strong>
                   </Typography>
                   <Stack direction="column" spacing={2}>
                     {name.otherNames.map((other) => (
