@@ -44,8 +44,6 @@ export default function Name() {
     }
   };
 
-  console.log(name);
-
   return (
     <>
       <Helmet>
@@ -97,21 +95,23 @@ export default function Name() {
                 <Divider sx={{ my: 2 }} />
 
                 <Stack component="main" spacing={2}>
-                  <Typography variant="subtitle1">
-                    <strong>பொருள்:</strong> {name.meaning}
-                  </Typography>
+                  {name.meaning && (
+                    <Typography variant="subtitle1">
+                      <strong>பொருள்:</strong> {name.meaning}
+                    </Typography>
+                  )}
 
-                  <Typography variant="body1">
-                    <strong>விளக்கம்:</strong> {name.description}
-                  </Typography>
+                  {name.description && (
+                    <Typography variant="body1">
+                      <strong>விளக்கம்:</strong> {name.description}
+                    </Typography>
+                  )}
 
-                  <Typography variant="body1">
-                    <strong>பாலினம்:</strong> {name.gender}
-                  </Typography>
-
-                  <Typography variant="body1">
-                    <strong>தோற்றம்:</strong> {name.origin}
-                  </Typography>
+                  {name.origin && (
+                    <Typography variant="body1">
+                      <strong>தோற்றம்:</strong> {name.origin}
+                    </Typography>
+                  )}
 
                   {name.literatureEvidence && (
                     <Typography variant="body1">
