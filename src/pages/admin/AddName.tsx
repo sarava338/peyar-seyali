@@ -9,27 +9,29 @@ import { getCategoriesForInput } from "../../firebase/services/categoryService";
 
 import type { CategorySlugType, IName, NameSlugType, TagSlugType } from "../../types/types";
 
-const initialFormData: IName = {
-  name: "",
-  nameInEnglish: "",
-  meaning: "",
-  origin: "",
-  description: "",
-  gender: "",
-  literatureEvidence: "",
-  epigraphEvidence: "",
-  otherNames: [],
-  relatedNames: [],
-  tags: [],
-  categories: [],
-  slug: "",
-  author: "",
-  reference: "",
-  active: true,
-};
+function getInitialFormData(): IName {
+  return {
+    name: "",
+    nameInEnglish: "",
+    meaning: "",
+    origin: "",
+    description: "",
+    gender: "",
+    literatureEvidence: "",
+    epigraphEvidence: "",
+    otherNames: [],
+    relatedNames: [],
+    tags: [],
+    categories: [],
+    slug: "",
+    author: "",
+    reference: "",
+    active: true,
+  };
+}
 
 export default function AddName() {
-  const [formData, setFormData] = useState<IName>(initialFormData);
+  const [formData, setFormData] = useState<IName>(getInitialFormData());
   const user = useAppSelector((state) => state.user.currentUser);
 
   const [tagOptions, setTagOptions] = useState<TagSlugType[]>([]);
@@ -82,7 +84,7 @@ export default function AddName() {
   };
 
   const handleClear = () => {
-    setFormData(initialFormData);
+    setFormData(getInitialFormData());
   };
 
   return (
@@ -167,6 +169,7 @@ export default function AddName() {
                 multiple
                 options={nameOptions}
                 getOptionLabel={(name) => name.name}
+                value={formData.otherNames}
                 onChange={(_e, value) => setFormData({ ...formData, otherNames: value })}
                 renderInput={(params) => <TextField {...params} label="Other Names" variant="outlined" />}
               />
@@ -177,6 +180,7 @@ export default function AddName() {
                 multiple
                 options={nameOptions}
                 getOptionLabel={(name) => name.name}
+                value={formData.relatedNames}
                 onChange={(_e, value) => setFormData({ ...formData, relatedNames: value })}
                 renderInput={(params) => <TextField {...params} label="Related Names" variant="outlined" />}
               />
@@ -208,6 +212,7 @@ export default function AddName() {
                 multiple
                 options={tagOptions}
                 getOptionLabel={(tag) => tag.tag}
+                value={formData.tags}
                 onChange={(_e, value) => setFormData({ ...formData, tags: value })}
                 renderInput={(params) => <TextField {...params} label="Tags" variant="outlined" />}
               />
@@ -218,6 +223,7 @@ export default function AddName() {
                 multiple
                 options={categoryOptions}
                 getOptionLabel={(cat) => cat.category}
+                value={formData.categories}
                 onChange={(_e, value) => setFormData({ ...formData, categories: value })}
                 renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
               />
