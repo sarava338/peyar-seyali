@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchNameById } from "../store/nameSlice";
 
 import LoadingScreen from "../components/LoadingScreen";
+import Error from "./Error";
 
 export default function Name() {
   const { id } = useParams<{ id: string }>();
@@ -16,14 +17,12 @@ export default function Name() {
   const { data: name, status, error } = useAppSelector((state) => state.name);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchNameById(id));
-    }
+    if (id) dispatch(fetchNameById(id));
   }, [dispatch, id]);
 
   if (status === "loading") return <LoadingScreen />;
-  if (error) return <p>Error: {error}</p>;
-  if (!name) return <p>No name details found.</p>;
+  if (error) return <Error code={500} messege={error} />;
+  if (!name) return <Error code={404} messege={`Name not found for ${id}`} />;
 
   const handleShareClick = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -44,7 +43,7 @@ export default function Name() {
     }
   };
 
-  console.log("name", name);
+  console.log("name", name.name, name);
 
   return (
     <>
@@ -59,39 +58,39 @@ export default function Name() {
           <Grid size={{ xs: 12, md: 8 }}>
             <Paper component="article" elevation={3}>
               <Box sx={{ p: 3 }}>
-                <Box component="header" position="relative">
-                  <Chip
-                    variant="outlined"
-                    size="small"
-                    label={name.gender}
-                    sx={{
-                      position: "absolute",
-                      bgcolor: ["ஆண்", "male", "ஆன்", "Male"].some((gen) => gen === name.gender) ? "#99ccff" : "#ffb4d5",
-                      p: 2,
-                      bottom: 0,
-                      right: 0,
-                    }}
-                  />
-                  <Stack direction="row" flexWrap="wrap" spacing={1} alignItems="center">
+                <Box component="header">
+                  <Stack direction="row" flexWrap="wrap" spacing={2} alignItems="center">
                     <Typography component="h1" variant="h3" gutterBottom>
                       {name.name}
                     </Typography>
+
                     <Typography component="span" variant="h6" color="text.secondary">
                       ({name.nameInEnglish})
                     </Typography>
-                    {name.tags.length > 0 && (
-                      <Stack direction="row" flexWrap="wrap" spacing={1}>
-                        {name.tags.map((tag) => (
-                          <Link to={`/tags/${tag.slug}`} key={tag.slug}>
-                            <Chip label={tag.tag} variant="filled" />
-                          </Link>
-                        ))}
-                      </Stack>
-                    )}
+
+                    <Chip
+                      variant="outlined"
+                      size="small"
+                      label={name.gender}
+                      sx={{
+                        bgcolor: ["ஆண்", "male", "ஆன்", "Male"].some((gen) => gen === name.gender) ? "#99ccff" : "#ffb4d5",
+                        p: 2,
+                      }}
+                    />
+
                     <Button size="small" color="primary" onClick={handleShareClick}>
                       <ShareIcon />
                     </Button>
                   </Stack>
+                  {name.tags.length > 0 && (
+                    <Stack direction="row" flexWrap="wrap" spacing={1} sx={{ m: 2 }}>
+                      {name.tags.map((tag) => (
+                        <Link to={`/tags/${tag.slug}`} key={tag.slug}>
+                          <Chip label={tag.tag} variant="filled" />
+                        </Link>
+                      ))}
+                    </Stack>
+                  )}
                 </Box>
 
                 <Divider sx={{ my: 2 }} />
