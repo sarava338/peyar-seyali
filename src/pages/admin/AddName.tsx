@@ -1,5 +1,21 @@
 import { useEffect, useState } from "react";
-import { Autocomplete, Box, Button, FormControlLabel, Grid, MenuItem, Paper, Switch, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  MenuItem,
+  Paper,
+  Slide,
+  Snackbar,
+  Switch,
+  TextField,
+  Typography,
+  type SnackbarCloseReason,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { useAppSelector } from "../../store/hooks";
 
@@ -30,6 +46,12 @@ function getInitialFormData(): IName {
   };
 }
 
+const initialMessageState = () => ({
+  open: false,
+  success: false,
+  message: "",
+});
+
 export default function AddName() {
   const [formData, setFormData] = useState<IName>(getInitialFormData());
   const user = useAppSelector((state) => state.user.currentUser);
@@ -37,6 +59,8 @@ export default function AddName() {
   const [tagOptions, setTagOptions] = useState<TagSlugType[]>([]);
   const [categoryOptions, setCategoryOptions] = useState<CategorySlugType[]>([]);
   const [nameOptions, setNameOptions] = useState<NameSlugType[]>([]);
+
+  const [messageState, setMessageState] = useState(initialMessageState());
 
   useEffect(() => {
     getTagsForInput().then(setTagOptions);
@@ -49,6 +73,11 @@ export default function AddName() {
     { value: "பெண்", label: "பெண்" },
     { value: "இருபாலர்", label: "இருபாலர்" },
   ];
+
+  const handleMessageClose = (_e: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+    if (reason == "clickaway") return;
+    setMessageState(initialMessageState());
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -76,9 +105,10 @@ export default function AddName() {
     try {
       await addName(formDetail);
       handleClear();
+      setMessageState({ open: true, success: true, message: "Name Created Successfully" });
     } catch (err) {
       const error = err as Error;
-      alert("Error adding name. : " + error.message);
+      setMessageState({ open: true, success: false, message: `Error adding name: ${error.message}` });
       console.error("Error adding name:", error);
     }
   };
@@ -90,6 +120,23 @@ export default function AddName() {
   return (
     <Box>
       <Paper elevation={3} sx={{ maxWidth: "90%", mx: "auto", p: 3 }}>
+        <Snackbar
+          sx={{ mt: 7, mr: 7.5 }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          TransitionComponent={(props) => <Slide {...props} direction="left" />}
+          autoHideDuration={2000}
+          open={messageState.open}
+          onClose={handleMessageClose}
+          message={messageState.message}
+          action={
+            <>
+              <IconButton aria-label="close" sx={{ color: "white", p: 0.5 }} onClick={handleMessageClose}>
+                <CloseIcon />
+              </IconButton>
+            </>
+          }
+        />
+
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <Typography variant="h3" component="h1" gutterBottom>
