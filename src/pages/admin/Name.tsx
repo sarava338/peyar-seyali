@@ -7,6 +7,8 @@ import { fetchNameByIdForAdmin } from "../../store/nameSlice";
 
 import LoadingScreen from "../../components/LoadingScreen";
 
+import Error from "../Error";
+
 export default function Name() {
   const { nameSlug } = useParams<{ nameSlug: string }>();
   const dispatch = useAppDispatch();
@@ -19,8 +21,8 @@ export default function Name() {
   }, [nameSlug, dispatch]);
 
   if (status === "loading") return <LoadingScreen />;
-  if (error) return <p>Error: {error}</p>;
-  if (!name) return <p>No name details found.</p>;
+  if (error) return <Error code={500} messege={error} />;
+  if (!name) return <Error code={404} messege={`Name not found for ${nameSlug}`} />;
 
   return (
     <>

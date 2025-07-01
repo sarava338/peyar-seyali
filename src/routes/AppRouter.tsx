@@ -5,6 +5,7 @@ import AdminLayout from "./AdminLayout";
 
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import Error from "../pages/Error";
 
 import PublicNames from "../pages/Names";
 import PublicName from "../pages/Name";
@@ -41,6 +42,11 @@ export default function AppRouter() {
 
         <Route path="tags" element={<AdminTags />} />
         <Route path="categories" element={<AdminCategories />} />
+      </Route>
+
+      {/** Error Route */}
+      <Route element={<PublicLayout />}>
+        <Route path="*" element={<Error code={404} messege="The Page you are looking for, Not Found" />} />
       </Route>
     </Routes>
   );

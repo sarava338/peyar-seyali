@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchNames, fetchNamesForAdmin } from "../../store/namesSlice";
 
-import NameTable from "../../components/admin/NameTable";
 import { deleteName } from "../../firebase/services/nameService";
 
+import NameTable from "../../components/admin/NameTable";
 import LoadingScreen from "../../components/LoadingScreen";
+
+import Error from "../Error";
 
 export default function Names() {
   const { adminNames: names, error, status } = useAppSelector((state) => state.names);
@@ -40,8 +42,8 @@ export default function Names() {
   };
 
   if (status === "loading") return <LoadingScreen />;
-  if (error) return <p>Error: {error}</p>;
-  if (!names || names.length === 0) return <p>பெயர்கள் இல்லை.</p>;
+  if (error) return <Error code={500} messege={error} />;
+  if (!names || names.length === 0) return <Error code={404} messege="No Names Found" />;
 
   return (
     <>
