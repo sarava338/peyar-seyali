@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
+import Markdown from "react-markdown";
+
 import { Box, Button, Chip, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 
@@ -73,7 +75,7 @@ export default function Name() {
                       size="small"
                       label={name.gender}
                       sx={{
-                        bgcolor: ["ஆண்", "male", "ஆன்", "Male"].some((gen) => gen === name.gender) ? "#99ccff" : "#ffb4d5",
+                        bgcolor: "ஆண்" === name.gender ? "#99ccff" : "#ffb4d5",
                         p: 2,
                       }}
                     />
@@ -102,33 +104,38 @@ export default function Name() {
                     </Typography>
                   )}
 
-                  {name.description && (
+                  {name.origin && (
                     <Typography variant="body1">
-                      <strong>விளக்கம்:</strong> {name.description}
+                      <strong>தோற்றம்: </strong>
+                      {name.origin}
                     </Typography>
                   )}
 
-                  {name.origin && (
+                  {name.description && (
                     <Typography variant="body1">
-                      <strong>தோற்றம்:</strong> {name.origin}
+                      <strong>விளக்கம்: </strong>
+                      <Markdown>{name.description}</Markdown>
                     </Typography>
                   )}
 
                   {name.literatureEvidence && (
                     <Typography variant="body1">
-                      <strong>இலக்கிய ஆதாரம்:</strong> {name.literatureEvidence}
+                      <strong>இலக்கிய ஆதாரம்: </strong>
+                      <Markdown>{name.literatureEvidence}</Markdown>
                     </Typography>
                   )}
 
                   {name.epigraphEvidence && (
                     <Typography variant="body1">
-                      <strong>பதிகை ஆதாரம்:</strong> {name.epigraphEvidence}
+                      <strong>பதிகை ஆதாரம்: </strong>
+                      <Markdown>{name.epigraphEvidence}</Markdown>
                     </Typography>
                   )}
 
                   {name.reference && (
                     <Typography variant="body1">
-                      <strong>மேற்கோள்:</strong> {name.reference}
+                      <strong>மேற்கோள்: </strong>
+                      <Markdown>{name.reference}</Markdown>
                     </Typography>
                   )}
 
