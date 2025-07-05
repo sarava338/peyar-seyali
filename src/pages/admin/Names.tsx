@@ -10,6 +10,7 @@ import NameTable from "../../components/admin/NameTable";
 import LoadingScreen from "../../components/LoadingScreen";
 
 import Error from "../Error";
+import { Button, Stack, Typography } from "@mui/material";
 
 export default function Names() {
   const { adminNames: names, error, status } = useAppSelector((state) => state.names);
@@ -48,9 +49,15 @@ export default function Names() {
   return (
     <>
       <main>
-        <h1>
-          அனைத்து பெயர்கள் - <strong>{names.length}</strong>
-        </h1>
+        <Stack m={3} flexDirection={{ sm: "column", md: "row" }} gap={3} justifyContent="space-between">
+          <Typography variant="h4" component="h1">
+            மொத்த பெயர்கள் - <strong>{names.length}</strong>
+          </Typography>
+
+          <Button variant="contained" color="primary" sx={{ width: "fit-content" }} onClick={() => navigate("/admin/names/add")}>
+            Add New Name
+          </Button>
+        </Stack>
         <NameTable names={names} handleView={handleViewClick} handleEdit={handleEditClick} handleDelete={handleDeleteClick} />
       </main>
     </>
