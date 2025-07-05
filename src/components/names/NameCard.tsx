@@ -9,7 +9,7 @@ interface NameCardProps {
   nameDetail: NameCardType;
 }
 
-const DESCRIPTION_MAX_WORDS = 10; // Maximum words to display in the description
+const DESCRIPTION_MAX_WORDS = 11; // Maximum words to display in the description
 
 export default function NameCardType({ nameDetail }: NameCardProps) {
   const navigate = useNavigate();
@@ -39,19 +39,19 @@ export default function NameCardType({ nameDetail }: NameCardProps) {
 
   const nameDescription =
     nameDetail.description.split(" ").slice(0, DESCRIPTION_MAX_WORDS).join(" ") +
-    `${nameDetail.description.split(" ").length > DESCRIPTION_MAX_WORDS && "..."}`;
+    `${nameDetail.description.split(" ").length > DESCRIPTION_MAX_WORDS ? "..." : ""}`;
 
   return (
     <Card elevation={3} sx={{ width: 345 }}>
       <CardActionArea onClick={handleCardClick}>
-        <CardContent sx={{ position: "relative", height: 90 }}>
+        <CardContent sx={{ position: "relative", height: 110 }}>
           <Chip
             variant="outlined"
             size="small"
             label={nameDetail.gender}
             sx={{
               position: "absolute",
-              bgcolor: nameDetail.gender === "male" ? "#99ccff" : "#ffb4d5",
+              bgcolor: nameDetail.gender === "ஆண்" ? "#99ccff" : "#ffb4d5",
               p: 1,
               top: 22,
               right: -10,
@@ -63,7 +63,7 @@ export default function NameCardType({ nameDetail }: NameCardProps) {
           </Typography>
 
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            <MDEditor.Markdown source={nameDescription}></MDEditor.Markdown>
+            <MDEditor.Markdown source={nameDescription} style={{ color: "#8e8e8e", fontSize: ".9rem" }}></MDEditor.Markdown>
           </Typography>
         </CardContent>
       </CardActionArea>
