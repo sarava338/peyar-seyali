@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import MDEditor from "@uiw/react-md-editor";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
@@ -178,148 +179,158 @@ export default function EditName() {
                 </Button> */}
               </Box>
             </Box>
-            <Grid container gap={3}>
-              <Grid size={{ md: 6, xs: 12 }}>
-                <TextField fullWidth label="Name" name="name" value={formData.name} onChange={handleChange} margin="normal" required />
-                <TextField
-                  fullWidth
-                  label="Name in English"
-                  name="nameInEnglish"
-                  value={formData.nameInEnglish}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                />
-                <TextField
-                  fullWidth
-                  label="Meaning"
-                  name="meaning"
-                  value={formData.meaning}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                />
-                <TextField
-                  fullWidth
-                  label="Description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  margin="normal"
-                  multiline
-                  rows={3}
-                  required
-                />
-                <TextField
-                  fullWidth
-                  label="Origin"
-                  name="origin"
-                  value={formData.origin}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                />
-                <TextField
-                  select
-                  fullWidth
-                  label="Gender"
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                >
-                  {genderOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+
+            <Box>
+              <Grid container spacing={3}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField fullWidth label="Name" name="name" value={formData.name} onChange={handleChange} margin="normal" required />
+                  <TextField
+                    fullWidth
+                    label="Name in English"
+                    name="nameInEnglish"
+                    value={formData.nameInEnglish}
+                    onChange={handleChange}
+                    margin="normal"
+                    required
+                  />
+                  <TextField
+                    fullWidth
+                    label="Meaning"
+                    name="meaning"
+                    value={formData.meaning}
+                    onChange={handleChange}
+                    margin="normal"
+                    required
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    fullWidth
+                    label="Origin"
+                    name="origin"
+                    value={formData.origin}
+                    onChange={handleChange}
+                    margin="normal"
+                    required
+                  />
+                  <TextField
+                    select
+                    fullWidth
+                    label="Gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    margin="normal"
+                    required
+                  >
+                    {genderOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+                  <TextField fullWidth label="Slug (Optional)" name="slug" value={formData.slug} onChange={handleChange} margin="normal" />
+                </Grid>
                 <FormControlLabel
                   control={<Switch checked={formData.active} onChange={handleChange} name="active" color="primary" />}
                   label="Active"
                 />
-
-                {/* <TextField fullWidth label="Slug (Optional)" name="slug" value={formData.slug} onChange={handleChange} margin="normal" /> */}
               </Grid>
 
-              <Grid size={{ md: 5, xs: 12 }}>
-                <Autocomplete
-                  sx={{ mt: 2, mb: 3 }}
-                  fullWidth
-                  multiple
-                  options={nameOptions}
-                  getOptionLabel={(name) => name.name}
-                  value={formData.otherNames}
-                  onChange={(_e, value) => setFormData({ ...formData, otherNames: value })}
-                  renderInput={(params) => <TextField {...params} label="Other Names" variant="outlined" />}
-                />
+              <Grid container spacing={3}>
+                <Grid size={{ sm: 12, md: 6 }}>
+                  <Autocomplete
+                    sx={{ mt: 2, mb: 3 }}
+                    fullWidth
+                    multiple
+                    options={nameOptions}
+                    getOptionLabel={(name) => name.name}
+                    value={formData.otherNames}
+                    onChange={(_e, value) => setFormData({ ...formData, otherNames: value })}
+                    renderInput={(params) => <TextField {...params} label="Other Names" variant="outlined" />}
+                  />
 
-                <Autocomplete
-                  sx={{ mt: 2, mb: 3 }}
-                  fullWidth
-                  multiple
-                  options={nameOptions}
-                  getOptionLabel={(name) => name.name}
-                  value={formData.relatedNames}
-                  onChange={(_e, value) => setFormData({ ...formData, relatedNames: value })}
-                  renderInput={(params) => <TextField {...params} label="Related Names" variant="outlined" />}
-                />
+                  <Autocomplete
+                    sx={{ mt: 2, mb: 3 }}
+                    fullWidth
+                    multiple
+                    options={nameOptions}
+                    getOptionLabel={(name) => name.name}
+                    value={formData.relatedNames}
+                    onChange={(_e, value) => setFormData({ ...formData, relatedNames: value })}
+                    renderInput={(params) => <TextField {...params} label="Related Names" variant="outlined" />}
+                  />
+                </Grid>
 
-                <TextField
-                  fullWidth
-                  label="Literature Evidence"
-                  name="literatureEvidence"
-                  value={formData.literatureEvidence}
-                  multiline
-                  rows={3}
-                  onChange={handleChange}
-                  margin="normal"
-                />
-                <TextField
-                  fullWidth
-                  label="Epigraph Evidence"
-                  name="epigraphEvidence"
-                  value={formData.epigraphEvidence}
-                  onChange={handleChange}
-                  margin="normal"
-                  multiline
-                  rows={3}
-                />
+                <Grid size={{ sm: 12, md: 6 }}>
+                  <Autocomplete
+                    sx={{ mt: 2, mb: 3 }}
+                    fullWidth
+                    multiple
+                    options={tagOptions}
+                    getOptionLabel={(tag) => tag.tag}
+                    value={formData.tags}
+                    onChange={(_e, value) => setFormData({ ...formData, tags: value })}
+                    renderInput={(params) => <TextField {...params} label="Tags" variant="outlined" />}
+                  />
 
-                <Autocomplete
-                  sx={{ mt: 2, mb: 3 }}
-                  fullWidth
-                  multiple
-                  options={tagOptions}
-                  getOptionLabel={(tag) => tag.tag}
-                  value={formData.tags}
-                  onChange={(_e, value) => setFormData({ ...formData, tags: value })}
-                  renderInput={(params) => <TextField {...params} label="Tags" variant="outlined" />}
-                />
-
-                <Autocomplete
-                  sx={{ mt: 2, mb: 3 }}
-                  fullWidth
-                  multiple
-                  options={categoryOptions}
-                  getOptionLabel={(cat) => cat.category}
-                  value={formData.categories}
-                  onChange={(_e, value) => setFormData({ ...formData, categories: value })}
-                  renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
-                />
+                  <Autocomplete
+                    sx={{ mt: 2, mb: 3 }}
+                    fullWidth
+                    multiple
+                    options={categoryOptions}
+                    getOptionLabel={(cat) => cat.category}
+                    value={formData.categories}
+                    onChange={(_e, value) => setFormData({ ...formData, categories: value })}
+                    renderInput={(params) => <TextField {...params} label="Categories" variant="outlined" />}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <TextField
-              fullWidth
-              label="Reference"
-              name="reference"
-              value={formData.literatureEvidence}
-              multiline
-              rows={2}
-              onChange={handleChange}
-              margin="normal"
-            />
+
+              <Grid container spacing={3}>
+                <Grid size={{ sm: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ mb: 2 }} marginBottom={1}>
+                      Description :
+                    </Typography>
+                    <MDEditor
+                      value={formData.description}
+                      onChange={(val) => setFormData((form) => ({ ...form, description: val || "" }))}
+                    />
+                  </Box>
+
+                  <Box sx={{ mt: 3 }}>
+                    <Typography sx={{ mb: 2 }} marginBottom={1}>
+                      Reference :
+                    </Typography>
+                    <MDEditor value={formData.reference} onChange={(val) => setFormData((form) => ({ ...form, reference: val || "" }))} />
+                  </Box>
+                </Grid>
+
+                <Grid size={{ sm: 12, md: 6 }}>
+                  <Box>
+                    <Typography sx={{ mb: 2 }} marginBottom={1}>
+                      Literature Evidence :
+                    </Typography>
+                    <MDEditor
+                      value={formData.literatureEvidence}
+                      onChange={(val) => setFormData((form) => ({ ...form, literatureEvidence: val || "" }))}
+                    />
+                  </Box>
+
+                  <Box sx={{ mt: 3 }}>
+                    <Typography sx={{ mb: 2 }} marginBottom={1}>
+                      Epigraph Evidence :
+                    </Typography>
+                    <MDEditor
+                      value={formData.epigraphEvidence}
+                      onChange={(val) => setFormData((form) => ({ ...form, epigraphEvidence: val || "" }))}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
 
             <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
               <Button type="submit" variant="contained" color="primary">

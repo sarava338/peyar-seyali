@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-
-import Markdown from "react-markdown";
+import MDEditor from "@uiw/react-md-editor";
 
 import { Box, Button, Chip, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
@@ -114,28 +113,28 @@ export default function Name() {
                   {name.description && (
                     <Typography variant="body1">
                       <strong>விளக்கம்: </strong>
-                      <Markdown>{name.description}</Markdown>
+                      <MDEditor.Markdown source={name.description} style={{ whiteSpace: "pre-wrap" }} />
                     </Typography>
                   )}
 
                   {name.literatureEvidence && (
                     <Typography variant="body1">
                       <strong>இலக்கிய ஆதாரம்: </strong>
-                      <Markdown>{name.literatureEvidence}</Markdown>
+                      <MDEditor.Markdown source={name.literatureEvidence} style={{ whiteSpace: "pre-wrap" }} />
                     </Typography>
                   )}
 
                   {name.epigraphEvidence && (
                     <Typography variant="body1">
                       <strong>பதிகை ஆதாரம்: </strong>
-                      <Markdown>{name.epigraphEvidence}</Markdown>
+                      <MDEditor.Markdown source={name.epigraphEvidence} style={{ whiteSpace: "pre-wrap" }} />
                     </Typography>
                   )}
 
                   {name.reference && (
                     <Typography variant="body1">
                       <strong>மேற்கோள்: </strong>
-                      <Markdown>{name.reference}</Markdown>
+                      <MDEditor.Markdown source={name.reference} style={{ whiteSpace: "pre-wrap" }} />
                     </Typography>
                   )}
 

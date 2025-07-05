@@ -4,11 +4,12 @@ import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Typograph
 import ShareIcon from "@mui/icons-material/Share";
 
 import type { NameCardType } from "../../types/types";
+import MDEditor from "@uiw/react-md-editor";
 interface NameCardProps {
   nameDetail: NameCardType;
 }
 
-const DESCRIPTION_MAX_WORDS = 12; // Maximum words to display in the description
+const DESCRIPTION_MAX_WORDS = 10; // Maximum words to display in the description
 
 export default function NameCardType({ nameDetail }: NameCardProps) {
   const navigate = useNavigate();
@@ -36,6 +37,10 @@ export default function NameCardType({ nameDetail }: NameCardProps) {
     }
   };
 
+  const nameDescription =
+    nameDetail.description.split(" ").slice(0, DESCRIPTION_MAX_WORDS).join(" ") +
+    `${nameDetail.description.split(" ").length > DESCRIPTION_MAX_WORDS && "..."}`;
+
   return (
     <Card elevation={3} sx={{ width: 345 }}>
       <CardActionArea onClick={handleCardClick}>
@@ -58,8 +63,7 @@ export default function NameCardType({ nameDetail }: NameCardProps) {
           </Typography>
 
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {nameDetail.description.split(" ").slice(0, DESCRIPTION_MAX_WORDS).join(" ")}
-            {nameDetail.description.split(" ").length > DESCRIPTION_MAX_WORDS && "..."}
+            <MDEditor.Markdown source={nameDescription}></MDEditor.Markdown>
           </Typography>
         </CardContent>
       </CardActionArea>
