@@ -13,17 +13,17 @@ import LoadingScreen from "../components/LoadingScreen";
 import Error from "./Error";
 
 export default function Name() {
-  const { id } = useParams<{ id: string }>();
+  const { nameSlug } = useParams<{ nameSlug: string }>();
   const dispatch = useAppDispatch();
   const { data: name, status, error } = useAppSelector((state) => state.name);
 
   useEffect(() => {
-    if (id) dispatch(fetchNameById(id));
-  }, [dispatch, id]);
+    if (nameSlug) dispatch(fetchNameById(nameSlug));
+  }, [dispatch, nameSlug]);
 
   if (status === "loading") return <LoadingScreen />;
   if (error) return <Error code={500} messege={error} />;
-  if (!name) return <Error code={404} messege={`Name not found for ${id}`} />;
+  if (!name) return <Error code={404} messege={`Name not found for ${nameSlug}`} />;
 
   const handleShareClick = async (event: React.MouseEvent) => {
     event.stopPropagation();
