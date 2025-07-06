@@ -1,39 +1,43 @@
-import { useNavigate } from "react-router-dom";
+import MDEditor from "@uiw/react-md-editor";
 
-import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Typography } from "@mui/material";
+import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Stack, Tooltip, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 
 import type { NameCardType } from "../../types/types";
-import MDEditor from "@uiw/react-md-editor";
+
 interface NameCardProps {
   nameDetail: NameCardType;
+  onShare: (nameDetail: NameCardType) => void;
+  onView: (nameSlug: string) => void;
+  onEdit?: (nameSlug: string) => void;
+  onDelete?: (nameSlug: string) => void;
 }
 
-const DESCRIPTION_MAX_WORDS = 11; // Maximum words to display in the description
+const DESCRIPTION_MAX_WORDS = 9; // Maximum words to display in the description
 
-export default function NameCardType({ nameDetail }: NameCardProps) {
-  const navigate = useNavigate();
-
+export default function NameCard({ nameDetail, onShare, onView, onEdit, onDelete }: NameCardProps) {
   const handleCardClick = () => {
-    navigate(`/names/${nameDetail.slug}`);
+    onView!(nameDetail.slug);
   };
 
   const handleShareClick = async (event: React.MouseEvent) => {
     event.stopPropagation();
+    onShare(nameDetail);
+  };
 
-    const shareData = {
-      title: nameDetail.name + "\n",
-      text: `${nameDetail.name} - ${nameDetail.description}\n`,
-      url: `${window.location.origin}/names/${nameDetail.slug}\n`,
-    };
+  const handleViewClick = (event: React.MouseEvent): void => {
+    event.stopPropagation();
+    onView!(nameDetail.slug);
+  };
 
-    try {
-      if (navigator.share && navigator.canShare?.(shareData)) {
-        await navigator.share(shareData);
-      } else alert("Sharing not supported in this browser.");
-    } catch (error) {
-      console.error("Error preparing share data:", error);
-    }
+  const handleEditClick = (event: React.MouseEvent): void => {
+    event.stopPropagation();
+    onEdit!(nameDetail.slug);
+  };
+
+  const handleDeleteClick = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+    onDelete!(nameDetail.slug);
   };
 
   const nameDescription =
@@ -43,7 +47,7 @@ export default function NameCardType({ nameDetail }: NameCardProps) {
   return (
     <Card elevation={3} sx={{ width: 345 }}>
       <CardActionArea onClick={handleCardClick}>
-        <CardContent sx={{ position: "relative", height: 110 }}>
+        <CardContent sx={{ position: "relative", height: 130 }}>
           <Chip
             variant="outlined"
             size="small"
@@ -67,9 +71,35 @@ export default function NameCardType({ nameDetail }: NameCardProps) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" onClick={handleShareClick}>
-          Share <ShareIcon />
-        </Button>
+        <Stack flexDirection="row" justifyContent="space-between">
+          <Stack flexDirection="row">
+            <Tooltip title="View More">
+              <Button size="small" color="primary" onClick={handleViewClick}>
+                View
+              </Button>
+            </Tooltip>
+            {onEdit && (
+              <Tooltip title="Edit this name">
+                <Button size="small" color="primary" onClick={handleEditClick}>
+                  Edit
+                </Button>
+              </Tooltip>
+            )}
+            {onDelete && (
+              <Tooltip title="Delete this name">
+                <Button size="small" color="error" onClick={handleDeleteClick}>
+                  X
+                </Button>
+              </Tooltip>
+            )}
+          </Stack>
+
+          <Tooltip title="Share">
+            <Button size="small" color="primary" onClick={handleShareClick}>
+              <ShareIcon />
+            </Button>
+          </Tooltip>
+        </Stack>
       </CardActions>
     </Card>
   );

@@ -1,14 +1,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { Button, Stack, Typography } from "@mui/material";
+
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchNamesForAdmin } from "../../store/namesSlice";
 
-import LoadingScreen from "../../components/LoadingScreen";
+import NameList from "../../components/names/NameList";
 
 import Error from "../Error";
-import { Button, Stack, Typography } from "@mui/material";
-import NameList from "../../components/admin/NameList";
+import LoadingScreen from "../../components/LoadingScreen";
+
 
 export default function Names() {
   const { adminNames: names, error, status } = useAppSelector((state) => state.names);
