@@ -1,28 +1,36 @@
-import { updateDoc, setDoc, deleteDoc, doc, getDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { updateDoc, setDoc, deleteDoc, doc, getDoc, collection, getDocs, query, where, DocumentReference } from "firebase/firestore";
 
 import { auth, db } from "../firebase";
+
+import { addNamesToTags, removeNamesFromTags } from "./tagService";
+import { addNamesToCategories, removeNamesFromCategories } from "./categoryService";
 
 import { toSlug } from "../../utils";
 import { getRefs, resolveRefs } from "../utils";
 
 import type { CategorySlugType, ICategory, IComment, IName, ITag, NameCardType, NameSlugType, TagSlugType } from "../../types/types";
 
-async function resolveName(docSnap: any): Promise<IName> {
-  const data = docSnap.data();
+async function resolveName(docSnap: any): Promise<IName | undefined> {
+  try {
+    const data = docSnap.data();
 
-  return {
-    ...data,
+    return {
+      ...data,
 
-    comments: await resolveRefs<IComment>(data.comments || []),
-    tags: await resolveRefs<ITag, TagSlugType>(data.tags || [], (data) => ({ tag: data.tag, slug: data.slug })),
-    relatedNames: await resolveRefs<IName, NameSlugType>(data.relatedNames || [], (data) => ({ name: data.name, slug: data.slug })),
-    otherNames: await resolveRefs<IName, NameSlugType>(data.otherNames || [], (data) => ({ name: data.name, slug: data.slug })),
+      comments: await resolveRefs<IComment>(data.comments || []),
+      tags: await resolveRefs<ITag, TagSlugType>(data.tags || [], (data) => ({ tag: data.tag, slug: data.slug })),
+      relatedNames: await resolveRefs<IName, NameSlugType>(data.relatedNames || [], (data) => ({ name: data.name, slug: data.slug })),
+      otherNames: await resolveRefs<IName, NameSlugType>(data.otherNames || [], (data) => ({ name: data.name, slug: data.slug })),
 
-    categories: await resolveRefs<ICategory, CategorySlugType>(data.categories || [], (data) => ({
-      category: data.category,
-      slug: data.slug,
-    })),
-  };
+      categories: await resolveRefs<ICategory, CategorySlugType>(data.categories || [], (data) => ({
+        category: data.category,
+        slug: data.slug,
+      })),
+    };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export async function getAllNamesForAdmin(): Promise<NameCardType[]> {
@@ -87,25 +95,34 @@ export async function getNamesForInput(): Promise<NameSlugType[]> {
   return names;
 }
 
-export async function getNameById(id: string): Promise<IName> {
-  const selectedName = query(collection(db, "names"), where("slug", "==", id), where("active", "==", true));
+export async function getNameById(id: string): Promise<IName | undefined> {
+  try {
+    const selectedName = query(collection(db, "names"), where("slug", "==", id), where("active", "==", true));
 
-  const snapshot = await getDocs(selectedName);
+    const snapshot = await getDocs(selectedName);
 
-  if (snapshot.empty) throw new Error("Name Not Found");
+    if (snapshot.empty) throw new Error("Name Not Found");
 
-  const doc = snapshot.docs[0];
+    const doc = snapshot.docs[0];
 
-  return resolveName(doc);
+    return resolveName(doc);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export async function getNameByIdForAdmin(id: string): Promise<IName> {
-  const docRef = doc(db, "names", id);
-  const docSnap = await getDoc(docRef);
+export async function getNameByIdForAdmin(id: string): Promise<IName | undefined> {
+  try {
+    const docRef = doc(db, "names", id);
+    const docSnap = await getDoc(docRef);
 
-  if (!docSnap.exists()) throw new Error("Name Not Found");
+    if (!docSnap.exists()) throw new Error("Name Not Found");
 
-  return resolveName(docSnap);
+    return resolveName(docSnap);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
 /**
@@ -142,26 +159,89 @@ export async function addName(nameDetail: IName) {
   }
 }
 
-export async function editNameById(nameId: string, updatedName: Partial<IName>) {
+export async function editNameById(nameId: string, updatedName: IName) {
   try {
-    console.log("nameId", nameId);
     console.log("name - update", updatedName);
 
-    const docRef = doc(db, "names", nameId);
-    const docSnap = await getDoc(docRef);
+    const { tags, categories, otherNames, relatedNames } = updatedName;
 
-    if (!docSnap.exists()) throw new Error("Name Not Found");
+    const nameRef = doc(db, "names", nameId);
+    const nameSnap = await getDoc(nameRef);
 
-    await updateDoc(docRef, updatedName);
-  } catch (err) {
-    const error = err as Error;
-    console.log("errorwhile updating name", error);
+    if (!nameSnap.exists()) throw new Error("Name Not Found");
+
+    const prevName = nameSnap.data();
+
+    console.log("prevName", prevName);
+
+    const prevTagRefs: DocumentReference[] = prevName.tags;
+    const prevCatRefs: DocumentReference[] = prevName.categories;
+
+    const newTagRefs = await getRefs(
+      "tags",
+      tags.map((tag) => tag.slug)
+    );
+    const newCatRefs = await getRefs(
+      "categories",
+      categories.map((cat) => cat.slug)
+    );
+
+    const otherNameRefs = await getRefs(
+      "names",
+      otherNames.map((name) => name.slug)
+    );
+    const relatedNameRefs = await getRefs(
+      "names",
+      relatedNames.map((name) => name.slug)
+    );
+
+    // ⛔️ Compare paths to get what's added/removed
+    const tagsToAdd = newTagRefs.filter((r) => !prevTagRefs.find((p) => p.path === r.path));
+    const tagsToRemove = prevTagRefs.filter((r) => !newTagRefs.find((p) => p.path === r.path));
+
+    const catsToAdd = newCatRefs.filter((r) => !prevCatRefs.find((p) => p.path === r.path));
+    const catsToRemove = prevCatRefs.filter((r) => !newCatRefs.find((p) => p.path === r.path));
+
+    // 🔄 Sync reverse links
+    await Promise.all([
+      addNamesToTags(tagsToAdd, [nameRef]),
+      removeNamesFromTags(tagsToRemove, [nameRef]),
+      addNamesToCategories(catsToAdd, [nameRef]),
+      removeNamesFromCategories(catsToRemove, [nameRef]),
+    ]);
+
+    await updateDoc(nameRef, {
+      ...updatedName,
+      tags: newTagRefs,
+      categories: newCatRefs,
+      otherNames: otherNameRefs,
+      relatedNames: relatedNameRefs,
+    });
+  } catch (error) {
+    console.log("error while updating name", error);
     throw error;
   }
 }
 
 // Delete a name
 export async function deleteName(docId: string) {
-  const docRef = doc(db, "names", docId);
-  await deleteDoc(docRef);
+  try {
+    const nameRef = doc(db, "names", docId);
+    const nameSnap = await getDoc(nameRef);
+
+    if (!nameSnap.exists()) throw new Error("name not found to delete");
+
+    const deleteName = nameSnap.data();
+
+    const { tags, categories } = deleteName;
+
+    await Promise.all([removeNamesFromTags(tags, [nameRef]), removeNamesFromCategories(categories, [nameRef])]);
+
+    // have to deleted references fields in other names which using this name as relatedName / otherName
+
+    await deleteDoc(nameRef);
+  } catch (error) {
+    console.log("error while deleting name", error);
+    throw error;
+  }
 }

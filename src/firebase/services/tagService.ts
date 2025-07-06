@@ -1,5 +1,5 @@
 // tagService.ts
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, DocumentReference, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
 import { db } from "../firebase";
 
@@ -15,4 +15,16 @@ export async function getTagsForInput(): Promise<TagSlugType[]> {
       slug: data.slug,
     };
   });
+}
+
+export async function addNamesToTags(tagRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
+  for (const tagRef of tagRefs) {
+    await updateDoc(tagRef, { names: arrayUnion(...nameRefs) });
+  }
+}
+
+export async function removeNamesFromTags(tagRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
+  for (const tagRef of tagRefs) {
+    await updateDoc(tagRef, { names: arrayRemove(...nameRefs) });
+  }
 }

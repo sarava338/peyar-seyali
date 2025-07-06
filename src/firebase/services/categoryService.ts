@@ -1,5 +1,5 @@
 // categoryService.ts
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, DocumentReference, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
 import { db } from "../firebase";
 
@@ -15,4 +15,16 @@ export async function getCategoriesForInput(): Promise<CategorySlugType[]> {
       slug: data.slug,
     };
   });
+}
+
+export async function addNamesToCategories(categoryRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
+  for (const categoryRef of categoryRefs) {
+    await updateDoc(categoryRef, { names: arrayUnion(...nameRefs) });
+  }
+}
+
+export async function removeNamesFromCategories(categoryRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
+  for (const categoryRef of categoryRefs) {
+    await updateDoc(categoryRef, { names: arrayRemove(...nameRefs) });
+  }
 }
