@@ -120,7 +120,7 @@ export async function getNameByIdForAdmin(id: string): Promise<IName | undefined
 
     return resolveName(docSnap);
   } catch (error) {
-    console.log(error);
+    console.error("error while getting name", error);
     throw error;
   }
 }
@@ -152,17 +152,14 @@ export async function addName(nameDetail: IName) {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
-  } catch (err) {
-    const error = err as Error;
-    console.log(error);
+  } catch (error) {
+    console.error("error while adding new name", error);
     throw error;
   }
 }
 
 export async function editNameById(nameId: string, updatedName: IName) {
   try {
-    console.log("name - update", updatedName);
-
     const { tags, categories, otherNames, relatedNames } = updatedName;
 
     const nameRef = doc(db, "names", nameId);
@@ -171,8 +168,6 @@ export async function editNameById(nameId: string, updatedName: IName) {
     if (!nameSnap.exists()) throw new Error("Name Not Found");
 
     const prevName = nameSnap.data();
-
-    console.log("prevName", prevName);
 
     const prevTagRefs: DocumentReference[] = prevName.tags;
     const prevCatRefs: DocumentReference[] = prevName.categories;
@@ -218,7 +213,7 @@ export async function editNameById(nameId: string, updatedName: IName) {
       relatedNames: relatedNameRefs,
     });
   } catch (error) {
-    console.log("error while updating name", error);
+    console.error("error while updating name", error);
     throw error;
   }
 }
@@ -241,7 +236,7 @@ export async function deleteName(docId: string) {
 
     await deleteDoc(nameRef);
   } catch (error) {
-    console.log("error while deleting name", error);
+    console.error("error while deleting name", error);
     throw error;
   }
 }

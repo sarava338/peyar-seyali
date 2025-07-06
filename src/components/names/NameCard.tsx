@@ -30,7 +30,6 @@ export default function NameCardType({ nameDetail }: NameCardProps) {
     try {
       if (navigator.share && navigator.canShare?.(shareData)) {
         await navigator.share(shareData);
-        console.log("Share successful");
       } else alert("Sharing not supported in this browser.");
     } catch (error) {
       console.error("Error preparing share data:", error);
