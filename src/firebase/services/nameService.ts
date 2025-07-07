@@ -23,25 +23,39 @@ import { getRefs, resolveRefs } from "../utils";
 
 import type { CategorySlugType, ICategory, IComment, IName, ITag, NameCardType, NameSlugType, TagSlugType } from "../../types/types";
 
-async function resolveName(docSnap: any): Promise<IName | undefined> {
+async function resolveName(nameRef: DocumentReference): Promise<IName | undefined> {
   try {
-    const data = docSnap.data();
+    const nameDoc = await getDoc(nameRef);
+
+    const data = nameDoc.data();
+
+    if (!data) throw new Error("Name not found");
 
     return {
-      ...data,
-
+      name: data.name,
+      nameInEnglish: data.nameInEnglish,
+      meaning: data.meaning,
+      description: data.description,
+      gender: data.gender,
+      slug: data.slug,
+      author: data.author,
+      active: data.active,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      origin: data.origin,
+      literatureEvidence: data.literatureEvidence,
+      epigraphEvidence: data.epigraphEvidence,
       comments: await resolveRefs<IComment>(data.comments || []),
       tags: await resolveRefs<ITag, TagSlugType>(data.tags || [], (data) => ({ tag: data.tag, slug: data.slug })),
       relatedNames: await resolveRefs<IName, NameSlugType>(data.relatedNames || [], (data) => ({ name: data.name, slug: data.slug })),
       otherNames: await resolveRefs<IName, NameSlugType>(data.otherNames || [], (data) => ({ name: data.name, slug: data.slug })),
-
       categories: await resolveRefs<ICategory, CategorySlugType>(data.categories || [], (data) => ({
         category: data.category,
         slug: data.slug,
       })),
     };
   } catch (error) {
-    console.error(error);
+    console.error("error while resolving name", error);
     throw error;
   }
 }
@@ -110,15 +124,13 @@ export async function getNamesForInput(): Promise<NameSlugType[]> {
 
 export async function getNameById(id: string): Promise<IName | undefined> {
   try {
-    const selectedName = query(collection(db, "names"), where("slug", "==", id), where("active", "==", true));
+    const selectedNameQuery = query(collection(db, "names"), where("slug", "==", id), where("active", "==", true));
+    const snapshot = await getDocs(selectedNameQuery);
+    if (snapshot.empty) throw new Error(`name not found for id : ${id}`);
 
-    const snapshot = await getDocs(selectedName);
+    const docRef = snapshot.docs[0].ref;
 
-    if (snapshot.empty) throw new Error("Name Not Found");
-
-    const doc = snapshot.docs[0];
-
-    return resolveName(doc);
+    return resolveName(docRef);
   } catch (error) {
     console.error(error);
   }
@@ -127,11 +139,7 @@ export async function getNameById(id: string): Promise<IName | undefined> {
 export async function getNameByIdForAdmin(id: string): Promise<IName | undefined> {
   try {
     const docRef = doc(db, "names", id);
-    const docSnap = await getDoc(docRef);
-
-    if (!docSnap.exists()) throw new Error("Name Not Found");
-
-    return resolveName(docSnap);
+    return resolveName(docRef);
   } catch (error) {
     console.error("error while getting name", error);
     throw error;
