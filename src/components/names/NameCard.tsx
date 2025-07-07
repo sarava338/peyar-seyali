@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
 
 import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Stack, Tooltip, Typography } from "@mui/material";
@@ -16,8 +17,10 @@ interface NameCardProps {
 const DESCRIPTION_MAX_WORDS = 9; // Maximum words to display in the description
 
 export default function NameCard({ nameDetail, onShare, onView, onEdit, onDelete }: NameCardProps) {
+  const navigate = useNavigate();
+
   const handleCardClick = () => {
-    onView!(nameDetail.slug);
+    navigate(`/names/${nameDetail.slug}`);
   };
 
   const handleShareClick = async (event: React.MouseEvent) => {
@@ -73,7 +76,7 @@ export default function NameCard({ nameDetail, onShare, onView, onEdit, onDelete
       <CardActions>
         <Stack flexDirection="row" justifyContent="space-between">
           <Stack flexDirection="row">
-            <Tooltip title="View More">
+            <Tooltip title="View as Admin">
               <Button size="small" color="primary" onClick={handleViewClick}>
                 View
               </Button>
