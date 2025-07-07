@@ -1,4 +1,17 @@
-import { updateDoc, setDoc, deleteDoc, doc, getDoc, collection, getDocs, query, where, DocumentReference } from "firebase/firestore";
+import {
+  updateDoc,
+  setDoc,
+  deleteDoc,
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+  DocumentReference,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
 
 import { auth, db } from "../firebase";
 
@@ -214,6 +227,24 @@ export async function editNameById(nameId: string, updatedName: IName) {
     });
   } catch (error) {
     console.error("error while updating name", error);
+    throw error;
+  }
+}
+
+export async function addTagRefsToName(nameRef: DocumentReference, tagRefs: DocumentReference[]) {
+  try {
+    await updateDoc(nameRef, { tags: arrayUnion(...tagRefs) });
+  } catch (error) {
+    console.error("error while adding tags to name", error);
+    throw error;
+  }
+}
+
+export async function removeTagRefsFromName(nameRef: DocumentReference, tagRefs: DocumentReference[]) {
+  try {
+    await updateDoc(nameRef, { tags: arrayRemove(...tagRefs) });
+  } catch (error) {
+    console.error("error while removing tags from name", error);
     throw error;
   }
 }
