@@ -7,7 +7,7 @@ import SideNavBar from "../../components/admin/SideNavBar";
 import { DrawerHeader } from "../../components/admin/Drawer";
 
 export default function AdminDashBoard({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);

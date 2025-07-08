@@ -13,14 +13,20 @@ interface DashBoardListItemProps {
   open: boolean;
   path: string | URL;
   pageName: string;
+  handleDrawerClose: () => void;
 }
 
-export default function DashBoardListItem({ open, path, pageName }: DashBoardListItemProps) {
+export default function DashBoardListItem({ open, path, pageName, handleDrawerClose }: DashBoardListItemProps) {
   const navigate = useNavigate();
+
+  const handleClcik = () => {
+    handleDrawerClose();
+    navigate(path);
+  };
 
   return (
     <>
-      <ListItem disablePadding sx={{ display: "block" }} onClick={() => navigate(path)}>
+      <ListItem disablePadding sx={{ display: "block" }} onClick={handleClcik}>
         <ListItemButton
           sx={{
             minHeight: 48,

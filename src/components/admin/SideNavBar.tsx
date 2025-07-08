@@ -24,16 +24,16 @@ export default function SideNavBar({ open, drawerWidth, handleDrawerClose }: Sid
         <Divider />
 
         <List>
-          <DashBoardListItem open={open} pageName="Names" path="/admin/names" />
-          <DashBoardListItem open={open} pageName="Add Name" path="/admin/names/add" />
+          <DashBoardListItem open={open} pageName="Names" path="/admin/names" handleDrawerClose={handleDrawerClose} />
+          <DashBoardListItem open={open} pageName="Add Name" path="/admin/names/add" handleDrawerClose={handleDrawerClose} />
 
           <Divider />
 
-          <DashBoardListItem open={open} pageName="Tags" path="/admin/tags" />
+          <DashBoardListItem open={open} pageName="Tags" path="/admin/tags" handleDrawerClose={handleDrawerClose} />
 
           <Divider />
 
-          <DashBoardListItem open={open} pageName="Categories" path="/admin/categories" />
+          <DashBoardListItem open={open} pageName="Categories" path="/admin/categories" handleDrawerClose={handleDrawerClose} />
 
           <Divider />
         </List>
