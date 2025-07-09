@@ -45,6 +45,7 @@ async function resolveName(nameRef: DocumentReference): Promise<IName | undefine
       origin: data.origin,
       literatureEvidence: data.literatureEvidence,
       epigraphEvidence: data.epigraphEvidence,
+      reference: data.reference,
       comments: await resolveRefs<IComment>(data.comments || []),
       tags: await resolveRefs<ITag, TagSlugType>(data.tags || [], (data) => ({ tag: data.tag, slug: data.slug })),
       relatedNames: await resolveRefs<IName, NameSlugType>(data.relatedNames || [], (data) => ({ name: data.name, slug: data.slug })),
