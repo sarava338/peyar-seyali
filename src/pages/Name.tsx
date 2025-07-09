@@ -95,44 +95,69 @@ export default function Name() {
 
                 <Stack component="main" spacing={2}>
                   {name.meaning && (
-                    <Typography variant="subtitle1">
-                      <strong>பொருள்:</strong> {name.meaning}
-                    </Typography>
+                    <Box>
+                      <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
+                        பொருள்:{" "}
+                        <Typography variant="body1" component="span">
+                          {name.meaning}
+                        </Typography>
+                      </Typography>
+                    </Box>
                   )}
 
                   {name.origin && (
-                    <Typography variant="body1">
-                      <strong>தோற்றம்: </strong>
-                      {name.origin}
-                    </Typography>
+                    <Box>
+                      <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
+                        தோற்றம்:{" "}
+                        <Typography variant="body1" component="span">
+                          {name.origin}
+                        </Typography>
+                      </Typography>
+                    </Box>
                   )}
 
                   {name.description && (
-                    <Typography variant="body1" component="div">
-                      <strong>விளக்கம்: </strong>
-                      <MDEditor.Markdown source={name.description} />
-                    </Typography>
+                    <Box>
+                      <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
+                        விளக்கம்:
+                      </Typography>
+                      <Box sx={{ p: 3 }}>
+                        <MDEditor.Markdown source={name.description} />
+                      </Box>
+                    </Box>
                   )}
 
                   {name.literatureEvidence && (
-                    <Typography variant="body1" component="div">
-                      <strong>இலக்கிய ஆதாரம்: </strong>
-                      <MDEditor.Markdown source={name.literatureEvidence} />
-                    </Typography>
+                    <Box>
+                      <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
+                        இலக்கிய ஆதாரம்:
+                      </Typography>
+                      <Box sx={{ p: 3 }}>
+                        <MDEditor.Markdown source={name.literatureEvidence} />
+                      </Box>
+                    </Box>
                   )}
 
                   {name.epigraphEvidence && (
-                    <Typography variant="body1" component="div">
-                      <strong>பதிகை ஆதாரம்: </strong>
-                      <MDEditor.Markdown source={name.epigraphEvidence} />
-                    </Typography>
+                    <Box>
+                      <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
+                        பதிகை ஆதாரம்:
+                      </Typography>
+                      <Box sx={{ p: 3 }}>
+                        <MDEditor.Markdown source={name.epigraphEvidence} />
+                      </Box>
+                    </Box>
                   )}
 
                   {name.reference && (
-                    <Typography variant="body1" component="div">
-                      <strong>மேற்கோள்: </strong>
-                      <MDEditor.Markdown source={name.reference} />
-                    </Typography>
+                    <Box>
+                      <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
+                        மேற்கோள்:
+                      </Typography>
+                      <Box sx={{ p: 3 }}>
+                        <MDEditor.Markdown source={name.reference} />
+                      </Box>
+                    </Box>
                   )}
 
                   {name.categories.length > 0 && (
