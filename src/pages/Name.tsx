@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import MDEditor from "@uiw/react-md-editor";
 
-import { Box, Button, Chip, Divider, Grid, Paper, Stack, Typography } from "@mui/material";
+import { Box, Button, Chip, Divider, Grid, Paper, Stack, Tooltip, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -11,11 +11,15 @@ import { fetchNameById } from "../store/nameSlice";
 
 import LoadingScreen from "../components/LoadingScreen";
 import Error from "./Error";
+import { deleteName } from "../firebase/services/nameService";
 
 export default function Name() {
   const { nameSlug } = useParams<{ nameSlug: string }>();
+  const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
   const { data: name, status, error } = useAppSelector((state) => state.name);
+  const { currentUser: user } = useAppSelector((state) => state.user);
 
   useEffect(() => {
     if (nameSlug) dispatch(fetchNameById(nameSlug));
@@ -24,6 +28,22 @@ export default function Name() {
   if (status === "loading") return <LoadingScreen />;
   if (error) return <Error code={500} messege={error} />;
   if (!name) return <Error code={404} messege={`Name not found for ${nameSlug}`} />;
+
+  const handleEditClick = () => {
+    navigate(`/admin/names/${nameSlug}/edit`);
+  };
+
+  const handleDeleteClick = async () => {
+    const canDelete = confirm(`Do you really want to delete name - ${nameSlug} ?`);
+
+    try {
+      if (canDelete && nameSlug) {
+        await deleteName(nameSlug);
+      }
+    } catch (error) {
+      console.error("error while delete button", error);
+    }
+  };
 
   const handleShareClick = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -76,9 +96,26 @@ export default function Name() {
                       }}
                     />
 
-                    <Button size="small" color="primary" onClick={handleShareClick}>
-                      <ShareIcon />
-                    </Button>
+                    {user?.isAdmin && (
+                      <>
+                        <Tooltip title="Edit this name">
+                          <Button size="small" color="primary" onClick={handleEditClick}>
+                            Edit
+                          </Button>
+                        </Tooltip>
+
+                        <Tooltip title="Delete this name">
+                          <Button size="small" color="error" onClick={handleDeleteClick}>
+                            X
+                          </Button>
+                        </Tooltip>
+                      </>
+                    )}
+                    <Tooltip title="Share this name">
+                      <Button size="small" color="primary" onClick={handleShareClick}>
+                        <ShareIcon />
+                      </Button>
+                    </Tooltip>
                   </Stack>
                   {name.tags.length > 0 && (
                     <Stack direction="row" flexWrap="wrap" spacing={1} sx={{ m: 2 }}>
