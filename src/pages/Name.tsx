@@ -152,7 +152,7 @@ export default function Name() {
                   {name.epigraphEvidence && (
                     <Box>
                       <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
-                        பதிகை ஆதாரம்:
+                        கல்வெட்டு ஆதாரம்:
                       </Typography>
                       <Box sx={{ p: 3 }}>
                         <MDEditor.Markdown source={name.epigraphEvidence} />

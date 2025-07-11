@@ -14,4 +14,4 @@ const makeAdmin = async (uid) => {
 };
 
 // Replace with the UID of the user
-makeAdmin("KoMm69mHNvgkqeICUB6m6ph1bw82");
+makeAdmin("wawOgc0zClPys0B4KeETWubbVTi1");
