@@ -27,8 +27,10 @@ dist-ssr
 .env.*
 
 # firebase hosting
+.firebase
 .firebase/*
 
 peyar-seyali-firebase-adminsdk-fbsvc*.json
+peyar-seyali-dev-firebase-adminsdk-fbsvc*.json
 serviceAccountKey.json
 serviceAccountKey*.json
