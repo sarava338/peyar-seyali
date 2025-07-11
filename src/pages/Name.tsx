@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import MDEditor from "@uiw/react-md-editor";
 
@@ -16,6 +16,7 @@ import { deleteName } from "../firebase/services/nameService";
 export default function Name() {
   const { nameSlug } = useParams<{ nameSlug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const dispatch = useAppDispatch();
   const { data: name, status, error } = useAppSelector((state) => state.name);
@@ -24,6 +25,8 @@ export default function Name() {
   useEffect(() => {
     if (nameSlug) dispatch(fetchNameById(nameSlug));
   }, [dispatch, nameSlug]);
+
+  const from = location.state?.from?.pathname || "/"; // fallback to Home page
 
   if (status === "loading") return <LoadingScreen />;
   if (error) return <Error code={500} messege={error} />;
@@ -39,6 +42,7 @@ export default function Name() {
     try {
       if (canDelete && nameSlug) {
         await deleteName(nameSlug);
+        navigate(from, { replace: true });
       }
     } catch (error) {
       console.error("error while delete button", error);
