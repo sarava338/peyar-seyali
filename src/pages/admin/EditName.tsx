@@ -41,6 +41,7 @@ function getInitialFormData(): IName {
     origin: "",
     description: "",
     gender: "",
+    special: "",
     literatureEvidence: "",
     epigraphEvidence: "",
     otherNames: [],
@@ -290,7 +291,7 @@ export default function EditName() {
 
               <Grid container spacing={3}>
                 <Grid size={{ sm: 12, md: 6 }}>
-                  <Box>
+                  <Box sx={{ mt: 3 }}>
                     <Typography sx={{ mb: 2 }} marginBottom={1}>
                       Description :
                     </Typography>
@@ -302,6 +303,13 @@ export default function EditName() {
 
                   <Box sx={{ mt: 3 }}>
                     <Typography sx={{ mb: 2 }} marginBottom={1}>
+                      Special :
+                    </Typography>
+                    <MDEditor value={formData.special} onChange={(val) => setFormData((form) => ({ ...form, special: val || "" }))} />
+                  </Box>
+
+                  <Box sx={{ mt: 3 }}>
+                    <Typography sx={{ mb: 2 }} marginBottom={1}>
                       Reference :
                     </Typography>
                     <MDEditor value={formData.reference} onChange={(val) => setFormData((form) => ({ ...form, reference: val || "" }))} />
@@ -309,7 +317,7 @@ export default function EditName() {
                 </Grid>
 
                 <Grid size={{ sm: 12, md: 6 }}>
-                  <Box>
+                  <Box sx={{ mt: 3 }}>
                     <Typography sx={{ mb: 2 }} marginBottom={1}>
                       Literature Evidence :
                     </Typography>

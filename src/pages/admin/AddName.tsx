@@ -19,8 +19,6 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { useAppSelector } from "../../store/hooks";
-
 import { addName, getNamesForInput } from "../../firebase/services/nameService";
 import { getTagsForInput } from "../../firebase/services/tagService";
 import { getCategoriesForInput } from "../../firebase/services/categoryService";
@@ -35,6 +33,7 @@ function getInitialFormData(): IName {
     origin: "",
     description: "",
     gender: "",
+    special: "",
     literatureEvidence: "",
     epigraphEvidence: "",
     otherNames: [],
@@ -56,7 +55,6 @@ const initialMessageState = () => ({
 
 export default function AddName() {
   const [formData, setFormData] = useState<IName>(getInitialFormData());
-  const user = useAppSelector((state) => state.user.currentUser);
 
   const [tagOptions, setTagOptions] = useState<TagSlugType[]>([]);
   const [categoryOptions, setCategoryOptions] = useState<CategorySlugType[]>([]);
@@ -102,10 +100,8 @@ export default function AddName() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formDetail = { ...formData, author: user?.email || "ADMIN" };
-
     try {
-      await addName(formDetail);
+      await addName(formData);
       handleClear();
       setMessageState({ open: true, success: true, message: "Name Created Successfully" });
     } catch (err) {
@@ -265,11 +261,18 @@ export default function AddName() {
 
             <Grid container spacing={3}>
               <Grid size={{ sm: 12, md: 6 }}>
-                <Box>
+                <Box sx={{ mt: 3 }}>
                   <Typography sx={{ mb: 2 }} marginBottom={1}>
                     Description :
                   </Typography>
                   <MDEditor value={formData.description} onChange={(val) => setFormData((form) => ({ ...form, description: val || "" }))} />
+                </Box>
+
+                <Box sx={{ mt: 3 }}>
+                  <Typography sx={{ mb: 2 }} marginBottom={1}>
+                    Special :
+                  </Typography>
+                  <MDEditor value={formData.special} onChange={(val) => setFormData((form) => ({ ...form, special: val || "" }))} />
                 </Box>
 
                 <Box sx={{ mt: 3 }}>
@@ -281,7 +284,7 @@ export default function AddName() {
               </Grid>
 
               <Grid size={{ sm: 12, md: 6 }}>
-                <Box>
+                <Box sx={{ mt: 3 }}>
                   <Typography sx={{ mb: 2 }} marginBottom={1}>
                     Literature Evidence :
                   </Typography>

@@ -36,6 +36,7 @@ async function resolveName(nameRef: DocumentReference): Promise<IName | undefine
       nameInEnglish: data.nameInEnglish,
       meaning: data.meaning,
       description: data.description,
+      special: data.special,
       gender: data.gender,
       slug: data.slug,
       author: data.author,

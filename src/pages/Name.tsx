@@ -127,6 +127,17 @@ export default function Name() {
                     </Box>
                   )}
 
+                  {name.special && (
+                    <Box>
+                      <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>
+                        சிறப்பு:
+                      </Typography>
+                      <Box sx={{ p: 3 }}>
+                        <MDEditor.Markdown source={name.special} />
+                      </Box>
+                    </Box>
+                  )}
+
                   {name.literatureEvidence && (
                     <Box>
                       <Typography variant="h6" component="h3" sx={{ fontWeight: 700 }}>

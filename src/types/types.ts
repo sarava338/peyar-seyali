@@ -8,6 +8,7 @@ export type IName = {
   description: string;
   gender: string;
   origin: string;
+  special: string;
   literatureEvidence: string;
   epigraphEvidence: string;
   otherNames: NameSlugType[];
