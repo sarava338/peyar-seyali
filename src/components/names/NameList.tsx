@@ -1,18 +1,39 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import NameCard from "./NameCard";
 
 import type { NameCardType } from "../../types/types";
-import { Box } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+
+import { Box, IconButton, Slide, Snackbar, type SnackbarCloseReason } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
 import { deleteName } from "../../firebase/services/nameService";
-import { useAppSelector } from "../../store/hooks";
+
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { fetchNames } from "../../store/namesSlice";
 
 type NameListProps = {
   names: NameCardType[];
 };
 
+const initialMessageState = () => ({
+  open: false,
+  success: false,
+  message: "",
+});
+
 export default function NameList({ names }: NameListProps) {
   const navigate = useNavigate();
   const { currentUser: user } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
+  const [messageState, setMessageState] = useState(initialMessageState());
+
+  const handleMessageClose = (_e: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+    if (reason == "clickaway") return;
+    setMessageState(initialMessageState());
+  };
 
   const handleView = (nameSlug: string) => (user && user.isAdmin ? navigate(`/admin/names/${nameSlug}`) : navigate(`/names/${nameSlug}`));
   const handleEdit = (nameSlug: string) => navigate(`/admin/names/${nameSlug}/edit`);
@@ -39,14 +60,35 @@ export default function NameList({ names }: NameListProps) {
     try {
       if (canDelete) {
         await deleteName(nameSlug);
+        dispatch(fetchNames());
+        setMessageState({ open: true, success: true, message: `Name ${nameSlug} Deleted Successfully` });
       }
-    } catch (error) {
+    } catch (err) {
+      const error = err as Error;
       console.error("error while delete button", error);
+      setMessageState({ open: true, success: false, message: `Name not deleted. Error : ${error.message}` });
     }
   };
 
   return (
     <Box component="section" sx={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center", mt: 3 }}>
+      <Snackbar
+        sx={{ mt: 7, mr: 7.5 }}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        TransitionComponent={(props) => <Slide {...props} direction="left" />}
+        autoHideDuration={2000}
+        open={messageState.open}
+        onClose={handleMessageClose}
+        message={messageState.message}
+        action={
+          <>
+            <IconButton aria-label="close" sx={{ color: "white", p: 0.5 }} onClick={handleMessageClose}>
+              <CloseIcon />
+            </IconButton>
+          </>
+        }
+      />
+
       {names.map((nameDetail) =>
         user && user.isAdmin ? (
           <NameCard
