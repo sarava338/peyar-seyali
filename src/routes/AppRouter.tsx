@@ -7,15 +7,13 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Error from "../pages/Error";
 
-import PublicNames from "../pages/Names";
-import PublicName from "../pages/Name";
+import Name from "../pages/Name";
+import Names from "../pages/Names";
 import PublicTags from "../pages/Tags";
 import PublicCategories from "../pages/Categories";
 
-import AdminNames from "../pages/admin/Names";
 import AddName from "../pages/admin/AddName";
 import EditName from "../pages/admin/EditName";
-import AdminName from "../pages/admin/Name";
 import AdminTags from "../pages/admin/Tags";
 import AdminCategories from "../pages/admin/Categories";
 
@@ -26,8 +24,8 @@ export default function AppRouter() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/names" element={<PublicNames />} />
-        <Route path="/names/:nameSlug" element={<PublicName />} />
+        <Route path="/names" element={<Names />} />
+        <Route path="/names/:nameSlug" element={<Name />} />
 
         <Route path="/tags/:tagSlug" element={<PublicTags />} />
         <Route path="/categories/:categorySlug" element={<PublicCategories />} />
@@ -35,8 +33,8 @@ export default function AppRouter() {
 
       {/* Admin Routes */}
       <Route path="/admin" element={<AdminLayout />}>
-        <Route path="names" element={<AdminNames />} />
-        <Route path="names/:nameSlug" element={<AdminName />} />
+        <Route path="names" element={<Names />} />
+        <Route path="names/:nameSlug" element={<Name />} />
         <Route path="names/:nameSlug/edit" element={<EditName />} />
         <Route path="names/add" element={<AddName />} />
 

@@ -1,21 +1,23 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { Box, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 
-import { fetchNames } from "../store/namesSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { fetchNamesForAdmin } from "../store/namesSlice";
 
-import NameList from "../components/names/NameList";
 import LoadingScreen from "../components/LoadingScreen";
-
 import Error from "./Error";
 
+import NameList from "../components/names/NameList";
+
 export default function Names() {
+  const { adminNames: names, error, status } = useAppSelector((state) => state.names);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { publicNames: names, status, error } = useAppSelector((state) => state.names);
 
   useEffect(() => {
-    dispatch(fetchNames());
+    dispatch(fetchNamesForAdmin());
   }, [dispatch]);
 
   if (status === "loading") return <LoadingScreen />;
@@ -24,12 +26,21 @@ export default function Names() {
 
   return (
     <>
-      <Box sx={{ mx: { md: 2, xs: 1 } }}>
-        <Typography component="h1" variant="h2" sx={{ textAlign: "center" }}>
-          பெயர்கள் பட்டியல்
-        </Typography>
+      <main>
+        <Stack m={3} flexDirection={{ sm: "column", md: "row" }} gap={3} justifyContent="space-between">
+          <Typography variant="h4" component="h1">
+            மொத்த பெயர்கள் - <strong>{names.length}</strong>
+          </Typography>
+
+          <Button variant="contained" color="primary" sx={{ width: "fit-content" }} onClick={() => navigate("/admin/names/add")}>
+            Add New Name
+          </Button>
+        </Stack>
+
         <NameList names={names} />
-      </Box>
+
+        {/* <NameTable names={names} handleView={handleViewClick} handleEdit={handleEditClick} handleDelete={handleDeleteClick} /> */}
+      </main>
     </>
   );
 }
