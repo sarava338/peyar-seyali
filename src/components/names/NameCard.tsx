@@ -11,12 +11,11 @@ interface NameCardProps {
   onShare: (nameDetail: NameCardType) => void;
   onView: (nameSlug: string) => void;
   onEdit?: (nameSlug: string) => void;
-  onDelete?: (nameSlug: string) => void;
 }
 
 const DESCRIPTION_MAX_WORDS = 9; // Maximum words to display in the description
 
-export default function NameCard({ nameDetail, onShare, onView, onEdit, onDelete }: NameCardProps) {
+export default function NameCard({ nameDetail, onShare, onView, onEdit }: NameCardProps) {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
@@ -36,11 +35,6 @@ export default function NameCard({ nameDetail, onShare, onView, onEdit, onDelete
   const handleEditClick = (event: React.MouseEvent): void => {
     event.stopPropagation();
     onEdit!(nameDetail.slug);
-  };
-
-  const handleDeleteClick = async (event: React.MouseEvent) => {
-    event.stopPropagation();
-    onDelete!(nameDetail.slug);
   };
 
   const nameDescription =
@@ -85,13 +79,6 @@ export default function NameCard({ nameDetail, onShare, onView, onEdit, onDelete
               <Tooltip title="Edit this name">
                 <Button size="small" color="primary" onClick={handleEditClick}>
                   Edit
-                </Button>
-              </Tooltip>
-            )}
-            {onDelete && (
-              <Tooltip title="Delete this name">
-                <Button size="small" color="error" onClick={handleDeleteClick}>
-                  X
                 </Button>
               </Tooltip>
             )}

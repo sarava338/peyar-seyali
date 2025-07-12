@@ -8,10 +8,7 @@ import type { NameCardType } from "../../types/types";
 import { Box, IconButton, Slide, Snackbar, type SnackbarCloseReason } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { deleteName } from "../../firebase/services/nameService";
-
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchNames } from "../../store/namesSlice";
+import { useAppSelector } from "../../store/hooks";
 
 type NameListProps = {
   names: NameCardType[];
@@ -26,7 +23,6 @@ const initialMessageState = () => ({
 export default function NameList({ names }: NameListProps) {
   const navigate = useNavigate();
   const { currentUser: user } = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
 
   const [messageState, setMessageState] = useState(initialMessageState());
 
@@ -54,22 +50,6 @@ export default function NameList({ names }: NameListProps) {
     }
   };
 
-  const handleDelete = async (nameSlug: string) => {
-    const canDelete = confirm(`Do you really want to delete name - ${nameSlug} ?`);
-
-    try {
-      if (canDelete) {
-        await deleteName(nameSlug);
-        dispatch(fetchNames());
-        setMessageState({ open: true, success: true, message: `Name ${nameSlug} Deleted Successfully` });
-      }
-    } catch (err) {
-      const error = err as Error;
-      console.error("error while delete button", error);
-      setMessageState({ open: true, success: false, message: `Name not deleted. Error : ${error.message}` });
-    }
-  };
-
   return (
     <Box component="section" sx={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center", mt: 3 }}>
       <Snackbar
@@ -91,14 +71,7 @@ export default function NameList({ names }: NameListProps) {
 
       {names.map((nameDetail) =>
         user && user.isAdmin ? (
-          <NameCard
-            key={nameDetail.slug}
-            nameDetail={nameDetail}
-            onShare={handleShare}
-            onView={handleView}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+          <NameCard key={nameDetail.slug} nameDetail={nameDetail} onShare={handleShare} onView={handleView} onEdit={handleEdit} />
         ) : (
           <NameCard key={nameDetail.slug} nameDetail={nameDetail} onShare={handleShare} onView={handleView} />
         )
