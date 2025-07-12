@@ -15,6 +15,7 @@ import { deleteName } from "../firebase/services/nameService";
 
 export default function Name() {
   const { nameSlug } = useParams<{ nameSlug: string }>();
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,6 +28,7 @@ export default function Name() {
   }, [dispatch, nameSlug]);
 
   const from = location.state?.from?.pathname || "/"; // fallback to Home page
+  const isAdminPage = location.pathname.includes("/admin") || user?.isAdmin;
 
   if (status === "loading") return <LoadingScreen />;
   if (error) return <Error code={500} messege={error} />;
@@ -100,7 +102,7 @@ export default function Name() {
                       }}
                     />
 
-                    {user?.isAdmin && (
+                    {isAdminPage && (
                       <>
                         <Tooltip title="Edit this name">
                           <Button size="small" color="primary" onClick={handleEditClick}>

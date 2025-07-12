@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
 
 import { Button, Card, CardActionArea, CardActions, CardContent, Chip, Stack, Tooltip, Typography } from "@mui/material";
@@ -8,33 +8,45 @@ import type { NameCardType } from "../../types/types";
 
 interface NameCardProps {
   nameDetail: NameCardType;
-  onShare: (nameDetail: NameCardType) => void;
-  onView: (nameSlug: string) => void;
-  onEdit?: (nameSlug: string) => void;
 }
 
 const DESCRIPTION_MAX_WORDS = 9; // Maximum words to display in the description
 
-export default function NameCard({ nameDetail, onShare, onView, onEdit }: NameCardProps) {
+export default function NameCard({ nameDetail }: NameCardProps) {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleCardClick = () => {
-    navigate(`/names/${nameDetail.slug}`);
-  };
+  const isAdminPage = location.pathname.includes("/admin");
 
   const handleShareClick = async (event: React.MouseEvent) => {
     event.stopPropagation();
-    onShare(nameDetail);
+
+    const shareData = {
+      title: nameDetail.name + "\n",
+      text: `${nameDetail.name} - ${nameDetail.description}\n`,
+      url: `${window.location.origin}/names/${nameDetail.slug}\n`,
+    };
+
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else alert("Sharing not supported in this browser.");
+    } catch (error) {
+      console.error("Error preparing share data:", error);
+    }
   };
 
   const handleViewClick = (event: React.MouseEvent): void => {
     event.stopPropagation();
-    onView!(nameDetail.slug);
+
+    if (isAdminPage) navigate(`/admin/names/${nameDetail.slug}`);
+    else navigate(`/names/${nameDetail.slug}`);
   };
 
   const handleEditClick = (event: React.MouseEvent): void => {
     event.stopPropagation();
-    onEdit!(nameDetail.slug);
+
+    if (isAdminPage) navigate(`/admin/names/${nameDetail.slug}/edit`);
   };
 
   const nameDescription =
@@ -43,7 +55,7 @@ export default function NameCard({ nameDetail, onShare, onView, onEdit }: NameCa
 
   return (
     <Card elevation={3} sx={{ width: 345 }}>
-      <CardActionArea onClick={handleCardClick}>
+      <CardActionArea onClick={handleViewClick}>
         <CardContent sx={{ position: "relative", height: 130 }}>
           <Chip
             variant="outlined"
@@ -75,7 +87,7 @@ export default function NameCard({ nameDetail, onShare, onView, onEdit }: NameCa
                 View
               </Button>
             </Tooltip>
-            {onEdit && (
+            {isAdminPage && (
               <Tooltip title="Edit this name">
                 <Button size="small" color="primary" onClick={handleEditClick}>
                   Edit
