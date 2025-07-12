@@ -95,7 +95,7 @@ export default function Name() {
                       size="small"
                       label={name.gender}
                       sx={{
-                        bgcolor: "ஆண்" === name.gender ? "#99ccff" : "#ffb4d5",
+                        bgcolor: name.gender === "ஆண்" ? "#99ccff" : name.gender === "பெண்" ? "#ffb4d5" : "#c4e284",
                         p: 2,
                       }}
                     />

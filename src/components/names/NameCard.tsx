@@ -57,7 +57,7 @@ export default function NameCard({ nameDetail, onShare, onView, onEdit, onDelete
             label={nameDetail.gender}
             sx={{
               position: "absolute",
-              bgcolor: nameDetail.gender === "ஆண்" ? "#99ccff" : "#ffb4d5",
+              bgcolor: nameDetail.gender === "ஆண்" ? "#99ccff" : nameDetail.gender === "பெண்" ? "#ffb4d5" : "#c4e284",
               p: 1,
               top: 22,
               right: -10,
