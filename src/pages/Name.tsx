@@ -6,12 +6,13 @@ import MDEditor from "@uiw/react-md-editor";
 import { Box, Button, Chip, Divider, Grid, Paper, Stack, Tooltip, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 
+import { deleteName } from "../firebase/services/nameService";
+
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchNameById } from "../store/nameSlice";
 
 import LoadingScreen from "../components/LoadingScreen";
 import Error from "./Error";
-import { deleteName } from "../firebase/services/nameService";
 
 export default function Name() {
   const { nameSlug } = useParams<{ nameSlug: string }>();
