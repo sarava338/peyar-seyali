@@ -11,7 +11,7 @@ import { deleteName } from "../firebase/services/nameService";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchNameById } from "../store/nameSlice";
 
-import LoadingScreen from "../components/LoadingScreen";
+import Loading from "./Loading";
 import Error from "./Error";
 
 export default function Name() {
@@ -31,7 +31,7 @@ export default function Name() {
   const from = location.state?.from?.pathname || "/"; // fallback to Home page
   const isAdminPage = location.pathname.includes("/admin");
 
-  if (status === "loading") return <LoadingScreen />;
+  if (status === "loading") return <Loading />;
   if (error) return <Error code={500} messege={error} />;
   if (!name) return <Error code={404} messege={`Name not found for ${nameSlug}`} />;
 

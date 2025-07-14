@@ -1,7 +1,6 @@
-// components/LoadingScreen.tsx
 import { Box, CircularProgress, Typography } from "@mui/material";
 
-export default function LoadingScreen() {
+export default function Loading() {
   return (
     <Box
       sx={{

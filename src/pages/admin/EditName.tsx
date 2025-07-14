@@ -28,7 +28,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import LoadingScreen from "../../components/LoadingScreen";
+import Loading from "../Loading";
 import Error from "../Error";
 
 import type { CategorySlugType, IName, NameSlugType, TagSlugType } from "../../types/types";
@@ -97,7 +97,7 @@ export default function EditName() {
 
   if (!nameSlug) return <Error code={400} messege="Put correct name-slug in the url" />;
 
-  if (status === "loading") return <LoadingScreen />;
+  if (status === "loading") return <Loading />;
   if (error) return <Error code={500} messege={error} />;
   if (!name) return <Error code={500} messege="Name Not Loaded" />;
 

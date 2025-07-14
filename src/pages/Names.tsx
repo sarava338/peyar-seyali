@@ -6,7 +6,7 @@ import { Button, Stack, Typography } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchNamesForAdmin } from "../store/namesSlice";
 
-import LoadingScreen from "../components/LoadingScreen";
+import Loading from "./Loading";
 import Error from "./Error";
 
 import NameList from "../components/names/NameList";
@@ -20,7 +20,7 @@ export default function Names() {
     dispatch(fetchNamesForAdmin());
   }, [dispatch]);
 
-  if (status === "loading") return <LoadingScreen />;
+  if (status === "loading") return <Loading />;
   if (error) return <Error code={500} messege={error} />;
   if (!names || names.length === 0) return <Error code={404} messege="No Names Found" />;
 
