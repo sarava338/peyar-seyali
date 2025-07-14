@@ -29,7 +29,6 @@ export async function resolveRefs<T, R = T>(refs: DocumentReference[], projector
  */
 export async function getRefs(collectionName: CollectionName, slugs: string[]): Promise<DocumentReference[]> {
   if (slugs.length === 0) return [];
-  if (slugs.length > 10) throw new Error("Can not add more than 10 fields");
 
   const q = query(collection(db, collectionName), where("slug", "in", slugs));
   const snapshot = await getDocs(q);

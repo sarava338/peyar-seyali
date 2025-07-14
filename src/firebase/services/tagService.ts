@@ -17,14 +17,22 @@ export async function getTagsForInput(): Promise<TagSlugType[]> {
   });
 }
 
-export async function addNamesToTags(tagRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
+export async function addNameRefsToTags(tagRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
   for (const tagRef of tagRefs) {
-    await updateDoc(tagRef, { names: arrayUnion(...nameRefs) });
+    await addNameRefsToTag(tagRef, nameRefs);
   }
 }
 
-export async function removeNamesFromTags(tagRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
+export async function addNameRefsToTag(tagRef: DocumentReference, nameRefs: DocumentReference[]) {
+  await updateDoc(tagRef, { names: arrayUnion(...nameRefs) });
+}
+
+export async function removeNameRefsFromTags(tagRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
   for (const tagRef of tagRefs) {
-    await updateDoc(tagRef, { names: arrayRemove(...nameRefs) });
+    await removeNameRefsFromTag(tagRef, nameRefs);
   }
+}
+
+export async function removeNameRefsFromTag(tagRef: DocumentReference, nameRefs: DocumentReference[]) {
+  await updateDoc(tagRef, { names: arrayRemove(...nameRefs) });
 }

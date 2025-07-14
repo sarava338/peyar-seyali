@@ -17,14 +17,22 @@ export async function getCategoriesForInput(): Promise<CategorySlugType[]> {
   });
 }
 
-export async function addNamesToCategories(categoryRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
+export async function addNameRefsToCategories(categoryRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
   for (const categoryRef of categoryRefs) {
-    await updateDoc(categoryRef, { names: arrayUnion(...nameRefs) });
+    await addNameRefsToCategory(categoryRef, nameRefs);
   }
 }
 
-export async function removeNamesFromCategories(categoryRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
+export async function addNameRefsToCategory(categoryRef: DocumentReference, nameRefs: DocumentReference[]) {
+  await updateDoc(categoryRef, { names: arrayUnion(...nameRefs) });
+}
+
+export async function removeNameRefsFromCategories(categoryRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
   for (const categoryRef of categoryRefs) {
-    await updateDoc(categoryRef, { names: arrayRemove(...nameRefs) });
+    await removeNameRefsToCategory(categoryRef, nameRefs);
   }
+}
+
+export async function removeNameRefsToCategory(categoryRef: DocumentReference, nameRefs: DocumentReference[]) {
+  await updateDoc(categoryRef, { names: arrayRemove(...nameRefs) });
 }

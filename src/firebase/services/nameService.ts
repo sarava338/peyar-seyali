@@ -15,8 +15,8 @@ import {
 
 import { auth, db } from "../firebase";
 
-import { addNamesToTags, removeNamesFromTags } from "./tagService";
-import { addNamesToCategories, removeNamesFromCategories } from "./categoryService";
+import { addNameRefsToTags, removeNameRefsFromTags } from "./tagService";
+import { addNameRefsToCategories, removeNameRefsFromCategories } from "./categoryService";
 
 import { toSlug } from "../../utils";
 import { getRefs, resolveRefs } from "../utils";
@@ -222,10 +222,10 @@ export async function editNameById(nameId: string, updatedName: IName) {
 
     // 🔄 Sync reverse links
     await Promise.all([
-      addNamesToTags(tagsToAdd, [nameRef]),
-      removeNamesFromTags(tagsToRemove, [nameRef]),
-      addNamesToCategories(catsToAdd, [nameRef]),
-      removeNamesFromCategories(catsToRemove, [nameRef]),
+      addNameRefsToTags(tagsToAdd, [nameRef]),
+      removeNameRefsFromTags(tagsToRemove, [nameRef]),
+      addNameRefsToCategories(catsToAdd, [nameRef]),
+      removeNameRefsFromCategories(catsToRemove, [nameRef]),
     ]);
 
     await updateDoc(nameRef, {
@@ -237,6 +237,29 @@ export async function editNameById(nameId: string, updatedName: IName) {
     });
   } catch (error) {
     console.error("error while updating name", error);
+    throw error;
+  }
+}
+
+// Delete a name
+export async function deleteName(docId: string) {
+  try {
+    const nameRef = doc(db, "names", docId);
+    const nameSnap = await getDoc(nameRef);
+
+    if (!nameSnap.exists()) throw new Error("name not found to delete");
+
+    const deleteName = nameSnap.data();
+
+    const { tags, categories } = deleteName;
+
+    await Promise.all([removeNameRefsFromTags(tags, [nameRef]), removeNameRefsFromCategories(categories, [nameRef])]);
+
+    // have to deleted references fields in other names which using this name as relatedName / otherName
+
+    await deleteDoc(nameRef);
+  } catch (error) {
+    console.error("error while deleting name", error);
     throw error;
   }
 }
@@ -259,25 +282,20 @@ export async function removeTagRefsFromName(nameRef: DocumentReference, tagRefs:
   }
 }
 
-// Delete a name
-export async function deleteName(docId: string) {
+export async function addCategoryRefsToName(nameRef: DocumentReference, categoryRefs: DocumentReference[]) {
   try {
-    const nameRef = doc(db, "names", docId);
-    const nameSnap = await getDoc(nameRef);
-
-    if (!nameSnap.exists()) throw new Error("name not found to delete");
-
-    const deleteName = nameSnap.data();
-
-    const { tags, categories } = deleteName;
-
-    await Promise.all([removeNamesFromTags(tags, [nameRef]), removeNamesFromCategories(categories, [nameRef])]);
-
-    // have to deleted references fields in other names which using this name as relatedName / otherName
-
-    await deleteDoc(nameRef);
+    await updateDoc(nameRef, { tags: arrayUnion(...categoryRefs) });
   } catch (error) {
-    console.error("error while deleting name", error);
+    console.error("error while adding categories to name", error);
+    throw error;
+  }
+}
+
+export async function removeCategoryRefsFromName(nameRef: DocumentReference, categoryRefs: DocumentReference[]) {
+  try {
+    await updateDoc(nameRef, { tags: arrayRemove(...categoryRefs) });
+  } catch (error) {
+    console.error("error while removing categories from name", error);
     throw error;
   }
 }
