@@ -16,6 +16,8 @@ import AddName from "../pages/admin/AddName";
 import EditName from "../pages/admin/EditName";
 import AdminTags from "../pages/admin/Tags";
 import AdminCategories from "../pages/admin/Categories";
+import User from "../pages/User";
+import Settings from "../pages/Settings";
 
 export default function AppRouter() {
   return (
@@ -29,6 +31,9 @@ export default function AppRouter() {
 
         <Route path="/tags/:tagSlug" element={<PublicTags />} />
         <Route path="/categories/:categorySlug" element={<PublicCategories />} />
+
+        <Route path="/user" element={<User />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
 
       {/* Admin Routes */}
