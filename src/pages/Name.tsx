@@ -29,7 +29,7 @@ export default function Name() {
   }, [dispatch, nameSlug]);
 
   const from = location.state?.from?.pathname || "/"; // fallback to Home page
-  const isAdminPage = location.pathname.includes("/admin") || user?.isAdmin;
+  const isAdminPage = location.pathname.includes("/admin");
 
   if (status === "loading") return <LoadingScreen />;
   if (error) return <Error code={500} messege={error} />;
@@ -103,21 +103,23 @@ export default function Name() {
                       }}
                     />
 
-                    {isAdminPage && (
-                      <>
+                    <>
+                      {user?.isAdmin && (
                         <Tooltip title="Edit this name">
                           <Button size="small" color="primary" onClick={handleEditClick}>
                             Edit
                           </Button>
                         </Tooltip>
-
+                      )}
+                      {isAdminPage && (
                         <Tooltip title="Delete this name">
                           <Button size="small" color="error" onClick={handleDeleteClick}>
                             X
                           </Button>
                         </Tooltip>
-                      </>
-                    )}
+                      )}
+                    </>
+
                     <Tooltip title="Share this name">
                       <Button size="small" color="primary" onClick={handleShareClick}>
                         <ShareIcon />
