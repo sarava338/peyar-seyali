@@ -32,6 +32,7 @@ export type ITag = {
   tagInEnglish: string;
   slug: string;
   names: NameSlugType[];
+  count: number;
 };
 
 export type TagType = Pick<ITag, "tag" | "slug" | "tagInEnglish">;
