@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 import namesReducer from "./namesSlice";
 import nameReducer from "./nameSlice";
 import userReducer from "./userSlice";
+import tagsReducer from "./tagsSlice";
 
 const persistConfig = {
   key: "root",
@@ -18,6 +19,7 @@ export const store = configureStore({
     names: namesReducer,
     name: nameReducer,
     user: persistedUserReducer,
+    tags: tagsReducer,
   },
 
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
