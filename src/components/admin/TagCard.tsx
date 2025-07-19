@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Autocomplete, Box, Button, Chip, Paper, Stack, TextField, Typography } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { getNamesForInput } from "../../firebase/services/nameService";
 
@@ -9,7 +10,7 @@ import type { ITag, NameSlugType } from "../../types/types";
 
 import { useAppDispatch } from "../../store/hooks";
 import { fetchTags } from "../../store/tagsSlice";
-import { addNameSlugsToTag, removeNameSlugsFromTag } from "../../firebase/services/tagService";
+import { addNamesToTag, deleteTag, removeNamesFromTag } from "../../firebase/services/tagService";
 
 interface TagCardProps {
   tagData: ITag;
@@ -35,7 +36,7 @@ export default function TagCard({ tagData }: TagCardProps) {
   const handleAddTag = async () => {
     const nameSlugs = selectedNames.map((name) => name.slug);
 
-    await addNameSlugsToTag(tagData.slug, nameSlugs);
+    await addNamesToTag(tagData.slug, nameSlugs);
 
     dispatch(fetchTags());
   };
@@ -43,12 +44,21 @@ export default function TagCard({ tagData }: TagCardProps) {
   const handleRemoveTag = async (e: React.MouseEvent, nameSlug: string) => {
     e.preventDefault();
     e.stopPropagation();
-    await removeNameSlugsFromTag(tagData.slug, [nameSlug]);
+    await removeNamesFromTag(tagData.slug, [nameSlug]);
     dispatch(fetchTags());
+  };
+
+  const handleDeleteTag = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await deleteTag(tagData.slug);
   };
 
   return (
     <Paper elevation={3} sx={{ p: 1, width: 345, height: "fit-content" }}>
+      <Button color="error" onClick={handleDeleteTag}>
+        <DeleteIcon />
+      </Button>
+
       <Typography variant="h5" component="h2">
         {tagData.tag}
       </Typography>
