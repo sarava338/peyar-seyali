@@ -6,6 +6,7 @@ import namesReducer from "./namesSlice";
 import nameReducer from "./nameSlice";
 import userReducer from "./userSlice";
 import tagsReducer from "./tagsSlice";
+import categoriesReducer from "./categorySlice";
 
 const persistConfig = {
   key: "root",
@@ -20,6 +21,7 @@ export const store = configureStore({
     name: nameReducer,
     user: persistedUserReducer,
     tags: tagsReducer,
+    categories: categoriesReducer,
   },
 
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
