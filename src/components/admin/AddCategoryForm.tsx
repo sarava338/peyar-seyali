@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { Autocomplete, Box, Button, FormControlLabel, Grid, Paper, Switch, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, FormControlLabel, Grid, Paper, Stack, Switch, TextField, Tooltip, Typography } from "@mui/material";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 
 import type { NameSlugType } from "../../types/types";
 
@@ -20,7 +21,11 @@ function getInitialFormData() {
   };
 }
 
-export default function AddCategoryForm() {
+interface AddCategoryFormProps {
+  onClose: () => void;
+}
+
+export default function AddCategoryForm({ onClose }: AddCategoryFormProps) {
   const [formData, setFormData] = useState(getInitialFormData());
   const [nameOptions, setNameOptions] = useState([] as NameSlugType[]);
 
@@ -67,9 +72,17 @@ export default function AddCategoryForm() {
 
   return (
     <Paper elevation={3} sx={{ p: 2, m: { md: 2, sm: 0 } }}>
-      <Typography variant="h4" component="h2">
-        Add new Category
-      </Typography>
+      <Stack direction="row">
+        <Typography variant="h4" component="h2">
+          Add new Category
+        </Typography>
+
+        <Tooltip title="Close Form">
+          <Button color="error" onClick={onClose}>
+            <CloseFullscreenIcon />
+          </Button>
+        </Tooltip>
+      </Stack>
 
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
         <Box>

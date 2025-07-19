@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchTags } from "../../store/tagsSlice";
@@ -15,6 +15,8 @@ export default function Tags() {
   const { tags, status, error } = useAppSelector((state) => state.tags);
   const dispatch = useAppDispatch();
 
+  const [showForm, setShowForm] = useState(false);
+
   useEffect(() => {
     dispatch(fetchTags());
   }, [dispatch]);
@@ -24,11 +26,20 @@ export default function Tags() {
 
   return (
     <>
-      <Typography variant="h3" component="h1" sx={{ mb: 2 }}>
-        அனைத்து குறிச்சொற்கள் - {tags.length}
-      </Typography>
+      <Stack direction="row" justifyContent="space-around">
+        <Typography variant="h3" component="h1" sx={{ mb: 2 }}>
+          அனைத்து குறிச்சொற்கள் - {tags.length}
+        </Typography>
 
-      <AddTagForm />
+        {!showForm && (
+          <Button variant="contained" onClick={() => setShowForm(true)} sx={{ height: "fit-content" }}>
+            Add New Tag
+          </Button>
+        )}
+      </Stack>
+
+      {showForm && <AddTagForm onClose={() => setShowForm(false)} />}
+
       {!tags || tags.length === 0 ? (
         <Error code={404} messege="No Tags Found" />
       ) : (
