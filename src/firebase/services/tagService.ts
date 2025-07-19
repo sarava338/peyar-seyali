@@ -3,19 +3,21 @@ import {
   getDocs,
   collection,
   DocumentReference,
-  updateDoc,
   arrayUnion,
   arrayRemove,
   query,
   doc,
-  setDoc,
   orderBy,
+  getDoc,
+  writeBatch,
+  increment,
+  type DocumentData,
 } from "firebase/firestore";
 
 import { db } from "../firebase";
 import { getRefs, resolveRefs } from "../utils";
 
-import type { IName, ITag, NameSlugType, TagSlugType } from "../../types/types";
+import type { IName, ITag, NameCardType, NameSlugType, TagSlugType } from "../../types/types";
 import { toSlug } from "../../utils";
 
 export async function getAllTags(): Promise<ITag[]> {
@@ -45,6 +47,36 @@ export async function getAllTags(): Promise<ITag[]> {
   }
 }
 
+export async function getNamesFromTag(tagId: string): Promise<NameCardType[]> {
+  try {
+    const tagRef = doc(db, "tags", tagId);
+    const tagDoc = await getDoc(tagRef);
+
+    if (!tagDoc.exists()) throw new Error("tag not found");
+
+    const tagData = tagDoc.data();
+
+    if (!tagData.active) throw new Error("tag not found");
+    
+    const nameDocs = await Promise.all(tagData.names.map(async (nameRef: DocumentReference) => await getDoc(nameRef)));
+
+    return nameDocs.map((nameDoc: DocumentData) => {
+      const data = nameDoc.data();
+
+      return {
+        name: data.name,
+        nameInEnglish: data.nameInEnglish,
+        slug: data.slug!,
+        description: data.description,
+        gender: data.gender,
+      };
+    });
+  } catch (error) {
+    console.error("error while getting names for a tag", error);
+    throw error;
+  }
+}
+
 export async function getTagsForInput(): Promise<TagSlugType[]> {
   const snapshot = await getDocs(collection(db, "tags"));
   return snapshot.docs.map((doc) => {
@@ -59,53 +91,75 @@ export async function getTagsForInput(): Promise<TagSlugType[]> {
 
 export async function addTag(tagData: ITag) {
   try {
+    const batch = writeBatch(db);
+
     const slug = tagData.slug || toSlug(tagData.tagInEnglish);
     const tagRef = doc(db, "tags", slug);
 
-    const nameSlugs = tagData.names.map((name) => name.slug);
+    const nameRefs = await getRefs(
+      "names",
+      tagData.names.map((name) => name.slug)
+    );
 
-    await setDoc(tagRef, {
+    nameRefs.forEach((nameRef) => batch.update(nameRef, { tags: arrayUnion(tagRef) }));
+
+    batch.set(tagRef, {
       ...tagData,
-      slug: slug,
-      names: await getRefs("names", nameSlugs),
-      count: tagData.count,
+      slug,
+      names: nameRefs,
+      count: increment(nameRefs.length),
     });
+
+    batch.commit();
   } catch (error) {
     console.error("error while adding new tag", error);
     throw error;
   }
 }
 
-export async function addNameSlugsToTag(tagId: string, nameSlugs: string[]) {
-  const tagRef = doc(db, "tags", tagId);
-  const nameRefs = await getRefs("names", nameSlugs);
+export async function deleteTag(tagId: string) {
+  try {
+    const batch = writeBatch(db);
 
-  await addNameRefsToTag(tagRef, nameRefs);
-}
+    const tagRef = doc(db, "tags", tagId);
+    const tagDoc = await getDoc(tagRef);
 
-export async function removeNameSlugsFromTag(tagId: string, nameSlugs: string[]) {
-  const tagRef = doc(db, "tags", tagId);
-  const nameRefs = await getRefs("names", nameSlugs);
+    if (!tagDoc.exists()) throw new Error("tag not found to delete");
 
-  await removeNameRefsFromTag(tagRef, nameRefs);
-}
+    const deleteTag = tagDoc.data();
 
-export async function addNameRefsToTags(tagRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
-  for (const tagRef of tagRefs) {
-    await addNameRefsToTag(tagRef, nameRefs);
+    const { names } = deleteTag;
+
+    names.forEach((nameRef: DocumentReference) => batch.update(nameRef, { tags: arrayRemove(tagRef) }));
+    batch.delete(tagRef);
+
+    batch.commit();
+  } catch (error) {
+    console.error("error while deleting tag", error);
+    throw error;
   }
 }
 
-export async function addNameRefsToTag(tagRef: DocumentReference, nameRefs: DocumentReference[]) {
-  await updateDoc(tagRef, { names: arrayUnion(...nameRefs) });
+export async function addNamesToTag(tagId: string, nameSlugs: string[]) {
+  const batch = writeBatch(db);
+
+  const tagRef = doc(db, "tags", tagId);
+  const nameRefs = await getRefs("names", nameSlugs);
+
+  batch.update(tagRef, { names: arrayUnion(...nameRefs), count: increment(nameRefs.length) });
+  nameRefs.forEach((nameRef) => batch.update(nameRef, { tags: arrayUnion(tagRef) }));
+
+  batch.commit();
 }
 
-export async function removeNameRefsFromTags(tagRefs: DocumentReference[], nameRefs: DocumentReference[] = []) {
-  for (const tagRef of tagRefs) {
-    await removeNameRefsFromTag(tagRef, nameRefs);
-  }
-}
+export async function removeNamesFromTag(tagId: string, nameSlugs: string[]) {
+  const batch = writeBatch(db);
 
-export async function removeNameRefsFromTag(tagRef: DocumentReference, nameRefs: DocumentReference[]) {
-  await updateDoc(tagRef, { names: arrayRemove(...nameRefs) });
+  const tagRef = doc(db, "tags", tagId);
+  const nameRefs = await getRefs("names", nameSlugs);
+
+  batch.update(tagRef, { names: arrayRemove(...nameRefs), count: increment(-nameRefs.length) });
+  nameRefs.forEach((nameRef) => batch.update(nameRef, { tags: arrayRemove(tagRef) }));
+
+  batch.commit();
 }

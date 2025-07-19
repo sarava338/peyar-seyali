@@ -1,7 +1,6 @@
 import {
   updateDoc,
   setDoc,
-  deleteDoc,
   doc,
   getDoc,
   collection,
@@ -11,12 +10,11 @@ import {
   DocumentReference,
   arrayUnion,
   arrayRemove,
+  writeBatch,
+  increment,
 } from "firebase/firestore";
 
 import { auth, db } from "../firebase";
-
-import { addNameRefsToTags, removeNameRefsFromTags } from "./tagService";
-import { addNameRefsToCategories, removeNameRefsFromCategories } from "./categoryService";
 
 import { toSlug } from "../../utils";
 import { getRefs, resolveRefs } from "../utils";
@@ -103,7 +101,7 @@ export async function getAllNames(): Promise<NameCardType[]> {
     });
   } catch (err) {
     const error = err as Error;
-    console.error(error);
+    console.error("error while getting names", error);
     throw error;
   }
 }
@@ -158,23 +156,17 @@ export async function addName(nameDetail: IName) {
     const slug = nameDetail.slug || toSlug(nameDetail.nameInEnglish);
     const docRef = doc(db, "names", slug);
 
-    const otherNameSlugs = nameDetail.otherNames.map((name) => name.slug);
-    const relatedNameSlugs = nameDetail.relatedNames.map((name) => name.slug);
-    const tagSlugs = nameDetail.tags.map((tag) => tag.slug);
-    const categorySlugs = nameDetail.categories.map((category) => category.slug);
-
     await setDoc(docRef, {
       ...nameDetail,
-      otherNames: await getRefs("names", otherNameSlugs),
-      relatedNames: await getRefs("names", relatedNameSlugs),
-      categories: await getRefs("categories", categorySlugs),
-      tags: await getRefs("tags", tagSlugs),
       slug: slug,
       author: nameDetail.author.split("@")[0] || auth.currentUser?.email?.split("@")[0] || "Anonymous",
       comments: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
+
+    // syncing refs
+    await updateNameWithRefs(docRef, nameDetail);
   } catch (error) {
     console.error("error while adding new name", error);
     throw error;
@@ -183,6 +175,8 @@ export async function addName(nameDetail: IName) {
 
 export async function editNameById(nameId: string, updatedName: IName) {
   try {
+    const batch = writeBatch(db);
+
     const { tags, categories, otherNames, relatedNames } = updatedName;
 
     const nameRef = doc(db, "names", nameId);
@@ -221,12 +215,10 @@ export async function editNameById(nameId: string, updatedName: IName) {
     const catsToRemove = prevCatRefs.filter((r) => !newCatRefs.find((p) => p.path === r.path));
 
     // 🔄 Sync reverse links
-    await Promise.all([
-      addNameRefsToTags(tagsToAdd, [nameRef]),
-      removeNameRefsFromTags(tagsToRemove, [nameRef]),
-      addNameRefsToCategories(catsToAdd, [nameRef]),
-      removeNameRefsFromCategories(catsToRemove, [nameRef]),
-    ]);
+    tagsToAdd.forEach((tagRef) => batch.update(tagRef, { names: arrayUnion(nameRef), count: increment(1) }));
+    tagsToRemove.forEach((tagRef) => batch.update(tagRef, { names: arrayRemove(nameRef), count: increment(-1) }));
+    catsToAdd.forEach((catRef) => batch.update(catRef, { names: arrayUnion(nameRef), count: increment(1) }));
+    catsToRemove.forEach((catRef) => batch.update(catRef, { names: arrayRemove(nameRef), count: increment(-1) }));
 
     await updateDoc(nameRef, {
       ...updatedName,
@@ -241,7 +233,6 @@ export async function editNameById(nameId: string, updatedName: IName) {
   }
 }
 
-// Delete a name
 export async function deleteName(docId: string) {
   try {
     const nameRef = doc(db, "names", docId);
@@ -253,11 +244,7 @@ export async function deleteName(docId: string) {
 
     const { tags, categories } = deleteName;
 
-    await Promise.all([removeNameRefsFromTags(tags, [nameRef]), removeNameRefsFromCategories(categories, [nameRef])]);
-
-    // have to deleted references fields in other names which using this name as relatedName / otherName
-
-    await deleteDoc(nameRef);
+    await deleteNameAndCleanup(nameRef, tags, categories);
   } catch (error) {
     console.error("error while deleting name", error);
     throw error;
@@ -298,4 +285,66 @@ export async function removeCategoryRefsFromName(nameRef: DocumentReference, cat
     console.error("error while removing categories from name", error);
     throw error;
   }
+}
+
+export async function removeRelatedNameRefsFromName(nameRef: DocumentReference, relatedNameRefs: DocumentReference[]) {
+  try {
+    await updateDoc(nameRef, { relatedNames: arrayRemove(...relatedNameRefs) });
+  } catch (error) {
+    console.error("error while removing relatedNames from name", error);
+    throw error;
+  }
+}
+
+export async function removeOtherNameRefsFromName(nameRef: DocumentReference, otherNameRefs: DocumentReference[]) {
+  try {
+    await updateDoc(nameRef, { otherNames: arrayRemove(...otherNameRefs) });
+  } catch (error) {
+    console.error("error while removing otherNames from name", error);
+    throw error;
+  }
+}
+
+async function updateNameWithRefs(nameRef: DocumentReference, nameData: IName) {
+  const batch = writeBatch(db);
+
+  const tagRefs = await getRefs(
+    "tags",
+    nameData.tags.map((tag) => tag.slug)
+  );
+  const categoryRefs = await getRefs(
+    "categories",
+    nameData.categories.map((cat) => cat.slug)
+  );
+  const relatedNameRefs = await getRefs(
+    "names",
+    nameData.relatedNames.map((name) => name.slug)
+  );
+  const otherNameRefs = await getRefs(
+    "names",
+    nameData.otherNames.map((name) => name.slug)
+  );
+
+  batch.update(nameRef, {
+    tags: arrayUnion(...tagRefs),
+    categories: arrayUnion(...categoryRefs),
+    relatedNames: arrayUnion(...relatedNameRefs),
+    otherNames: arrayUnion(...otherNameRefs),
+  });
+
+  tagRefs.forEach((tagRef) => batch.update(tagRef, { names: arrayUnion(nameRef) }));
+  categoryRefs.forEach((catRef) => batch.update(catRef, { names: arrayUnion(nameRef) }));
+
+  await batch.commit();
+}
+
+async function deleteNameAndCleanup(nameRef: DocumentReference, tagRefs: DocumentReference[] = [], categoryRefs: DocumentReference[] = []) {
+  const batch = writeBatch(db);
+
+  tagRefs.forEach((tagRef) => batch.update(tagRef, { names: arrayRemove(nameRef) }));
+  categoryRefs.forEach((catRef) => batch.update(catRef, { names: arrayRemove(nameRef) }));
+
+  batch.delete(nameRef);
+
+  await batch.commit();
 }

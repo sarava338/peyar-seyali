@@ -9,15 +9,15 @@ import Error from "../pages/Error";
 
 import Name from "../pages/Name";
 import Names from "../pages/Names";
-import PublicTags from "../pages/Tags";
-import PublicCategories from "../pages/Categories";
+import Tag from "../pages/Tag";
+import Category from "../pages/Category";
+import User from "../pages/User";
+import Settings from "../pages/Settings";
 
 import AddName from "../pages/admin/AddName";
 import EditName from "../pages/admin/EditName";
 import AdminTags from "../pages/admin/Tags";
 import AdminCategories from "../pages/admin/Categories";
-import User from "../pages/User";
-import Settings from "../pages/Settings";
 
 export default function AppRouter() {
   return (
@@ -29,8 +29,8 @@ export default function AppRouter() {
         <Route path="/names" element={<Names />} />
         <Route path="/names/:nameSlug" element={<Name />} />
 
-        <Route path="/tags/:tagSlug" element={<PublicTags />} />
-        <Route path="/categories/:categorySlug" element={<PublicCategories />} />
+        <Route path="/tag/:tagSlug" element={<Tag />} />
+        <Route path="/category/:categorySlug" element={<Category />} />
 
         <Route path="/user" element={<User />} />
         <Route path="/settings" element={<Settings />} />
