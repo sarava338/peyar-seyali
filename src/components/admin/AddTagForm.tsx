@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { Autocomplete, Box, Button, FormControlLabel, Grid, Paper, Switch, TextField, Typography } from "@mui/material";
 
 import type { NameSlugType } from "../../types/types";
+
 import { getNamesForInput } from "../../firebase/services/nameService";
 import { addTag } from "../../firebase/services/tagService";
+
 import { useAppDispatch } from "../../store/hooks";
 import { fetchTags } from "../../store/tagsSlice";
 
@@ -100,7 +102,7 @@ export default function AddTagForm() {
                 getOptionLabel={(name) => name.name}
                 value={formData.names}
                 onChange={(_e, value) => setFormData({ ...formData, names: value })}
-                renderInput={(params) => <TextField {...params} label="Other Names" variant="outlined" />}
+                renderInput={(params) => <TextField {...params} label="Names" variant="outlined" />}
               />
               <Box sx={{ display: "flex", gap: 2 }}>
                 <Button type="submit" variant="contained" color="primary">

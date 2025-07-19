@@ -51,6 +51,7 @@ export default function TagCard({ tagData }: TagCardProps) {
   const handleDeleteTag = async (e: React.MouseEvent) => {
     e.preventDefault();
     await deleteTag(tagData.slug);
+    dispatch(fetchTags());
   };
 
   return (
