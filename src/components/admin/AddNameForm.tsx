@@ -12,12 +12,15 @@ import {
   Paper,
   Slide,
   Snackbar,
+  Stack,
   Switch,
   TextField,
+  Tooltip,
   Typography,
   type SnackbarCloseReason,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 
 import { addName, getNamesForInput } from "../../firebase/services/nameService";
 import { getTagsForInput } from "../../firebase/services/tagService";
@@ -53,7 +56,11 @@ const initialMessageState = () => ({
   message: "",
 });
 
-export default function AddName() {
+interface AddNameFormProps {
+  onClose: () => void;
+}
+
+export default function AddNameForm({ onClose }: AddNameFormProps) {
   const [formData, setFormData] = useState<IName>(getInitialFormData());
 
   const [tagOptions, setTagOptions] = useState<TagSlugType[]>([]);
@@ -137,9 +144,18 @@ export default function AddName() {
 
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <Typography variant="h3" component="h1" gutterBottom>
-              Add a New Name
-            </Typography>
+            <Stack direction="row" alignItems="center">
+              <Typography variant="h3" component="h1" gutterBottom>
+                Add a New Name
+              </Typography>
+
+              <Tooltip title="Close Form">
+                <Button color="error" onClick={onClose} sx={{ height: "fit-content" }}>
+                  <CloseFullscreenIcon />
+                </Button>
+              </Tooltip>
+            </Stack>
+
             <Box sx={{ display: { xs: "none", md: "flex" }, justifyContent: "space-between", gap: 5 }}>
               <Button type="submit" variant="contained" color="primary">
                 Add Name
@@ -307,7 +323,7 @@ export default function AddName() {
             </Grid>
           </Box>
 
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <Stack direction="row" gap={2} m={2}>
             <Button type="submit" variant="contained" color="primary">
               Add Name
             </Button>
@@ -315,7 +331,11 @@ export default function AddName() {
             <Button type="reset" variant="contained" color="secondary" onClick={handleClear}>
               Clear
             </Button>
-          </Box>
+
+            <Button variant="outlined" color="error" onClick={onClose}>
+              Close Form
+            </Button>
+          </Stack>
         </Box>
       </Paper>
     </Box>

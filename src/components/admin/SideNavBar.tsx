@@ -25,7 +25,6 @@ export default function SideNavBar({ open, drawerWidth, handleDrawerClose }: Sid
 
         <List>
           <DashBoardListItem open={open} pageName="Names" path="/admin/names" handleDrawerClose={handleDrawerClose} />
-          <DashBoardListItem open={open} pageName="Add Name" path="/admin/names/add" handleDrawerClose={handleDrawerClose} />
 
           <Divider />
 

@@ -26,7 +26,7 @@ export default function Tags() {
 
   return (
     <>
-      <Stack direction="row" justifyContent="space-around">
+      <Stack m={3} flexDirection={{ sm: "column", md: "row" }} gap={3} justifyContent="space-around">
         <Typography variant="h3" component="h1" sx={{ mb: 2 }}>
           அனைத்து குறிச்சொற்கள் - {tags.length}
         </Typography>

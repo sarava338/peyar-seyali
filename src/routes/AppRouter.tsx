@@ -14,7 +14,6 @@ import Category from "../pages/Category";
 import User from "../pages/User";
 import Settings from "../pages/Settings";
 
-import AddName from "../pages/admin/AddName";
 import EditName from "../pages/admin/EditName";
 import AdminTags from "../pages/admin/Tags";
 import AdminCategories from "../pages/admin/Categories";
@@ -41,7 +40,6 @@ export default function AppRouter() {
         <Route path="names" element={<Names />} />
         <Route path="names/:nameSlug" element={<Name />} />
         <Route path="names/:nameSlug/edit" element={<EditName />} />
-        <Route path="names/add" element={<AddName />} />
 
         <Route path="tags" element={<AdminTags />} />
         <Route path="categories" element={<AdminCategories />} />

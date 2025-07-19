@@ -5,6 +5,8 @@ import MDEditor from "@uiw/react-md-editor";
 
 import { Box, Button, Chip, Divider, Grid, Paper, Stack, Tooltip, Typography } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { deleteName } from "../firebase/services/nameService";
 
@@ -107,14 +109,14 @@ export default function Name() {
                       {user?.isAdmin && (
                         <Tooltip title="Edit this name">
                           <Button size="small" color="primary" onClick={handleEditClick}>
-                            Edit
+                            <EditIcon />
                           </Button>
                         </Tooltip>
                       )}
                       {isAdminPage && (
                         <Tooltip title="Delete this name">
                           <Button size="small" color="error" onClick={handleDeleteClick}>
-                            X
+                            <DeleteIcon />
                           </Button>
                         </Tooltip>
                       )}
