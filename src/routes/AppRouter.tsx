@@ -29,8 +29,8 @@ export default function AppRouter() {
         <Route path="/names" element={<Names />} />
         <Route path="/names/:nameSlug" element={<Name />} />
 
-        <Route path="/tag/:tagSlug" element={<Tag />} />
-        <Route path="/category/:categorySlug" element={<Category />} />
+        <Route path="/tags/:tagSlug" element={<Tag />} />
+        <Route path="/categories/:categorySlug" element={<Category />} />
 
         <Route path="/user" element={<User />} />
         <Route path="/settings" element={<Settings />} />
