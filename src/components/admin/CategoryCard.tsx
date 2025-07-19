@@ -84,7 +84,7 @@ export default function CategoryCard({ categoryData }: CategryCardProps) {
           getOptionLabel={(name) => name.name}
           value={selectedNames}
           onChange={(_e, value) => addNameInInput(value)}
-          renderInput={(params) => <TextField {...params} label="Add Names to Tag" variant="outlined" size="small" />}
+          renderInput={(params) => <TextField {...params} label="Add Names to Category" variant="outlined" size="small" />}
         />
 
         <Button onClick={handleAddCategory}>Save</Button>
