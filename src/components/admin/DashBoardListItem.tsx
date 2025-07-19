@@ -1,22 +1,17 @@
+import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
-import {
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+import { Button, ListItem, ListItemText, Stack } from "@mui/material";
 
 interface DashBoardListItemProps {
   open: boolean;
   path: string | URL;
   pageName: string;
   handleDrawerClose: () => void;
+  icon: ReactNode;
 }
 
-export default function DashBoardListItem({ open, path, pageName, handleDrawerClose }: DashBoardListItemProps) {
+export default function DashBoardListItem({ open, path, pageName, handleDrawerClose, icon }: DashBoardListItemProps) {
   const navigate = useNavigate();
 
   const handleClcik = () => {
@@ -26,25 +21,31 @@ export default function DashBoardListItem({ open, path, pageName, handleDrawerCl
 
   return (
     <>
-      <ListItem disablePadding sx={{ display: "block" }} onClick={handleClcik}>
-        <ListItemButton
-          sx={{
-            minHeight: 48,
-            px: 2.5,
-            justifyContent: open ? "initial" : "center",
-          }}
-        >
-          <ListItemIcon
+      <ListItem
+        sx={{
+          display: "block",
+          "&:hover": {
+            backgroundColor: "#ddd",
+            cursor: "pointer",
+          },
+        }}
+        onClick={handleClcik}
+      >
+        <Stack direction="row">
+          <Button
+            startIcon={icon}
             sx={{
-              minWidth: 0,
-              justifyContent: "center",
-              mr: open ? 3 : "auto",
+              justifyContent: "initial",
             }}
-          >
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary={pageName} sx={{ opacity: open ? 1 : 0 }} />
-        </ListItemButton>
+          ></Button>
+          <ListItemText
+            primary={pageName}
+            sx={{
+              display: open ? "block" : "none",
+              marginLeft: 1,
+            }}
+          />
+        </Stack>
       </ListItem>
     </>
   );
