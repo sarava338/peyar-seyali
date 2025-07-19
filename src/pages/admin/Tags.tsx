@@ -21,7 +21,6 @@ export default function Tags() {
 
   if (status === "loading") return <Loading />;
   if (error) return <Error code={500} messege={error} />;
-  if (!tags || tags.length === 0) return <Error code={404} messege="No Tags Found" />;
 
   return (
     <>
@@ -30,12 +29,15 @@ export default function Tags() {
       </Typography>
 
       <AddTagForm />
-
-      <Box sx={{ m: { md: 2, sm: 1 }, mt: 2, display: "flex", flexWrap: "wrap", gap: 2 }}>
-        {tags.map((tag) => (
-          <TagCard key={tag.slug} tagData={tag} />
-        ))}
-      </Box>
+      {!tags || tags.length === 0 ? (
+        <Error code={404} messege="No Tags Found" />
+      ) : (
+        <Box sx={{ m: { md: 2, sm: 1 }, mt: 2, display: "flex", flexWrap: "wrap", gap: 2 }}>
+          {tags.map((tag) => (
+            <TagCard key={tag.slug} tagData={tag} />
+          ))}
+        </Box>
+      )}
     </>
   );
 }

@@ -18,21 +18,22 @@ export default function Categories() {
 
   if (status === "loading") return <Loading />;
   if (error) return <Error code={500} messege={error} />;
-  if (!categories || categories.length === 0) return <Error code={404} messege="No Tags Found" />;
 
   return (
     <>
       <Typography variant="h3" component="h1" sx={{ mb: 2 }}>
         அனைத்து வகைகள் - {categories.length}
       </Typography>
-
       <AddCategoryForm />
-
-      <Box sx={{ m: { md: 2, sm: 1 }, mt: 2, display: "flex", flexWrap: "wrap", gap: 2 }}>
-        {categories.map((category) => (
-          <CategoryCard key={category.slug} categoryData={category} />
-        ))}
-      </Box>
+      {!categories || categories.length === 0 ? (
+        <Error code={404} messege="No Categories Found" />
+      ) : (
+        <Box sx={{ m: { md: 2, sm: 1 }, mt: 2, display: "flex", flexWrap: "wrap", gap: 2 }}>
+          {categories.map((category) => (
+            <CategoryCard key={category.slug} categoryData={category} />
+          ))}
+        </Box>
+      )}
     </>
   );
 }
