@@ -21,6 +21,14 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "active", "order": "ASCENDING" },
+        { "fieldPath": "nameInEnglish", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "names",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "active", "order": "ASCENDING" },
         { "fieldPath": "slug", "order": "ASCENDING" }
       ]
     },
@@ -37,7 +45,23 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "createdAt", "order": "DESCENDING" },
+        { "fieldPath": "nameInEnglish", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "names",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "createdAt", "order": "DESCENDING" },
         { "fieldPath": "slug", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "names",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "name", "order": "ASCENDING" },
+        { "fieldPath": "nameInEnglish", "order": "ASCENDING" }
       ]
     },
     {
