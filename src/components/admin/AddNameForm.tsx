@@ -226,7 +226,7 @@ export default function AddNameForm({ onClose }: AddNameFormProps) {
             </Grid>
 
             <Grid container spacing={3}>
-              <Grid size={{ sm: 12, md: 6 }}>
+              <Grid size={{ xs: 12, md: 6 }} sx={{ flexWrap: "nowrap" }}>
                 <Autocomplete
                   sx={{ mt: 2, mb: 3 }}
                   fullWidth
@@ -250,7 +250,7 @@ export default function AddNameForm({ onClose }: AddNameFormProps) {
                 />
               </Grid>
 
-              <Grid size={{ sm: 12, md: 6 }}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Autocomplete
                   sx={{ mt: 2, mb: 3 }}
                   fullWidth
