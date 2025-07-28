@@ -12,6 +12,7 @@ import {
   arrayRemove,
   writeBatch,
   increment,
+  QueryConstraint,
 } from "firebase/firestore";
 
 import { auth, db } from "../firebase";
@@ -60,9 +61,9 @@ async function resolveName(nameRef: DocumentReference): Promise<IName | undefine
   }
 }
 
-export async function getAllNamesForAdmin(): Promise<NameCardType[]> {
+export async function getAllNamesForAdmin(queries: QueryConstraint[] = []): Promise<NameCardType[]> {
   try {
-    const selectedNames = query(collection(db, "names"));
+    const selectedNames = query(collection(db, "names"), ...queries);
     const snapshot = await getDocs(selectedNames);
 
     return snapshot.docs.map((docSnap) => {
@@ -83,9 +84,9 @@ export async function getAllNamesForAdmin(): Promise<NameCardType[]> {
   }
 }
 
-export async function getAllNames(): Promise<NameCardType[]> {
+export async function getAllNames(queries: QueryConstraint[] = []): Promise<NameCardType[]> {
   try {
-    const selectedNames = query(collection(db, "names"), where("active", "==", true));
+    const selectedNames = query(collection(db, "names"), where("active", "==", true), ...queries);
     const snapshot = await getDocs(selectedNames);
 
     return snapshot.docs.map((docSnap) => {
@@ -146,11 +147,6 @@ export async function getNameByIdForAdmin(id: string): Promise<IName | undefined
   }
 }
 
-/**
- * Add a new name with unique slug as document ID
- * @export
- * @param {IName} nameDetail
- */
 export async function addName(nameDetail: IName) {
   try {
     const slug = nameDetail.slug || toSlug(nameDetail.nameInEnglish);
