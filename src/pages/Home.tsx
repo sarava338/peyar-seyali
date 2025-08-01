@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
-import SearchBox from "../components/SearchBox";
-import NameList from "../components/names/NameList";
 import { fetchNames } from "../store/namesSlice";
+
+import NameList from "../components/names/NameList";
 
 export default function Home() {
   const { publicNames, status, error } = useAppSelector((state) => state.names);
@@ -21,13 +21,9 @@ export default function Home() {
   return (
     <Box sx={{ mx: { md: 2, xs: 1 } }}>
       <Box component="article">
-        <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography component="h1" variant="h2" sx={{ textAlign: { xs: "center", md: "left" } }}>
-            பெயர் செயலி
-          </Typography>
-
-          <SearchBox />
-        </Stack>
+        <Typography component="h1" variant="h2" sx={{ textAlign: { xs: "center", md: "left" } }}>
+          பெயர் செயலி
+        </Typography>
 
         <Typography component="h2" variant="h5" sx={{ textAlign: "center" }}>
           மொத்த பெயர்கள் :{" "}

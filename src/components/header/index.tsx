@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Toolbar, Container, Box, AppBar } from "@mui/material";
+import { Toolbar, Box, AppBar } from "@mui/material";
 
-import { HeaderLogo } from "../Logo";
+import { HeaderLogo, MobileHeaderLogo } from "../Logo";
+
 import NavMenu from "./NavMenu";
 import UserMenu from "./UserMenu";
+import SearchBox from "../SearchBox";
 
 export default function Header() {
   const [navAnchor, setNavAnchor] = useState<null | HTMLElement>(null);
@@ -25,23 +27,25 @@ export default function Header() {
   return (
     <>
       <AppBar position="fixed" component="header" sx={{ backgroundColor: "white", color: "black", px: { md: 8, xs: 1 } }}>
-        <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            {/** Logo - Desktop */}
-            <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <HeaderLogo />
-            </Box>
+        {/* <Container maxWidth="xl"> */}
+        <Toolbar disableGutters>
+          {/** Logo - Desktop */}
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <HeaderLogo />
+          </Box>
 
-            <NavMenu navAnchor={navAnchor} onNavOpen={handleNavMenuOpen} onNavClose={handleNavMenuClose} />
+          <NavMenu navAnchor={navAnchor} onNavOpen={handleNavMenuOpen} onNavClose={handleNavMenuClose} />
 
-            {/* Logo - Mobile */}
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <HeaderLogo />
-            </Box>
+          {/* Logo - Mobile */}
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <MobileHeaderLogo />
+          </Box>
 
-            <UserMenu userAnchor={userAnchor} onUserMenuOpen={handleUserMenuOpen} onUserMenuClose={handleUserMenuClose} />
-          </Toolbar>
-        </Container>
+          <SearchBox />
+
+          <UserMenu userAnchor={userAnchor} onUserMenuOpen={handleUserMenuOpen} onUserMenuClose={handleUserMenuClose} />
+        </Toolbar>
+        {/* </Container> */}
       </AppBar>
 
       <div style={{ minHeight: "80px" }}></div>
