@@ -19,6 +19,7 @@
     "@tailwindcss/vite": "^4.1.10",
     "@uiw/react-md-editor": "^4.0.7",
     "firebase": "^11.9.1",
+    "framer-motion": "^12.23.12",
     "peyar-seyali": "file:",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

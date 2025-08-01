@@ -3,6 +3,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Box, Stack, TextField, MenuItem, Paper, Typography, IconButton } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
+import { AnimatePresence, motion } from "framer-motion";
+
 import { getAllNames } from "../firebase/services/nameService";
 import { endAt, orderBy, startAt } from "firebase/firestore";
 
@@ -74,72 +76,92 @@ export default function SearchBox() {
 
   return (
     <Box ref={searchBoxRef}>
-      {!showSeachBox ? (
-        <IconButton onClick={() => setShowSearchBox(true)} sx={{ mr: { xs: 1, md: 2 } }} size="small">
-          <SearchIcon />
-        </IconButton>
-      ) : (
-        <Box sx={{ position: "relative", maxWidth: 600, mt: 2, mr: 2 }}>
-          <Stack direction={{ xs: "column", md: "row" }} spacing={2} alignItems={{ md: "center" }} mb={3}>
-            <TextField
-              select
-              label="Search Field"
-              value={searchField}
-              onChange={(e) => setSearchField(e.target.value as SearchField)}
-              size="small"
-              sx={{ minWidth: 160, maxWidth: 180 }}
-            >
-              <MenuItem value="name">Name (தமிழ்)</MenuItem>
-              <MenuItem value="nameInEnglish">Name (English)</MenuItem>
-              {user && user.isAdmin && <MenuItem value="slug">Slug</MenuItem>}
-            </TextField>
+      <AnimatePresence mode="wait">
+        {!showSeachBox ? (
+          <motion.div key="icon" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+            <IconButton onClick={() => setShowSearchBox(true)} sx={{ mr: { xs: 1, md: 2 } }} size="small">
+              <SearchIcon />
+            </IconButton>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="searchbox"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Box sx={{ position: "relative", maxWidth: 600, mt: 2, mr: 2 }}>
+              <Stack direction={{ xs: "column", md: "row" }} spacing={2} alignItems={{ md: "center" }} mb={3}>
+                <TextField
+                  select
+                  label="Search Field"
+                  value={searchField}
+                  onChange={(e) => setSearchField(e.target.value as SearchField)}
+                  size="small"
+                  sx={{ minWidth: 160, maxWidth: 180 }}
+                >
+                  <MenuItem value="name">Name (தமிழ்)</MenuItem>
+                  <MenuItem value="nameInEnglish">Name (English)</MenuItem>
+                  {user && user.isAdmin && <MenuItem value="slug">Slug</MenuItem>}
+                </TextField>
 
-            <TextField
-              label={searchField === "name" ? "தமிழில் தேட" : searchField === "nameInEnglish" ? "ஆங்கிலத்தில் தேட" : "Search by Slug"}
-              variant="outlined"
-              fullWidth
-              size="small"
-              value={searchText}
-              onFocus={() => setShowResults(true)}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-          </Stack>
-
-          {showResults && results.length > 0 && (
-            <Box
-              sx={{
-                position: "absolute",
-                zIndex: 2,
-                left: 0,
-                right: 0,
-                width: "100%",
-                maxHeight: 400,
-                overflowY: "auto",
-                border: "1px solid #ccc",
-                borderRadius: 2,
-                backgroundColor: "#fff",
-                boxShadow: 3,
-              }}
-            >
-              <Stack spacing={2}>
-                {results.map((result) => (
-                  <Paper key={result.slug} elevation={2} sx={{ p: 2 }}>
-                    <Typography variant="subtitle1" fontWeight={600}>
-                      {result.nameInEnglish}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {result.name}
-                    </Typography>
-                    <Typography variant="caption" color="text.disabled">
-                      {result.slug}
-                    </Typography>
-                  </Paper>
-                ))}
+                <TextField
+                  label={searchField === "name" ? "தமிழில் தேட" : searchField === "nameInEnglish" ? "ஆங்கிலத்தில் தேட" : "Search by Slug"}
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  value={searchText}
+                  onFocus={() => setShowResults(true)}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
               </Stack>
+
+              {showResults && results.length > 0 && (
+                <motion.div
+                  key="results"
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      zIndex: 2,
+                      left: 0,
+                      right: 0,
+                      width: "100%",
+                      maxHeight: 400,
+                      overflowY: "auto",
+                      border: "1px solid #ccc",
+                      borderRadius: 2,
+                      backgroundColor: "#fff",
+                      boxShadow: 3,
+                    }}
+                  >
+                    <Stack spacing={2}>
+                      {results.map((result) => (
+                        <Paper key={result.slug} elevation={2} sx={{ p: 2 }}>
+                          <Typography variant="subtitle1" fontWeight={600}>
+                            {result.nameInEnglish}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {result.name}
+                          </Typography>
+                          <Typography variant="caption" color="text.disabled">
+                            {result.slug}
+                          </Typography>
+                        </Paper>
+                      ))}
+                    </Stack>
+                  </Box>
+                </motion.div>
+              )}
             </Box>
-          )}
-        </Box>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Box>
   );
 }
