@@ -231,7 +231,15 @@ export default function EditName() {
                     ))}
                   </TextField>
 
-                  <TextField fullWidth label="Slug (Optional)" name="slug" value={formData.slug} onChange={handleChange} margin="normal" />
+                  <TextField
+                    fullWidth
+                    disabled
+                    label="Slug (Disabled)"
+                    name="slug"
+                    value={formData.slug}
+                    onChange={handleChange}
+                    margin="normal"
+                  />
                 </Grid>
                 <FormControlLabel
                   control={<Switch checked={formData.active} onChange={handleChange} name="active" color="primary" />}
