@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { AppBar, Box, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Stack, Toolbar } from "@mui/material";
 
-import { HeaderLogo } from "../Logo";
+import { HeaderLogo, MobileHeaderLogo } from "../Logo";
 import UserMenu from "../header/UserMenu";
 import AdminDrawerIcon from "../../assets/icons/AdminDrawerIcon";
+import SearchBox from "../SearchBox";
 
 interface HeaderProps {
   open: boolean;
@@ -48,16 +49,20 @@ export default function Header({ open, handleDrawerOpen, drawerWidth }: HeaderPr
     >
       <Toolbar>
         <AdminDrawerIcon isDrawerOpen={open} onClick={handleDrawerOpen} />
+        <Stack direction="row" alignItems="center" justifyItems="end">
+          {/* Logo - Laptop */}
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <HeaderLogo />
+          </Box>
 
-        <UserMenu userAnchor={userAnchor} onUserMenuOpen={handleUserMenuOpen} onUserMenuClose={handleUserMenuClose} />
+          {/* Logo - Mobile */}
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+            <MobileHeaderLogo />
+          </Box>
 
-        <Box sx={{ mx: 4 }}>
-          <HeaderLogo />
-        </Box>
-
-        <Typography variant="h5" noWrap component="p">
-          நிர்வாகி தளம்
-        </Typography>
+          <SearchBox />
+          <UserMenu userAnchor={userAnchor} onUserMenuOpen={handleUserMenuOpen} onUserMenuClose={handleUserMenuClose} />
+        </Stack>
       </Toolbar>
     </AppBar>
   );

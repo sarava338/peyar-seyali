@@ -79,7 +79,7 @@ export default function SearchBox() {
       <AnimatePresence mode="wait">
         {!showSeachBox ? (
           <motion.div key="icon" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-            <IconButton onClick={() => setShowSearchBox(true)} sx={{ mr: { xs: 1, md: 2 } }} size="small">
+            <IconButton onClick={() => setShowSearchBox(true)} sx={{ mx: { xs: 1, md: 2 } }} size="small">
               <SearchIcon />
             </IconButton>
           </motion.div>
@@ -91,7 +91,7 @@ export default function SearchBox() {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
           >
-            <Box sx={{ position: "relative", maxWidth: 600, mt: 2, mr: 2 }}>
+            <Box sx={{ position: "relative", maxWidth: 600, mt: 2, mx: { xs: 1, md: 2 } }}>
               <Stack direction={{ xs: "column", md: "row" }} spacing={2} alignItems={{ md: "center" }} mb={3}>
                 <TextField
                   select
