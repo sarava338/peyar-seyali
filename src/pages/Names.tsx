@@ -27,7 +27,6 @@ export default function Names() {
 
   if (status === "loading") return <Loading />;
   if (error) return <Error code={500} messege={error} />;
-  if (!names || names.length === 0) return <Error code={404} messege="No Names Found" />;
 
   return (
     <>
