@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Toolbar, Box, AppBar } from "@mui/material";
 
-import { HeaderLogo, MobileHeaderLogo } from "../common/Logo";
+import { HeaderLogo, MobileHeaderLogo } from "../Logo";
 
 import NavMenu from "./NavMenu";
 import UserMenu from "./UserMenu";

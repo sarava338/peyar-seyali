@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppBar, Box, Stack, Toolbar } from "@mui/material";
 
-import { HeaderLogo, MobileHeaderLogo } from "../common/Logo";
+import { HeaderLogo, MobileHeaderLogo } from "../Logo";
 import UserMenu from "../header/UserMenu";
 import AdminDrawerIcon from "../../assets/icons/AdminDrawerIcon";
 import SearchBox from "../SearchBox";
