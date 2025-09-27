@@ -7,7 +7,7 @@ import { fetchNamesWithTag } from "../store/namesSlice";
 import Loading from "./Loading";
 import Error from "./Error";
 
-import NameList from "../components/names/NameList";
+import NameList from "../components/names/NameCards";
 
 export default function Tag() {
   const { tagSlug } = useParams();

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { FooterLogo } from "./Logo";
+import { FooterLogo } from "./common/Logo";
 
 export default function Footer() {
   return (

@@ -9,8 +9,8 @@ import { fetchNamesForAdmin } from "../store/namesSlice";
 import Loading from "./Loading";
 import Error from "./Error";
 
-import NameList from "../components/names/NameList";
 import AddNameForm from "../components/admin/AddNameForm";
+import NameTable from "../components/admin/NameTable";
 
 export default function Names() {
   const { adminNames: names, error, status } = useAppSelector((state) => state.names);
@@ -30,23 +30,21 @@ export default function Names() {
 
   return (
     <>
-      <main>
-        <Stack m={3} flexDirection={{ sm: "column", md: "row" }} gap={3} justifyContent="space-around">
-          <Typography variant="h4" component="h1">
-            மொத்த பெயர்கள் - <strong>{names.length}</strong>
-          </Typography>
+      <Stack m={3} flexDirection={{ sm: "column", md: "row" }} gap={3} justifyContent="space-around">
+        <Typography variant="h4" component="h1">
+          மொத்த பெயர்கள் - <strong>{names.length}</strong>
+        </Typography>
 
-          {isAdminPage && !showForm && (
-            <Button variant="contained" color="primary" sx={{ width: "fit-content" }} onClick={() => setShowForm(true)}>
-              Add New Name
-            </Button>
-          )}
-        </Stack>
+        {isAdminPage && !showForm && (
+          <Button variant="contained" color="primary" sx={{ width: "fit-content" }} onClick={() => setShowForm(true)}>
+            Add New Name
+          </Button>
+        )}
+      </Stack>
 
-        {isAdminPage && showForm && <AddNameForm onClose={() => setShowForm(false)} />}
+      {isAdminPage && showForm && <AddNameForm onClose={() => setShowForm(false)} />}
 
-        <NameList names={names} />
-      </main>
+      <NameTable names={names} />
     </>
   );
 }

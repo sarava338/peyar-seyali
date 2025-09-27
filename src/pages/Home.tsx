@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 import { fetchNames } from "../store/namesSlice";
 
-import NameList from "../components/names/NameList";
+import NameCards from "../components/names/NameCards";
 
 export default function Home() {
   const { publicNames, status, error } = useAppSelector((state) => state.names);
@@ -32,7 +32,7 @@ export default function Home() {
           </Typography>
         </Typography>
 
-        <NameList names={publicNames} />
+        <NameCards names={publicNames} />
       </Box>
     </Box>
   );

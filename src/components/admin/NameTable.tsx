@@ -1,71 +1,96 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, Typography, Button } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { Box } from "@mui/material";
+import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 
 import type { NameCardType } from "../../types/types";
 
+import { deleteName } from "../../firebase/services/nameService";
+
+import { fetchNamesForAdmin } from "../../store/namesSlice";
+import { useAppDispatch } from "../../store/hooks";
+
+import { EditButton, ViewButton, DeleteButton } from "../common/buttons";
+
 interface NameTableProps {
   names: NameCardType[];
-  handleView: (nameSlug: string) => void;
-  handleEdit: (nameSlug: string) => void;
-  handleDelete: (nameSlug: string) => void;
 }
 
-export default function NameTable({ names, handleView, handleEdit, handleDelete }: NameTableProps) {
-  return (
-    <TableContainer component={Paper} elevation={3}>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>
-              <Typography variant="h6">Id / Slug</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="h6">Name</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="h6">English Name</Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="h6">Gender</Typography>
-            </TableCell>
-            <TableCell align="center">
-              <Typography variant="h6">Actions</Typography>
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {names.map((name) => (
-            <TableRow key={name.slug}>
-              <TableCell>{name.slug}</TableCell>
-              <TableCell>{name.name}</TableCell>
-              <TableCell>{name.nameInEnglish}</TableCell>
-              <TableCell>{name.gender}</TableCell>
-              <TableCell align="center">
-                <Tooltip title="View">
-                  <Button onClick={() => handleView(name.slug!)}>View</Button>
-                </Tooltip>
-                <Tooltip title="Edit">
-                  <Button onClick={() => handleEdit(name.slug!)}>Edit</Button>
-                </Tooltip>
-                <Tooltip title="Delete">
-                  <Button color="error" onClick={() => handleDelete(name.slug!)}>
-                    X
-                  </Button>
-                </Tooltip>
-              </TableCell>
-            </TableRow>
-          ))}
+export default function NameTable({ names }: NameTableProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useAppDispatch();
 
-          {names.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={5} align="center">
-                <Typography variant="body2" color="text.secondary">
-                  No names found.
-                </Typography>
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+  const isAdminPage = location.pathname.includes("/admin");
+
+  const handleView = (slug: string) => {
+    if (isAdminPage) navigate(`/admin/names/${slug}`);
+    else navigate(`/names/${slug}`);
+  };
+
+  const handleEdit = (slug: string) => {
+    if (isAdminPage) navigate(`/admin/names/${slug}/edit`);
+  };
+
+  const handleDelete = async (slug: string) => {
+    const canDelete = confirm(`Do you really want to delete name - ${slug} ?`);
+
+    try {
+      if (canDelete && slug) {
+        await deleteName(slug);
+        dispatch(fetchNamesForAdmin());
+      }
+    } catch (error) {
+      console.error("error while delete button", error);
+    }
+  };
+
+  const columns: GridColDef[] = [
+    { field: "slug", headerName: "Slug", flex: 1, editable: false },
+    { field: "name", headerName: "பெயர்", flex: 1, editable: false },
+    { field: "nameInEnglish", headerName: "பெயர் ஆங்கிலத்தில்", flex: 1, editable: false },
+    { field: "gender", headerName: "பால்", flex: 1, editable: false },
+    {
+      field: "actions",
+      headerName: "செயல்கள்",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: (table) => (
+        <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+          <ViewButton onClick={() => handleView(table.row.slug)} />
+          <EditButton onClick={() => handleEdit(table.row.slug)} />
+          <DeleteButton onClick={() => handleDelete(table.row.slug)} />
+        </Box>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <Box sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={names}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 10,
+              },
+            },
+          }}
+          showToolbar
+          getRowId={(row) => row.slug}
+          pageSizeOptions={[10]}
+          checkboxSelection
+          disableRowSelectionOnClick
+          sx={{
+            "& .MuiDataGrid-columnHeaders": {
+              fontWeight: "bold",
+            },
+          }}
+        />
+      </Box>
+    </>
   );
 }
