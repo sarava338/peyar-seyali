@@ -10,7 +10,7 @@ import { deleteName } from "../../firebase/services/nameService";
 import { fetchNamesForAdmin } from "../../store/namesSlice";
 import { useAppDispatch } from "../../store/hooks";
 
-import { EditButton, ViewButton, DeleteButton } from "../common/buttons";
+import { EditButton, DeleteButton } from "../common/buttons";
 
 interface NameTableProps {
   names: NameCardType[];
@@ -22,11 +22,6 @@ export default function NameTable({ names }: NameTableProps) {
   const dispatch = useAppDispatch();
 
   const isAdminPage = location.pathname.includes("/admin");
-
-  const handleView = (slug: string) => {
-    if (isAdminPage) navigate(`/admin/names/${slug}`);
-    else navigate(`/names/${slug}`);
-  };
 
   const handleEdit = (slug: string) => {
     if (isAdminPage) navigate(`/admin/names/${slug}/edit`);
