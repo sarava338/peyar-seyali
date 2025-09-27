@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Box } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
@@ -46,7 +46,15 @@ export default function NameTable({ names }: NameTableProps) {
   };
 
   const columns: GridColDef[] = [
-    { field: "slug", headerName: "Slug", flex: 1, editable: false },
+    {
+      field: "slug",
+      headerName: "Slug",
+      flex: 1,
+      editable: false,
+      renderCell: (table) => (
+        <NavLink to={isAdminPage ? `/admin/names/${table.row.slug}` : `/names/${table.row.slug}`}>{table.row.slug}</NavLink>
+      ),
+    },
     { field: "name", headerName: "பெயர்", flex: 1, editable: false },
     { field: "nameInEnglish", headerName: "பெயர் ஆங்கிலத்தில்", flex: 1, editable: false },
     { field: "gender", headerName: "பால்", flex: 1, editable: false },
@@ -57,8 +65,7 @@ export default function NameTable({ names }: NameTableProps) {
       sortable: false,
       filterable: false,
       renderCell: (table) => (
-        <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <ViewButton onClick={() => handleView(table.row.slug)} />
+        <Box sx={{ display: `${isAdminPage ? "flex" : "none"}`, alignItems: "center", height: "100%" }}>
           <EditButton onClick={() => handleEdit(table.row.slug)} />
           <DeleteButton onClick={() => handleDelete(table.row.slug)} />
         </Box>
@@ -66,12 +73,17 @@ export default function NameTable({ names }: NameTableProps) {
     },
   ];
 
+  const columnsToShow = columns.filter((col) => {
+    if (!isAdminPage && col.field === "actions") return false;
+    return true;
+  });
+
   return (
     <>
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={names}
-          columns={columns}
+          columns={columnsToShow}
           initialState={{
             pagination: {
               paginationModel: {
