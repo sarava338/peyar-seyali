@@ -5,7 +5,6 @@ import { HeaderLogo, MobileHeaderLogo } from "../Logo";
 
 import NavMenu from "./NavMenu";
 import UserMenu from "./UserMenu";
-import SearchBox from "../SearchBox";
 
 export default function Header() {
   const [navAnchor, setNavAnchor] = useState<null | HTMLElement>(null);
@@ -40,8 +39,6 @@ export default function Header() {
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <MobileHeaderLogo />
           </Box>
-
-          <SearchBox />
 
           <UserMenu userAnchor={userAnchor} onUserMenuOpen={handleUserMenuOpen} onUserMenuClose={handleUserMenuClose} />
         </Toolbar>

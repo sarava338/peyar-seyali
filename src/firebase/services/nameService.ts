@@ -20,7 +20,17 @@ import { auth, db } from "../firebase";
 import { toSlug } from "../../utils";
 import { getRefs, resolveRefs } from "../utils";
 
-import type { CategorySlugType, ICategory, IComment, IName, ITag, NameCardType, NameSlugType, TagSlugType } from "../../types/types";
+import type {
+  CategorySlugType,
+  ICategory,
+  IComment,
+  IName,
+  ITag,
+  NameCardType,
+  NameSlugType,
+  NameTableType,
+  TagSlugType,
+} from "../../types/types";
 
 async function resolveName(nameRef: DocumentReference): Promise<IName | undefined> {
   try {
@@ -61,7 +71,7 @@ async function resolveName(nameRef: DocumentReference): Promise<IName | undefine
   }
 }
 
-export async function getAllNamesForAdmin(queries: QueryConstraint[] = []): Promise<NameCardType[]> {
+export async function getAllNamesForAdmin(queries: QueryConstraint[] = []): Promise<NameTableType[]> {
   try {
     const selectedNames = query(collection(db, "names"), ...queries);
     const snapshot = await getDocs(selectedNames);
@@ -75,6 +85,12 @@ export async function getAllNamesForAdmin(queries: QueryConstraint[] = []): Prom
         slug: data.slug,
         description: data.description,
         gender: data.gender,
+        origin: data.origin,
+        special: data.special,
+        active: data.active,
+        author: data.author,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
       };
     });
   } catch (err) {

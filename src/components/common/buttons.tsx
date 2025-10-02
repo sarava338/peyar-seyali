@@ -3,6 +3,7 @@ import { Button, type SxProps, type Theme } from "@mui/material";
 import ClickIcon from "@mui/icons-material/AdsClick";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ShareIcon from "@mui/icons-material/Share";
 
 interface ButtonProps {
   onClick: () => void;
@@ -13,6 +14,14 @@ export const ViewButton = ({ onClick, sx = {} }: ButtonProps) => {
   return (
     <Button size="small" onClick={onClick} sx={sx}>
       <ClickIcon />
+    </Button>
+  );
+};
+
+export const ShareButton = ({ onClick, sx = {} }: ButtonProps) => {
+  return (
+    <Button size="small" onClick={onClick} sx={sx}>
+      <ShareIcon />
     </Button>
   );
 };

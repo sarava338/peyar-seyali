@@ -17,7 +17,7 @@ import Error from "./pages/Error";
 export default function App() {
   return (
     <>
-      <ErrorBoundary fallback={<Error code={500} messege="Something went Wrong. Check the logs" />}>
+      <ErrorBoundary fallback={<Error code={500} error="It's our fault. not Yours" messege="Something went Wrong. Check the logs" />}>
         <HelmetProvider>
           <ThemeProvider theme={theme}>
             <Provider store={store}>

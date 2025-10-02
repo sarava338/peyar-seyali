@@ -1,4 +1,4 @@
-import { Divider, IconButton, List } from "@mui/material";
+import { Divider, IconButton, List, Tooltip } from "@mui/material";
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ArticleIcon from "@mui/icons-material/Article";
@@ -27,27 +27,33 @@ export default function SideNavBar({ open, drawerWidth, handleDrawerClose }: Sid
         <Divider />
 
         <List>
-          <DashBoardListItem
-            open={open}
-            pageName="Names"
-            path="/admin/names"
-            handleDrawerClose={handleDrawerClose}
-            icon={<ArticleIcon />}
-          />
+          <Tooltip title="Names" placement="bottom">
+            <DashBoardListItem
+              open={open}
+              pageName="Names"
+              path="/admin/names"
+              handleDrawerClose={handleDrawerClose}
+              icon={<ArticleIcon />}
+            />
+          </Tooltip>
 
           <Divider />
 
-          <DashBoardListItem open={open} pageName="Tags" path="/admin/tags" handleDrawerClose={handleDrawerClose} icon={<SellIcon />} />
+          <Tooltip title="Tags" placement="bottom">
+            <DashBoardListItem open={open} pageName="Tags" path="/admin/tags" handleDrawerClose={handleDrawerClose} icon={<SellIcon />} />
+          </Tooltip>
 
           <Divider />
 
-          <DashBoardListItem
-            open={open}
-            pageName="Categories"
-            path="/admin/categories"
-            handleDrawerClose={handleDrawerClose}
-            icon={<CategoryIcon />}
-          />
+          <Tooltip title="Categories" placement="bottom">
+            <DashBoardListItem
+              open={open}
+              pageName="Categories"
+              path="/admin/categories"
+              handleDrawerClose={handleDrawerClose}
+              icon={<CategoryIcon />}
+            />
+          </Tooltip>
 
           <Divider />
         </List>
