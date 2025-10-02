@@ -1,27 +1,31 @@
 import { useEffect, useState } from "react";
+
 import { Box, Button, ButtonGroup } from "@mui/material";
 
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchNames } from "../store/slices/namesSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-import Loading from "./Loading";
-import Error from "./Error";
+import Loading from "../Loading";
+import Error from "../Error";
 
-import NameCards from "../components/names/NameCards";
-import NameTable from "../components/names/NameTable";
+import AddNameForm from "../../components/admin/AddNameForm";
+import { fetchNamesForAdmin } from "../../store/slices/namesSlice";
+
+import NameCards from "../../components/names/NameCards";
+import NameTable from "../../components/admin/NameTable";
 
 type View = "table" | "card";
 
 export default function Names() {
-  const { publicNames: names, error, status } = useAppSelector((state) => state.names);
+  const { adminNames: names, error, status } = useAppSelector((state) => state.names);
   const dispatch = useAppDispatch();
 
-  const [view, setView] = useState<View>("card");
+  const [showForm, setShowForm] = useState(false);
+  const [view, setView] = useState<View>("table");
 
   const views: View[] = ["table", "card"];
 
   useEffect(() => {
-    dispatch(fetchNames());
+    dispatch(fetchNamesForAdmin());
   }, [dispatch]);
 
   if (status === "loading") return <Loading />;
@@ -46,7 +50,13 @@ export default function Names() {
             </Button>
           ))}
         </ButtonGroup>
+
+        <Button variant="contained" color="primary" sx={{ width: "fit-content" }} onClick={() => setShowForm(!showForm)}>
+          {!showForm ? "Add New Name" : "Close Form"}
+        </Button>
       </Box>
+
+      {showForm && <AddNameForm onClose={() => setShowForm(false)} />}
 
       {view === "table" ? <NameTable names={names} /> : <NameCards names={names} />}
     </>

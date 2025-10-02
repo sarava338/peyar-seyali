@@ -24,6 +24,10 @@ export type IName = {
   updatedAt?: string;
 };
 
+export type NameTableType = Pick<
+  IName,
+  "name" | "nameInEnglish" | "slug" | "description" | "gender" | "origin" | "special" | "author" | "active" | "createdAt" | "updatedAt"
+>;
 export type NameCardType = Pick<IName, "name" | "nameInEnglish" | "slug" | "description" | "gender">;
 export type NameSlugType = Pick<IName, "name" | "slug">;
 

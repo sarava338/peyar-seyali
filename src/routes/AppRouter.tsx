@@ -9,13 +9,14 @@ import Error from "../pages/Error";
 import AuthProvider from "../contexts/AuthProvider";
 
 import Name from "../pages/Name";
-import Names from "../pages/Names";
+import PublicNames from "../pages/Names";
 import Tag from "../pages/Tag";
 import Category from "../pages/Category";
 import User from "../pages/User";
 import Settings from "../pages/Settings";
 
 import EditName from "../pages/admin/EditName";
+import AdminNames from "../pages/admin/Names";
 import AdminTags from "../pages/admin/Tags";
 import AdminCategories from "../pages/admin/Categories";
 import { useAppSelector } from "../store/hooks";
@@ -29,7 +30,7 @@ export default function AppRouter() {
         {/* Public Routes */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/names" element={<Names />} />
+          <Route path="/names" element={<PublicNames />} />
           <Route path="/names/:nameSlug" element={<Name />} />
 
           <Route path="/tags/:tagSlug" element={<Tag />} />
@@ -42,7 +43,7 @@ export default function AppRouter() {
         {/* Admin Routes */}
         {user?.isAdmin && (
           <Route path="/admin" element={<AdminLayout />}>
-            <Route path="names" element={<Names />} />
+            <Route path="names" element={<AdminNames />} />
             <Route path="names/:nameSlug" element={<Name />} />
             <Route path="names/:nameSlug/edit" element={<EditName />} />
             <Route path="tags" element={<AdminTags />} />

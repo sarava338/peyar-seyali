@@ -1,13 +1,21 @@
 import { DataGrid } from "@mui/x-data-grid";
 
 import type { GridColDef } from "@mui/x-data-grid";
-
+/**
+ *
+ *
+ * @interface DataTableProps
+ * @template T
+ */
 interface DataTableProps<T extends { slug: string }> {
   rows: T[];
   columns: GridColDef[];
+  columnVisibilityModel?: Record<string, boolean>;
+  onColumnVisibilityModelChange?: (model: Record<string, boolean>) => void;
 }
 
-export default function DataTable<T extends { slug: string }>({ rows, columns }: DataTableProps<T>) {
+
+export default function DataTable<T extends { slug: string }>({ rows, columns, columnVisibilityModel, onColumnVisibilityModelChange }: DataTableProps<T>) {
   return (
     <DataGrid
       rows={rows}
@@ -19,6 +27,8 @@ export default function DataTable<T extends { slug: string }>({ rows, columns }:
           },
         },
       }}
+      columnVisibilityModel={columnVisibilityModel}
+      onColumnVisibilityModelChange={onColumnVisibilityModelChange}
       showToolbar
       getRowId={(row) => row.slug}
       pageSizeOptions={[10]}

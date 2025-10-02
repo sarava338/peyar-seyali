@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import type { NameCardType } from "../../types/types";
+import type { NameCardType, NameTableType } from "../../types/types";
 import { getAllNames, getAllNamesForAdmin } from "../../firebase/services/nameService";
 import { getNamesFromTag } from "../../firebase/services/tagService";
 import { getNamesFromCategory } from "../../firebase/services/categoryService";
@@ -9,7 +9,7 @@ interface NamesState {
   publicNames: NameCardType[];
   tagNames: NameCardType[];
   categoryNames: NameCardType[];
-  adminNames: NameCardType[];
+  adminNames: NameTableType[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
