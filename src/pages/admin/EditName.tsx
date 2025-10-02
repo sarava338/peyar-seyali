@@ -69,7 +69,7 @@ export default function EditName() {
   const { nameSlug } = useParams<{ nameSlug: string }>();
   const { data: name, status, error } = useAppSelector((state) => state.name);
 
-  const user = useAppSelector((state) => state.user);
+  const { user } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const [formData, setFormData] = useState<IName>(getInitialFormData());
