@@ -10,7 +10,7 @@ import { deleteName } from "../../firebase/services/nameService";
 import { useAppDispatch } from "../../store/hooks";
 import { fetchNamesForAdmin } from "../../store/slices/namesSlice";
 
-import { EditButton, DeleteButton } from "../common/buttons";
+import { EditButton, DeleteButton, ShareButton, ViewButton } from "../common/buttons";
 import DataTable from "../common/DataTable";
 
 interface NameTableProps {
@@ -23,6 +23,11 @@ export default function NameTable({ names }: NameTableProps) {
   const dispatch = useAppDispatch();
 
   const isAdminPage = location.pathname.includes("/admin");
+
+  const handleView = (slug: string) => {
+    if (isAdminPage) navigate(`/admin/names/${slug}`);
+    else navigate(`/names/${slug}`);
+  };
 
   const handleEdit = (slug: string) => {
     if (isAdminPage) navigate(`/admin/names/${slug}/edit`);
@@ -38,6 +43,24 @@ export default function NameTable({ names }: NameTableProps) {
       }
     } catch (error) {
       console.error("error while delete button", error);
+    }
+  };
+
+  const handleShare = async (event: React.MouseEvent, nameDetail: NameCardType) => {
+    event.stopPropagation();
+
+    const shareData = {
+      title: nameDetail.name + "\n",
+      text: `${nameDetail.name} - ${nameDetail.description}\n`,
+      url: `${window.location.origin}/names/${nameDetail.slug}\n`,
+    };
+
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else alert("Sharing not supported in this browser.");
+    } catch (error) {
+      console.error("Error preparing share data:", error);
     }
   };
 
@@ -61,23 +84,24 @@ export default function NameTable({ names }: NameTableProps) {
       sortable: false,
       filterable: false,
       renderCell: (table) => (
-        <Box sx={{ display: `${isAdminPage ? "flex" : "none"}`, alignItems: "center", height: "100%" }}>
-          <EditButton onClick={() => handleEdit(table.row.slug)} />
-          <DeleteButton onClick={() => handleDelete(table.row.slug)} />
+        <Box sx={{ alignItems: "center", height: "100%" }}>
+          <ViewButton onClick={() => handleView(table.row.slug)} />
+          <ShareButton onClick={() => handleShare({ stopPropagation: () => {} } as React.MouseEvent, table.row)} />
+          {isAdminPage && (
+            <>
+              <EditButton onClick={() => handleEdit(table.row.slug)} />
+              <DeleteButton onClick={() => handleDelete(table.row.slug)} />
+            </>
+          )}
         </Box>
       ),
     },
   ];
 
-  const columnsToShow = columns.filter((col) => {
-    if (!isAdminPage && col.field === "actions") return false;
-    return true;
-  });
-
   return (
     <>
-      <Box sx={{ height: 400, width: "100%" }}>
-        <DataTable rows={names} columns={columnsToShow} />
+      <Box sx={{ width: "100%" }}>
+        <DataTable rows={names} columns={columns} />
       </Box>
     </>
   );

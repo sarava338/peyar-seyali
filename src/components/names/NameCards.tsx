@@ -8,7 +8,7 @@ type NameListProps = {
   names: NameCardType[];
 };
 
-export default function NameList({ names }: NameListProps) {
+export default function NameCards({ names }: NameListProps) {
   return (
     <Box component="section" sx={{ display: "flex", flexWrap: "wrap", gap: 4, justifyContent: "center", mt: 3 }}>
       {names.map((nameDetail) => (

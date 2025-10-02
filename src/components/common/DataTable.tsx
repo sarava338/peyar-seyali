@@ -25,6 +25,7 @@ export default function DataTable<T extends { slug: string }>({ rows, columns }:
       checkboxSelection
       disableRowSelectionOnClick
       sx={{
+        mt: 3,
         backgroundColor: "white", // grid background
         "& .MuiDataGrid-columnHeaders": {
           fontWeight: "bold",
