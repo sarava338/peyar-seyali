@@ -11,7 +11,7 @@ import type { NameCardType } from "../../types/types";
 import { deleteName } from "../../firebase/services/nameService";
 
 import { useAppDispatch } from "../../store/hooks";
-import { fetchNamesForAdmin } from "../../store/namesSlice";
+import { fetchNamesForAdmin } from "../../store/slices/namesSlice";
 
 interface NameCardProps {
   nameDetail: NameCardType;

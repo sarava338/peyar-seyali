@@ -9,7 +9,7 @@ import { getNamesForInput } from "../../firebase/services/nameService";
 import { addTag } from "../../firebase/services/tagService";
 
 import { useAppDispatch } from "../../store/hooks";
-import { fetchTags } from "../../store/tagsSlice";
+import { fetchTags } from "../../store/slices/tagsSlice";
 
 function getInitialFormData() {
   return {

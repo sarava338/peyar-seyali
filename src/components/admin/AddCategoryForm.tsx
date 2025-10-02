@@ -9,7 +9,7 @@ import { getNamesForInput } from "../../firebase/services/nameService";
 import { addCategory } from "../../firebase/services/categoryService";
 
 import { useAppDispatch } from "../../store/hooks";
-import { fetchCategories } from "../../store/categorySlice";
+import { fetchCategories } from "../../store/slices/categorySlice";
 
 function getInitialFormData() {
   return {

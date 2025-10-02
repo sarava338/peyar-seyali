@@ -4,13 +4,13 @@ import { useLocation } from "react-router-dom";
 import { Button, Stack, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchNamesForAdmin } from "../store/namesSlice";
 
 import Loading from "./Loading";
 import Error from "./Error";
 
 import AddNameForm from "../components/admin/AddNameForm";
 import NameTable from "../components/admin/NameTable";
+import { fetchNamesForAdmin } from "../store/slices/namesSlice";
 
 export default function Names() {
   const { adminNames: names, error, status } = useAppSelector((state) => state.names);

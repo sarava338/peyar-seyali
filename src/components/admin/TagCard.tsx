@@ -9,7 +9,8 @@ import { getNamesForInput } from "../../firebase/services/nameService";
 import type { ITag, NameSlugType } from "../../types/types";
 
 import { useAppDispatch } from "../../store/hooks";
-import { fetchTags } from "../../store/tagsSlice";
+import { fetchTags } from "../../store/slices/tagsSlice";
+
 import { addNamesToTag, deleteTag, removeNamesFromTag } from "../../firebase/services/tagService";
 
 interface TagCardProps {

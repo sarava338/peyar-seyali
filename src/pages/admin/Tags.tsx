@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchTags } from "../../store/tagsSlice";
+import { fetchTags } from "../../store/slices/tagsSlice";
 
 import Error from "../Error";
 import Loading from "../Loading";

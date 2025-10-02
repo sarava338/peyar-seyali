@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchNamesWithCategory } from "../store/namesSlice";
+import { fetchNamesWithCategory } from "../store/slices/namesSlice";
 
 import Loading from "./Loading";
 import Error from "./Error";

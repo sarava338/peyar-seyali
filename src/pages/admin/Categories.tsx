@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchCategories } from "../../store/categorySlice";
+import { fetchCategories } from "../../store/slices/categorySlice";
+
 import Loading from "../Loading";
 import Error from "../Error";
-import { Box, Button, Stack, Typography } from "@mui/material";
+
 import AddCategoryForm from "../../components/admin/AddCategoryForm";
 import CategoryCard from "../../components/admin/CategoryCard";
 

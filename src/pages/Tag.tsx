@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchNamesWithTag } from "../store/namesSlice";
 
 import Loading from "./Loading";
 import Error from "./Error";
 
 import NameList from "../components/names/NameCards";
+import { fetchNamesWithTag } from "../store/slices/namesSlice";
 
 export default function Tag() {
   const { tagSlug } = useParams();

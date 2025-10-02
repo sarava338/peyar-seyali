@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { ITag } from "../types/types";
-import { getAllTags } from "../firebase/services/tagService";
+
+import type { ITag } from "../../types/types";
+import { getAllTags } from "../../firebase/services/tagService";
 
 interface TagState {
   tags: ITag[];

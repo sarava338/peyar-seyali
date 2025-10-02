@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
-
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-
-import { fetchNameByIdForAdmin } from "../../store/nameSlice";
-
-import { getTagsForInput } from "../../firebase/services/tagService";
-import { getCategoriesForInput } from "../../firebase/services/categoryService";
-import { editNameById, getNamesForInput } from "../../firebase/services/nameService";
-
 import {
   Autocomplete,
   Box,
@@ -27,6 +18,13 @@ import {
   type SnackbarCloseReason,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { fetchNameByIdForAdmin } from "../../store/slices/nameSlice";
+
+import { getTagsForInput } from "../../firebase/services/tagService";
+import { getCategoriesForInput } from "../../firebase/services/categoryService";
+import { editNameById, getNamesForInput } from "../../firebase/services/nameService";
 
 import Loading from "../Loading";
 import Error from "../Error";
@@ -71,7 +69,7 @@ export default function EditName() {
   const { nameSlug } = useParams<{ nameSlug: string }>();
   const { data: name, status, error } = useAppSelector((state) => state.name);
 
-  const user = useAppSelector((state) => state.user.currentUser);
+  const user = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const [formData, setFormData] = useState<IName>(getInitialFormData());

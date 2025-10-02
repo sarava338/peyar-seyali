@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getNameById, getNameByIdForAdmin } from "../firebase/services/nameService";
-
-import type { IName } from "../types/types";
+import type { IName } from "../../types/types";
+import { getNameById, getNameByIdForAdmin } from "../../firebase/services/nameService";
 
 interface INameState {
   data: IName | null;
