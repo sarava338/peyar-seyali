@@ -1,16 +1,17 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Box } from "@mui/material";
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import type { GridColDef } from "@mui/x-data-grid";
 
 import type { NameCardType } from "../../types/types";
 
 import { deleteName } from "../../firebase/services/nameService";
 
-import { fetchNamesForAdmin } from "../../store/namesSlice";
 import { useAppDispatch } from "../../store/hooks";
+import { fetchNamesForAdmin } from "../../store/slices/namesSlice";
 
 import { EditButton, DeleteButton } from "../common/buttons";
+import DataTable from "../common/DataTable";
 
 interface NameTableProps {
   names: NameCardType[];
@@ -76,27 +77,7 @@ export default function NameTable({ names }: NameTableProps) {
   return (
     <>
       <Box sx={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={names}
-          columns={columnsToShow}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10,
-              },
-            },
-          }}
-          showToolbar
-          getRowId={(row) => row.slug}
-          pageSizeOptions={[10]}
-          checkboxSelection
-          disableRowSelectionOnClick
-          sx={{
-            "& .MuiDataGrid-columnHeaders": {
-              fontWeight: "bold",
-            },
-          }}
-        />
+        <DataTable rows={names} columns={columnsToShow} />
       </Box>
     </>
   );

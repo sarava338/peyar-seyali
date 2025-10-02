@@ -1,13 +1,15 @@
-import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { PersistGate } from "redux-persist/integration/react";
-import { ThemeProvider } from "@mui/material";
 import { HelmetProvider } from "react-helmet-async";
 import { ErrorBoundary } from "react-error-boundary";
 
-import AppRouter from "./routes/AppRouter";
+import { ThemeProvider } from "@mui/material";
+
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
 import { store, persistor } from "./store";
+
+import AppRouter from "./routes/AppRouter";
 
 import theme from "./theme";
 import Error from "./pages/Error";

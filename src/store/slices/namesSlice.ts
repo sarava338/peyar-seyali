@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import { getAllNames, getAllNamesForAdmin } from "../firebase/services/nameService";
-
-import type { NameCardType } from "../types/types";
-import { getNamesFromTag } from "../firebase/services/tagService";
-import { getNamesFromCategory } from "../firebase/services/categoryService";
+import type { NameCardType } from "../../types/types";
+import { getAllNames, getAllNamesForAdmin } from "../../firebase/services/nameService";
+import { getNamesFromTag } from "../../firebase/services/tagService";
+import { getNamesFromCategory } from "../../firebase/services/categoryService";
 
 interface NamesState {
   publicNames: NameCardType[];

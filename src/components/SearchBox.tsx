@@ -23,7 +23,7 @@ export default function SearchBox() {
 
   const searchBoxRef = useRef<HTMLDivElement>(null);
 
-  const { currentUser: user } = useAppSelector((state) => state.user);
+  const { user } = useAppSelector((state) => state.auth);
 
   const fetchNames = useCallback(async () => {
     try {

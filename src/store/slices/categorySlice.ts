@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { ICategory } from "../types/types";
-import { getAllCategories } from "../firebase/services/categoryService";
+
+import type { ICategory } from "../../types/types";
+import { getAllCategories } from "../../firebase/services/categoryService";
 
 interface TagState {
   categories: ICategory[];

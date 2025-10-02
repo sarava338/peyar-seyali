@@ -4,9 +4,8 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
-import { fetchNames } from "../store/namesSlice";
-
 import NameCards from "../components/names/NameCards";
+import { fetchNames } from "../store/slices/namesSlice";
 
 export default function Home() {
   const { publicNames, status, error } = useAppSelector((state) => state.names);

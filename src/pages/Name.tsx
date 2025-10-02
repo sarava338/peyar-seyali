@@ -11,10 +11,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteName } from "../firebase/services/nameService";
 
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchNameById } from "../store/nameSlice";
 
 import Loading from "./Loading";
 import Error from "./Error";
+import { fetchNameById } from "../store/slices/nameSlice";
 
 export default function Name() {
   const { nameSlug } = useParams<{ nameSlug: string }>();
@@ -24,7 +24,7 @@ export default function Name() {
 
   const dispatch = useAppDispatch();
   const { data: name, status, error } = useAppSelector((state) => state.name);
-  const { currentUser: user } = useAppSelector((state) => state.user);
+  const user = useAppSelector((state) => state.user);
 
   useEffect(() => {
     if (nameSlug) dispatch(fetchNameById(nameSlug));

@@ -10,7 +10,7 @@ import { addNamesToCategory, deleteCategory, removeNamesFromCategory } from "../
 import type { ICategory, NameSlugType } from "../../types/types";
 
 import { useAppDispatch } from "../../store/hooks";
-import { fetchCategories } from "../../store/categorySlice";
+import { fetchCategories } from "../../store/slices/categorySlice";
 
 interface CategryCardProps {
   categoryData: ICategory;
