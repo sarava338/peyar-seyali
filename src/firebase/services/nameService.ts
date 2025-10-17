@@ -170,6 +170,10 @@ export async function addName(nameDetail: IName) {
 
     await setDoc(docRef, {
       ...nameDetail,
+      tags: [],
+      categories: [],
+      relatedNames: [],
+      otherNames: [],
       slug: slug,
       author: nameDetail.author.split("@")[0] || auth.currentUser?.email?.split("@")[0] || "Anonymous",
       comments: [],
