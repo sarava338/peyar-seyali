@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, query, where, type DocumentReference } from "firebase/firestore";
+import { collection, getDoc, getDocs, query, where, type DocumentReference } from "firebase/firestore";
 
 import { db } from "./firebase";
 
@@ -30,8 +30,12 @@ export async function resolveRefs<T, R = T>(refs: DocumentReference[], projector
 export async function getRefs(collectionName: CollectionName, slugs: string[]): Promise<DocumentReference[]> {
   if (slugs.length === 0) return [];
 
-  const q = query(collection(db, collectionName), where("slug", "in", slugs));
-  const snapshot = await getDocs(q);
-
-  return snapshot.docs.map((docSnap) => doc(db, collectionName, docSnap.id)) as DocumentReference[];
+  try {
+    const q = query(collection(db, collectionName), where("slug", "in", slugs));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((docSnap) => docSnap.ref) as DocumentReference[];
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
