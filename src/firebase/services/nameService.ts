@@ -11,7 +11,6 @@ import {
   arrayUnion,
   arrayRemove,
   writeBatch,
-  increment,
   QueryConstraint,
 } from "firebase/firestore";
 
@@ -231,10 +230,10 @@ export async function editNameById(nameId: string, updatedName: IName) {
     const catsToRemove = prevCatRefs.filter((r) => !newCatRefs.find((p) => p.path === r.path));
 
     // 🔄 Sync reverse links
-    tagsToAdd.forEach((tagRef) => batch.update(tagRef, { names: arrayUnion(nameRef), count: increment(1) }));
-    tagsToRemove.forEach((tagRef) => batch.update(tagRef, { names: arrayRemove(nameRef), count: increment(-1) }));
-    catsToAdd.forEach((catRef) => batch.update(catRef, { names: arrayUnion(nameRef), count: increment(1) }));
-    catsToRemove.forEach((catRef) => batch.update(catRef, { names: arrayRemove(nameRef), count: increment(-1) }));
+    tagsToAdd.forEach((tagRef) => batch.update(tagRef, { names: arrayUnion(nameRef) }));
+    tagsToRemove.forEach((tagRef) => batch.update(tagRef, { names: arrayRemove(nameRef) }));
+    catsToAdd.forEach((catRef) => batch.update(catRef, { names: arrayUnion(nameRef) }));
+    catsToRemove.forEach((catRef) => batch.update(catRef, { names: arrayRemove(nameRef) }));
 
     await updateDoc(nameRef, {
       ...updatedName,

@@ -76,7 +76,6 @@
       "collectionGroup": "tags",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "count", "order": "DESCENDING" },
         { "fieldPath": "tag", "order": "ASCENDING" }
       ]
     },
@@ -84,7 +83,6 @@
       "collectionGroup": "tags",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "count", "order": "ASCENDING" },
         { "fieldPath": "tag", "order": "ASCENDING" }
       ]
     },
@@ -92,7 +90,6 @@
       "collectionGroup": "categories",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "count", "order": "DESCENDING" },
         { "fieldPath": "category", "order": "ASCENDING" }
       ]
     },
@@ -100,7 +97,6 @@
       "collectionGroup": "categories",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "count", "order": "ASCENDING" },
         { "fieldPath": "category", "order": "ASCENDING" }
       ]
     }

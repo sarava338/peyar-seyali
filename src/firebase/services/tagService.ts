@@ -10,7 +10,6 @@ import {
   orderBy,
   getDoc,
   writeBatch,
-  increment,
   type DocumentData,
 } from "firebase/firestore";
 
@@ -22,7 +21,7 @@ import { toSlug } from "../../utils";
 
 export async function getAllTags(): Promise<ITag[]> {
   try {
-    const selectedTags = query(collection(db, "tags"), orderBy("count", "desc"), orderBy("tag", "asc"));
+    const selectedTags = query(collection(db, "tags"), orderBy("tag", "asc"));
     const tagsSnapshot = await getDocs(selectedTags);
 
     return await Promise.all(
@@ -37,7 +36,6 @@ export async function getAllTags(): Promise<ITag[]> {
             name: nameData.name,
             slug: nameData.slug,
           })),
-          count: data.names.length || 0,
         };
       })
     );
@@ -57,7 +55,7 @@ export async function getNamesFromTag(tagId: string): Promise<NameCardType[]> {
     const tagData = tagDoc.data();
 
     if (!tagData.active) throw new Error("tag not found");
-    
+
     const nameDocs = await Promise.all(tagData.names.map(async (nameRef: DocumentReference) => await getDoc(nameRef)));
 
     return nameDocs.map((nameDoc: DocumentData) => {
@@ -107,7 +105,6 @@ export async function addTag(tagData: ITag) {
       ...tagData,
       slug,
       names: nameRefs,
-      count: increment(nameRefs.length),
     });
 
     batch.commit();
@@ -146,7 +143,7 @@ export async function addNamesToTag(tagId: string, nameSlugs: string[]) {
   const tagRef = doc(db, "tags", tagId);
   const nameRefs = await getRefs("names", nameSlugs);
 
-  batch.update(tagRef, { names: arrayUnion(...nameRefs), count: increment(nameRefs.length) });
+  batch.update(tagRef, { names: arrayUnion(...nameRefs) });
   nameRefs.forEach((nameRef) => batch.update(nameRef, { tags: arrayUnion(tagRef) }));
 
   batch.commit();
@@ -158,7 +155,7 @@ export async function removeNamesFromTag(tagId: string, nameSlugs: string[]) {
   const tagRef = doc(db, "tags", tagId);
   const nameRefs = await getRefs("names", nameSlugs);
 
-  batch.update(tagRef, { names: arrayRemove(...nameRefs), count: increment(-nameRefs.length) });
+  batch.update(tagRef, { names: arrayRemove(...nameRefs) });
   nameRefs.forEach((nameRef) => batch.update(nameRef, { tags: arrayRemove(tagRef) }));
 
   batch.commit();

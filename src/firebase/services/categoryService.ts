@@ -9,7 +9,6 @@ import {
   type DocumentData,
   writeBatch,
   arrayUnion,
-  increment,
   arrayRemove,
 } from "firebase/firestore";
 
@@ -107,7 +106,6 @@ export async function addCategory(categoryData: ICategory) {
       ...categoryData,
       slug,
       names: nameRefs,
-      count: increment(nameRefs.length),
     });
 
     batch.commit();
@@ -148,7 +146,7 @@ export async function addNamesToCategory(categoryId: string, nameSlugs: NameSlug
       nameSlugs.map((nameSlug) => nameSlug.slug)
     );
 
-    batch.update(catRef, { names: arrayUnion(...nameRefs), count: increment(nameRefs.length) });
+    batch.update(catRef, { names: arrayUnion(...nameRefs) });
     nameRefs.forEach((nameRef) => batch.update(nameRef, { categories: arrayUnion(catRef) }));
 
     batch.commit();
@@ -168,7 +166,7 @@ export async function removeNamesFromCategory(categoryId: string, nameSlugs: Nam
       nameSlugs.map((nameSlug) => nameSlug.slug)
     );
 
-    batch.update(catRef, { names: arrayRemove(...nameRefs), count: increment(-nameRefs.length) });
+    batch.update(catRef, { names: arrayRemove(...nameRefs) });
     nameRefs.forEach((nameRef) => batch.update(nameRef, { categories: arrayRemove(catRef) }));
 
     batch.commit();

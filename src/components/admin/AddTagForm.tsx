@@ -57,7 +57,7 @@ export default function AddTagForm({ onClose }: AddTagForm) {
     e.preventDefault();
 
     try {
-      await addTag({ ...formData, count: formData.names.length });
+      await addTag({ ...formData });
       dispatch(fetchTags());
       handleClear();
     } catch (err) {
